@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEBF STUDIO - The Enciso's Beat Factory</title>
     
+    <!-- CODE CHANGE: Preload critical assets for faster initial rendering -->
+    <link rel="preload" href="assets/img/logo.png" as="image">
+    <link rel="preload" href="assets/logo-animado.webm" as="video" type="video/webm">
+    <link rel="preload" href="assets/logo-animado.mp4" as="video" type="video/mp4">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -171,17 +176,21 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center vertically */
+            align-items: center;
         }
 
         .hero-video {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 50%;
+            left: 50%;
             width: 100%;
             height: 100%;
             object-fit: contain; 
             z-index: 1; 
-            transform: scale(0.95);
+            transform: translate(-50%, -50%) scale(0.95); /* Adjusted for centering */
         }
 
         .hero-overlay {
@@ -200,15 +209,14 @@
         }
 
         .hero-content {
-            position: absolute;
+            position: relative; /* Changed from absolute */
             z-index: 3;
             width: 90%;
             max-width: 1200px; 
-            bottom: 10vh; 
-            left: 50%; 
-            transform: translateX(-50%);
             text-align: center;
             padding: 0 20px;
+            margin-top: auto; /* Push to bottom within flex container */
+            padding-bottom: 10vh; /* Maintain some bottom spacing */
         }
 
         .hero-title {
@@ -260,6 +268,37 @@
         .is-hidden {
             display: none;
         }
+        
+        /* CODE CHANGE: Added scroll down indicator for mobile */
+        .scroll-indicator {
+            display: none; /* Hidden by default on desktop */
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        .scroll-indicator i {
+            font-size: 24px;
+            display: block;
+            margin-top: 5px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
 
         /* --- SECCIONES DE CONTENIDO GENERAL --- */
         main {
@@ -589,6 +628,7 @@
             font-size: 12px;
             font-weight: 600;
             margin: 2px;
+            text-transform: capitalize;
         }
         .artist-links {
             margin-top: auto; 
@@ -1390,11 +1430,34 @@
         }
 
         @media (max-width: 768px) {
+             /* CODE CHANGE: Adjust hero section for mobile */
+            .hero-section {
+                min-height: 85vh; /* Reduce height to avoid excessive space */
+                height: auto;
+            }
+            .hero-video {
+                transform: translate(-50%, -50%) scale(1.2); /* Make video slightly larger to fill space */
+            }
+            .hero-content {
+                padding-bottom: 25vh; /* Push content higher up */
+            }
+            .scroll-indicator {
+                display: block; /* Show scroll indicator on mobile */
+            }
+            
             .gear-intro, .drum-kits-container, .contact-wrapper, .mallet-card, .mallet-card:nth-child(even), .about-wrapper {
                 flex-direction: column;
                 text-align: center;
                 grid-template-columns: 1fr;
             }
+             /* CODE CHANGE: Align all contact info blocks to the left */
+            .contact-info {
+                text-align: left;
+            }
+             .contact-info .info-block {
+                text-align: left;
+            }
+
             .mallet-card:nth-child(even) .mallet-text,
             .mallet-card:nth-child(even) .mallet-image {
                 order: initial;
@@ -1483,9 +1546,13 @@
             <source src="assets/logo-animado.mp4" type="video/mp4">
             Your browser does not support video tags.
         </video>
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <h1 class="hero-title">Forging the Beat that Defines You</h1>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Forging the Beat that Defines You</h1>
+            <!-- CODE CHANGE: Added scroll down indicator HTML -->
+            <div class="scroll-indicator">
+                <span>Scroll Down</span>
+                <i class="ri-arrow-down-line"></i>
             </div>
         </div>
         <button class="sound-button is-blinking" id="sound-toggle">
@@ -1577,7 +1644,7 @@
                 <h2 class="section-title">The Factory Floor: Our Instruments & Tools</h2>
                 
                 <div class="gear-intro">
-                    <img src="assets/img/enciso-gear.jpg" alt="A photo of the studio founder, Enciso" class="gear-intro-img">
+                    <img src="assets/img/enciso-gear.jpg" alt="A photo of the studio founder, Enciso" class="gear-intro-img" loading="lazy">
                     <div class="gear-intro-text">
                         <h3>The Heartbeat of the Factory</h3>
                         <p>"My collection is more than just instruments; it's a palette of global sounds, each with a story. Here is the arsenal we use to build your beat."</p>
@@ -1586,7 +1653,7 @@
 
                 <h3 class="gear-subsection-title">The Heartbeat: A World of Percussion</h3>
                 <div class="percussion-map-container">
-                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=Mapa+Mundi';">
+                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=Mapa+Mundi';" loading="lazy">
                     <!-- Puntos Interactivos -->
                     <div class="map-dot" id="dot-colombia" data-region="colombia" title="Colombia"></div>
                     <div class="map-dot" id="dot-peru" data-region="peru" title="Peru"></div>
@@ -1620,12 +1687,12 @@
                 <h3 class="gear-subsection-title">The Engine Room: Sonic Blueprints</h3>
                 <div class="drum-kits-container">
                     <div class="drum-kit-card">
-                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Yamaha';">
+                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Yamaha';" loading="lazy">
                         <h3>The "Big Rig" Configuration</h3>
                         <p>This is our workhorse for a sound that is both massive and explosive. We configure the Yamaha Maple Custom Absolute with a thunderous 22" kick and a full set of toms (10" to 16") to deliver a deep, fat tone with a commanding punch. It's the definitive choice for creating a powerful, resonant foundation in Rock, Pop, Funk, Latin and Metal.</p>
                     </div>
                     <div class="drum-kit-card">
-                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Gretsch';">
+                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Gretsch';" loading="lazy">
                         <h3>The "Finesse" Configuration</h3>
                         <p>When precision is paramount, we re-tool the kit for its "Finesse" setup. Centered on a tight, melodic 18" kick and smaller, responsive toms, this configuration produces a crisp, articulate sound that sings with warmth and nuance. It’s the perfect choice for capturing every ghost note and subtle detail in Jazz, Fusion, Folkloric, Urban, R&B, and Singer-Songwriter sessions.</p>
                     </div>
@@ -1634,8 +1701,8 @@
                     <h3>The Final Touch: Your Sonic Fingerprint</h3>
                     <p>The kit configuration sets the foundation, but the snares and cymbals define its unique voice. This is the final calibration. We offer a full palette of options—different sizes and materials for snare drums; and a wide range of hi-hats, rides, crashes, chinas, splashes, and stacks—to find the unique combination that will become your beat's sonic fingerprint.</p>
                     <div class="drum-palette-images">
-                        <img src="assets/img/snares-collection.jpg" alt="Collection of various snare drums">
-                        <img src="assets/img/cymbals-selection.jpg" alt="Selection of various cymbals">
+                        <img src="assets/img/snares-collection.jpg" alt="Collection of various snare drums" loading="lazy">
+                        <img src="assets/img/cymbals-selection.jpg" alt="Selection of various cymbals" loading="lazy">
                     </div>
                 </div>
 
@@ -1649,7 +1716,7 @@
                             <p>The piano of the Colombian jungle... its wooden keys hold the secrets of the Pacific rainforest. We use it to add organic warmth, hypnotic textures, and a deeply ancestral flavor to your tracks, bringing a unique and soulful character to your music.</p>
                         </div>
                         <div class="mallet-image">
-                            <img src="assets/img/marimba-de-chonta.jpg" alt="Marimba de Chonta">
+                            <img src="assets/img/marimba-de-chonta.jpg" alt="Marimba de Chonta" loading="lazy">
                         </div>
                     </div>
                     <div class="mallet-card">
@@ -1658,7 +1725,7 @@
                             <p>Ethereal, metallic, and full of soul. The vibraphone adds a layer of sophisticated harmony and a dreamy, shimmering sustain that is perfect for jazz, lo-fi, and cinematic soundscapes. Its unique vibrato creates a captivating and unforgettable atmosphere.</p>
                         </div>
                         <div class="mallet-image">
-                            <img src="assets/img/vibraphone.jpg" alt="Vibraphone">
+                            <img src="assets/img/vibraphone.jpg" alt="Vibraphone" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -1672,7 +1739,7 @@
                             <p>While our soul is analog, our brain is digital. This is where the physical world is deconstructed and rebuilt without limits. Our electronic setup is not just a drum machine with a collection of sounds; it's a powerful tool capable of capturing any texture, loop it for creating hypnotic patterns, and surgically chopping and re-imagining any audio source. Combined with our vast libraries of unique sounds, we can design hybrid beats, forge futuristic textures, or build entire rhythmic universes from a single spark of inspiration. It's the perfect complement to our acoustic arsenal, offering boundless creativity and sonic precision.</p>
                         </div>
                         <div class="mallet-image">
-                            <img src="assets/img/digital-set.jpg" alt="Electronic drum kit and sampler setup" onerror="this.onerror=null;this.src='https://placehold.co/600x450/073B38/FFFFFF?text=Digital+Set';">
+                            <img src="assets/img/digital-set.jpg" alt="Electronic drum kit and sampler setup" onerror="this.onerror=null;this.src='https://placehold.co/600x450/073B38/FFFFFF?text=Digital+Set';" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -1737,7 +1804,7 @@
                 <h2 class="section-title">About The Beat Factory</h2>
                 <div class="about-wrapper">
                     <div class="about-image">
-                        <img src="assets/img/enciso-about.jpg" alt="Enciso, founder of TEBF Studio, in the recording room.">
+                        <img src="assets/img/enciso-about.jpg" alt="Enciso, founder of TEBF Studio, in the recording room." loading="lazy">
                     </div>
                     <div class="about-text">
                         <h3>Our Philosophy: Analog Soul, Digital Precision</h3>
@@ -2113,18 +2180,18 @@
                 const clientData = servicesData[clientType];
                 if (!clientData) return;
 
-                // 1. Actualizar color del tema
+                // 1. Update theme color
                 root.style.setProperty('--current-service-color', clientData.themeColor);
 
-                // 2. Actualizar botones
+                // 2. Update buttons
                 document.querySelectorAll('.service-selector-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.client === clientType);
                 });
 
-                // 3. Renderizar el acordeón
+                // 3. Render accordion
                 accordionContainer.innerHTML = clientData.accordion.map(createAccordionItem).join('');
                 
-                // 4. Re-asignar eventos al nuevo acordeón
+                // 4. Re-assign events to the new accordion
                 assignAccordionEvents();
             }
 
@@ -2136,7 +2203,7 @@
                         const content = item.querySelector('.accordion-content');
                         const wasActive = item.classList.contains('active');
 
-                        // Cerrar todos los demás
+                        // Close all others
                         accordionItems.forEach(otherItem => {
                             if (otherItem !== item) {
                                 otherItem.classList.remove('active');
@@ -2144,7 +2211,7 @@
                             }
                         });
 
-                        // Abrir o cerrar el actual
+                        // Open or close the current one
                         if (!wasActive) {
                             item.classList.add('active');
                             content.style.maxHeight = content.scrollHeight + "px";
@@ -2166,7 +2233,7 @@
                 }
             });
 
-            // Carga inicial
+            // Initial load
             updateServices('artist');
             // --- FIN: LÓGICA DE SERVICIOS DINÁMICOS ---
 
@@ -2680,9 +2747,10 @@
                 }
                 if (item.soundcloudUrl) {
                     const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                    mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true"></iframe></div>`;
+                    /* CODE CHANGE: Added visual=true and show_teaser=false to improve mobile embed */
+                    mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"></iframe></div>`;
                 } else {
-                    mediaHTML = `<img src="${item.imgSrc}" alt="Cover art for ${item.title}" class="portfolio-image">`;
+                    mediaHTML = `<img src="${item.imgSrc}" alt="Cover art for ${item.title}" class="portfolio-image" loading="lazy">`;
                 }
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
@@ -2963,6 +3031,9 @@
                         const instrumentId = e.target.dataset.instrument;
                         const data = instrumentData[instrumentId];
                         if (data) {
+                            /* CODE CHANGE: Clear previous image src to prevent flicker */
+                            modalImg.src = 'about:blank'; 
+
                             const audioSrc = `assets/audio/${instrumentId}.mp3`;
                             const imgSrc = `assets/img/instruments/${instrumentId}.jpg`;
 
@@ -3041,4 +3112,3 @@
 
 </body>
 </html>
-```
