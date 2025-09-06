@@ -1,0 +1,3044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEBF STUDIO - The Enciso's Beat Factory</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Swiper.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+    <!-- INICIO DEL CÓDIGO CSS EMBEBIDO -->
+    <style>
+        /* --- RAÍZ DEL DISEÑO Y VARIABLES DE COLOR --- */
+        :root {
+            --color-primary: #2CECED;      /* Neon Aqua */
+            --color-secondary: #EE8F00;     /* Amber Gear */
+            --color-accent: #F58A00;       /* Vivid Orange */
+            --color-bg-1: #000000;         /* Gear-Black */
+            --color-bg-2: #073B38;         /* Charcoal Teal */
+            --color-text: #FFFFFF;         /* Pure White */
+            
+            /* Colores para perfiles de servicio */
+            --color-artist: #2CECED;    /* Neon Aqua */
+            --color-producer: #F58A00;  /* Vivid Orange */
+            --color-media: #AFFF27;     /* Electric Lime */
+            --color-enterprise: #D455F5;/* Neon Purple */
+
+            /* Variable dinámica para el color del servicio actual */
+            --current-service-color: var(--color-artist);
+
+            --font-headings: 'Audiowide', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        /* --- RESETEO BÁSICO Y ESTILOS GLOBALES --- */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-bg-1);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- HEADER Y NAVEGACIÓN --- */
+        .site-header {
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-image {
+            height: 50px;
+            width: auto;
+            display: block;
+            flex-shrink: 0; 
+        }
+        
+        .nav-wrapper {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            margin: 0 20px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .main-nav {
+            display: flex;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .main-nav a {
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: 16px;
+            color: var(--color-text);
+            text-decoration: none;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+            white-space: nowrap; 
+        }
+
+        .main-nav a:hover {
+            color: var(--color-accent);
+        }
+
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lang-switcher .lang-link {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .lang-switcher .lang-link:hover {
+            opacity: 1;
+        }
+
+        .lang-switcher .lang-link.active {
+            opacity: 1;
+            color: var(--color-primary);
+        }
+
+        /* --- MENÚ MÓVIL --- */
+        .mobile-nav-toggle {
+            display: none; 
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            z-index: 1; 
+            transform: scale(0.95);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background-color: rgba(0, 0, 0, 0.6);
+            transition: background-color 0.5s ease;
+        }
+
+        .hero-overlay.sound-is-active {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content {
+            position: absolute;
+            z-index: 3;
+            width: 90%;
+            max-width: 1200px; 
+            bottom: 10vh; 
+            left: 50%; 
+            transform: translateX(-50%);
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: var(--font-headings);
+            font-size: clamp(28px, 4.5vw, 44px);
+            text-transform: uppercase;
+            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0 auto;
+        }
+
+        @keyframes neon-pulse {
+            from { box-shadow: 0 0 5px rgba(44, 236, 237, 0.6), 0 0 10px rgba(44, 236, 237, 0.4); }
+            to { box-shadow: 0 0 15px var(--color-primary), 0 0 25px var(--color-primary); }
+        }
+
+        .sound-button {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            z-index: 4;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .sound-button.is-blinking {
+            animation: neon-pulse 0.25s infinite alternate ease-in-out;
+        }
+
+        .sound-button:hover {
+            background-color: var(--color-primary);
+            color: var(--color-bg-1);
+            transform: scale(1.1);
+        }
+
+        .is-hidden {
+            display: none;
+        }
+
+        /* --- SECCIONES DE CONTENIDO GENERAL --- */
+        main {
+            padding-top: 80px; 
+        }
+
+        .content-section {
+            padding: 100px 0;
+            position: relative;
+            scroll-margin-top: 80px; 
+        }
+
+        .section-title {
+            font-family: var(--font-headings);
+            font-size: clamp(32px, 5vw, 48px);
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--color-primary);
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            max-width: 800px;
+            margin: -10px auto 40px auto;
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+        }
+
+        /* --- INICIO: NUEVOS ESTILOS PARA SECCIÓN DE SERVICIOS --- */
+        .service-selector-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .service-selector-btn {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .service-selector-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--color-text);
+        }
+
+        .service-selector-btn.active {
+            color: var(--color-bg-1);
+            background-color: var(--current-service-color);
+            border-color: var(--current-service-color);
+            box-shadow: 0 0 15px var(--current-service-color);
+        }
+
+        .accordion-item {
+            border-left: 3px solid var(--current-service-color);
+            transition: background-color 0.3s ease, border-color 0.4s ease;
+        }
+        
+        .accordion-toggle {
+            border-color: var(--current-service-color);
+            color: var(--current-service-color);
+        }
+        
+        .accordion-item.active .accordion-toggle {
+            background-color: var(--current-service-color);
+            color: var(--color-bg-1);
+        }
+        
+        .service-detail-item h4 {
+            color: var(--current-service-color);
+            transition: color 0.4s ease;
+        }
+
+        .quote-btn-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .quote-btn {
+            background-color: var(--current-service-color);
+            color: var(--color-bg-1);
+            box-shadow: 0 0 15px var(--current-service-color);
+            transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+        }
+
+        .quote-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            background-color: var(--current-service-color); /* Mantener color en hover */
+        }
+        /* --- FIN: NUEVOS ESTILOS PARA SECCIÓN DE SERVICIOS --- */
+
+        .accordion-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .accordion-item {
+            background-color: var(--color-bg-2);
+            border-radius: 4px;
+            overflow: hidden;
+            scroll-margin-top: 100px; 
+        }
+        
+        .accordion-item.active {
+            background-color: #0c4f4a; 
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            cursor: pointer;
+        }
+
+        .accordion-text {
+            flex-grow: 1;
+            padding-right: 20px;
+        }
+
+        .accordion-title {
+            font-family: var(--font-headings);
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .accordion-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 90%;
+        }
+
+        .accordion-toggle {
+            background-color: transparent;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        .service-detail-list {
+            padding: 0 30px 30px 30px;
+            border-top: 1px solid rgba(238, 143, 0, 0.2);
+        }
+
+        .service-detail-item {
+            margin-top: 25px;
+        }
+
+        .service-detail-item p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* --- SECCIÓN DE PORTFOLIO (CARRUSEL) --- */
+        #portfolio {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .portfolio-filters-container {
+            background-color: rgba(7, 59, 56, 0.3);
+            padding: 30px 0;
+            margin-bottom: 40px;
+            border-top: 1px solid rgba(238, 143, 0, 0.2);
+            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
+        }
+        .portfolio-filters {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+        .filter-group {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-group-label {
+            font-family: var(--font-headings);
+            font-size: 16px;
+            color: var(--color-primary);
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .filter-btn {
+            background-color: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-bg-1);
+        }
+        .filter-btn.active {
+            background-color: var(--color-accent);
+            color: var(--color-bg-1);
+            border-color: var(--color-accent);
+        }
+
+        .portfolio-slider-wrapper {
+            position: relative;
+            min-height: 300px; /* Para dar espacio al mensaje de no resultados */
+        }
+        .swiper-container {
+            width: 100%;
+            padding: 20px 0;
+        }
+        .swiper-slide {
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            height: auto; 
+            display: flex;
+        }
+        
+        /* --- INICIO: Ajustes de ancho para recuadros del portafolio --- */
+        .portfolio-swiper .swiper-slide {
+            width: 480px; /* Ancho para pantallas de escritorio */
+        }
+
+        @media (max-width: 1024px) {
+            .portfolio-swiper .swiper-slide {
+                width: 60%; /* Ancho para tablets */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-swiper .swiper-slide {
+                width: 85%; /* Ancho para móviles */
+            }
+        }
+        /* --- FIN: Ajustes de ancho --- */
+
+        .swiper-slide:not(.swiper-slide-active) {
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+        .swiper-slide.swiper-slide-active {
+            opacity: 1;
+            transform: scale(0.95);
+        }
+        .portfolio-item {
+            background-color: var(--color-bg-2);
+            border-radius: 4px;
+            overflow: hidden;
+            border-bottom: 3px solid var(--color-secondary);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .portfolio-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        /* Estilos para el reproductor de SoundCloud */
+        .portfolio-embed-wrapper {
+            background-color: #051a19;
+            line-height: 0;
+        }
+        .portfolio-embed-wrapper iframe {
+            border: none;
+            width: 100%;
+        }
+
+        .portfolio-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .portfolio-title {
+            font-family: var(--font-headings);
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .portfolio-desc {
+            color: var(--color-primary);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .portfolio-tags {
+            margin-bottom: 20px;
+            min-height: 24px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: rgba(44, 236, 237, 0.1);
+            color: var(--color-primary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .artist-links {
+            margin-top: auto; 
+            padding-top: 15px;
+            border-top: 1px solid rgba(238, 143, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .artist-links a {
+            color: var(--color-text);
+            font-size: 24px;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+        }
+        .artist-links a:hover {
+            color: var(--color-primary);
+            opacity: 1;
+            transform: translateY(-3px);
+        }
+        .slider-navigation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .slider-btn {
+            pointer-events: all; 
+            background-color: rgba(7, 59, 56, 0.8);
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .slider-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-bg-1);
+        }
+
+        /* --- INICIO: ESTILOS PARA MENSAJE DE NO RESULTADOS --- */
+        .no-results-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .no-results-message h3 {
+            font-family: var(--font-headings);
+            font-size: 22px;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+        }
+        .reset-filters-btn {
+            margin-top: 25px;
+            background-color: transparent;
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .reset-filters-btn:hover {
+            background-color: var(--color-accent);
+            color: var(--color-bg-1);
+        }
+        /* --- FIN: ESTILOS PARA MENSAJE DE NO RESULTADOS --- */
+
+
+        /* --- NUEVOS ESTILOS PARA SECCIÓN DE GEAR --- */
+        .gear-intro {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+        .gear-intro-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 3px solid var(--color-secondary);
+        }
+        .gear-intro-text h3 {
+            font-family: var(--font-headings);
+            font-size: 28px;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+        .gear-intro-text p {
+            font-size: 18px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .gear-subsection-title {
+            text-align: center;
+            font-size: 24px;
+            font-family: var(--font-headings);
+            color: var(--color-text);
+            margin-bottom: 40px;
+            border-top: 1px solid rgba(238, 143, 0, 0.2);
+            padding-top: 40px;
+        }
+        
+        .percussion-map-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto; 
+        }
+        .world-map-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.8; 
+        }
+        .map-dot {
+            position: absolute;
+            width: 14px; 
+            height: 14px;
+            background-color: var(--color-secondary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid black;
+            animation: map-dot-pulse 0.25s infinite alternate; 
+        }
+        .map-dot:hover, .map-dot.active {
+            transform: scale(1.5);
+            box-shadow: 0 0 15px var(--color-secondary);
+            animation: none;
+        }
+        @keyframes map-dot-pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.3); }
+        }
+        
+        #dot-colombia { top: 59%; left: 25%; }
+        #dot-peru { top: 65%; left: 25%; }
+        #dot-brazil { top: 68%; left: 32%; }
+        #dot-cuba { top: 52%; left: 23%; }
+        #dot-dominican-republic { top: 53%; left: 26%; }
+        #dot-north-africa { top: 49%; left: 51%; }
+        #dot-subsaharan-africa { top: 64%; left: 53%; }
+        #dot-spain { top: 40%; left: 44.5%; }
+        #dot-symphonic { top: 32%; left: 50%; } 
+        #dot-japan { top: 42%; left: 84%; }
+        #dot-turkey { top: 41%; left: 55%; }
+        #dot-india { top: 53%; left: 67%; }
+
+        .map-caption {
+            text-align: center;
+            font-family: var(--font-headings);
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .instrument-panel {
+            display: none; 
+            background-color: var(--color-bg-2);
+            padding: 30px;
+            border-radius: 4px;
+            margin-top: 20px;
+            position: relative; 
+        }
+        .instrument-panel h4 {
+            font-family: var(--font-headings);
+            font-size: 20px;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+        .instrument-panel ul {
+            list-style: none;
+            columns: 2;
+            -webkit-columns: 2;
+            -moz-columns: 2;
+            padding-left: 0;
+        }
+        .instrument-panel li {
+            margin-bottom: 10px;
+        }
+        /* Estilos para hacer los instrumentos clickeables */
+        .instrument-list-item {
+            background: none;
+            border: none;
+            color: var(--color-text);
+            text-align: left;
+            padding: 5px;
+            width: 100%;
+            font-size: 16px;
+            font-family: var(--font-body);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .instrument-list-item:hover {
+            background-color: rgba(44, 236, 237, 0.1);
+            color: var(--color-primary);
+        }
+
+        .close-panel-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--color-text);
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .close-panel-btn:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .drum-section-title {
+            text-align: center;
+            font-size: 22px;
+            font-family: var(--font-headings);
+            color: var(--color-text);
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+
+        .drum-kits-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .drum-kit-card {
+            background-color: var(--color-bg-2);
+            padding: 30px;
+            border-radius: 4px;
+            border-top: 3px solid var(--color-accent);
+        }
+
+        .drum-kit-image {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .drum-kit-card h3 {
+            font-family: var(--font-headings);
+            color: var(--color-primary);
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .drum-kit-card p {
+            color: rgba(255,255,255, 0.9);
+        }
+
+        .drum-palette-container {
+            background-color: var(--color-bg-2);
+            padding: 40px;
+            border-radius: 4px;
+            text-align: center;
+            border-left: 3px solid var(--color-secondary);
+        }
+
+        .drum-palette-container h3 {
+            font-family: var(--font-headings);
+            font-size: 24px;
+            color: var(--color-primary); 
+            margin-bottom: 15px;
+        }
+
+        .drum-palette-container p {
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+            color: rgba(255,255,255, 0.9);
+        }
+
+        .drum-palette-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .drum-palette-images img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .mallet-instrument-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .mallet-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            background-color: var(--color-bg-2);
+            padding: 30px;
+            border-radius: 4px;
+            border-left: 3px solid var(--color-primary);
+        }
+        .mallet-card:nth-child(even) {
+            grid-template-columns: 1fr 1fr; 
+        }
+         .mallet-card:nth-child(even) .mallet-text {
+            order: 2;
+        }
+         .mallet-card:nth-child(even) .mallet-image {
+            order: 1;
+        }
+
+        .mallet-text h4 {
+            font-family: var(--font-headings);
+            font-size: 24px;
+            color: var(--color-secondary);
+            margin-bottom: 15px;
+        }
+        .mallet-text p {
+            color: rgba(255,255,255,0.9);
+        }
+        .mallet-image img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .tech-gear-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .gear-category {
+             background-color: var(--color-bg-2);
+             padding: 30px;
+             border-radius: 4px;
+        }
+
+        .gear-category h3 {
+            font-family: var(--font-headings);
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--color-primary);
+            border-bottom: 1px solid rgba(238, 143, 0, 0.3);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gear-category ul {
+            list-style: none;
+        }
+
+        .gear-category li {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- NUEVOS ESTILOS PARA SECCIÓN ABOUT US --- */
+        .about-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .about-image img {
+            width: 100%;
+            border-radius: 4px;
+            border: 2px solid var(--color-secondary);
+        }
+        .about-text h3 {
+            font-family: var(--font-headings);
+            font-size: 24px;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+        .about-text p {
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- SECCIÓN DE CONTACTO --- */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--color-bg-2);
+            background-color: rgba(7, 59, 56, 0.5);
+            color: var(--color-text);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            background-color: var(--color-accent);
+            color: var(--color-bg-1);
+            text-decoration: none;
+            font-family: var(--font-headings);
+            font-weight: 400;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: var(--color-secondary);
+            transform: translateY(-3px);
+        }
+
+        .contact-info .info-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .contact-info .info-block i {
+            font-size: 28px;
+            color: var(--color-primary);
+            margin-top: 5px;
+        }
+
+        .contact-info .info-block h4 {
+            font-family: var(--font-headings);
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .contact-info .info-block p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        .contact-info .info-block a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info .info-block a:hover {
+            color: var(--color-accent);
+        }
+
+        .map-placeholder {
+            height: 200px;
+            background-color: var(--color-bg-2);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: var(--font-headings);
+        }
+
+        /* --- INICIO: ESTILOS PARA EL LLAMADO A LA ACCIÓN DE REDES SOCIALES (AJUSTADOS) --- */
+        .socials-cta {
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
+        }
+        .socials-cta-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        .socials-cta-text {
+            font-family: var(--font-headings);
+            font-size: clamp(24px, 4vw, 36px);
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            flex-grow: 1;
+            flex-basis: 50%;
+        }
+        .socials-cta-arrow {
+            flex-shrink: 0;
+            width: 300px;
+        }
+        .socials-cta-arrow svg {
+            width: 100%;
+            height: auto;
+        }
+        .socials-cta-arrow .arrow-path {
+            stroke: var(--color-secondary);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-arrow 2s ease-out forwards;
+        }
+        .socials-cta-arrow .arrow-text {
+            font-family: var(--font-body);
+            font-size: 14px;
+            fill: var(--color-primary);
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fade-in-text 1s ease-out 1s forwards;
+        }
+        @keyframes draw-arrow {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes fade-in-text {
+            to { opacity: 1; }
+        }
+
+        /* Punto de quiebre para apilar en móvil */
+        @media (max-width: 750px) {
+            .socials-cta-container {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+                gap: 20px;
+            }
+            .socials-cta-text {
+                flex-basis: auto;
+            }
+            .socials-cta-arrow {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        /* --- FIN: ESTILOS PARA EL LLAMADO A LA ACCIÓN DE REDES SOCIALES (AJUSTADOS) --- */
+
+
+        /* --- FOOTER --- */
+        .site-footer-bottom {
+            background-color: #000;
+            padding: 20px 0;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-footer-bottom p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 22px;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        /* --- ESTILOS PARA MODALES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.is-visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--color-bg-2);
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            border-top: 3px solid var(--color-primary);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.is-visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--color-text);
+            font-size: 30px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .instrument-modal-body {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 30px;
+        }
+        .instrument-modal-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            aspect-ratio: 1 / 1;
+        }
+        .instrument-modal-title {
+            font-family: var(--font-headings);
+            font-size: 24px;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .instrument-sound-btn {
+            background: none;
+            border: none;
+            color: var(--color-secondary);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .instrument-sound-btn:hover {
+            color: var(--color-accent);
+            transform: scale(1.1);
+        }
+        .instrument-modal-desc {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        /* Modal de contacto */
+        #contact-apps-modal .modal-content {
+            max-width: 400px;
+            text-align: center;
+        }
+        #contact-apps-modal h3 {
+            font-family: var(--font-headings);
+            font-size: 22px;
+            color: var(--color-primary);
+            margin-bottom: 25px;
+        }
+        .contact-app-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact-app-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+        .contact-app-btn:hover {
+            transform: scale(1.05);
+        }
+        .contact-app-btn i {
+            font-size: 24px;
+        }
+        .btn-whatsapp { background-color: #25D366; color: white; }
+        .btn-telegram { background-color: #0088cc; color: white; }
+        .btn-wechat { background-color: #09B83E; color: white; }
+
+
+        /* --- RESPONSIVE STYLES --- */
+        @media (max-width: 820px) {
+            .nav-wrapper {
+                display: none; 
+            }
+
+            .mobile-nav-toggle {
+                display: block; 
+            }
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 70%;
+            max-width: 320px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            transform: translateX(100%); 
+            transition: transform 0.4s ease-in-out;
+            z-index: 999; 
+        }
+
+        .mobile-nav.is-open {
+            transform: translateX(0); 
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            padding: 0;
+            flex-direction: column;
+            display: flex;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .mobile-nav a {
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: 22px;
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .mobile-nav a:hover {
+            color: var(--color-accent);
+        }
+
+        @media (max-width: 768px) {
+            .gear-intro, .drum-kits-container, .contact-wrapper, .mallet-card, .mallet-card:nth-child(even), .about-wrapper {
+                flex-direction: column;
+                text-align: center;
+                grid-template-columns: 1fr;
+            }
+            .mallet-card:nth-child(even) .mallet-text,
+            .mallet-card:nth-child(even) .mallet-image {
+                order: initial;
+            }
+            .instrument-panel ul {
+                columns: 1;
+                -webkit-columns: 1;
+                -moz-columns: 1;
+            }
+            .drum-palette-images {
+                grid-template-columns: 1fr;
+            }
+            .footer-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .instrument-modal-body {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .instrument-modal-img {
+                width: 150px;
+                height: 150px;
+                margin: 0 auto;
+            }
+            .instrument-modal-title {
+                justify-content: center;
+            }
+            .service-selector-btn {
+                font-size: 12px;
+                padding: 8px 18px;
+            }
+        }
+    </style>
+    <!-- FIN DEL CÓDIGO CSS EMBEBIDO -->
+</head>
+<body>
+
+    <!-- ========= HEADER START (Estructura Definitiva) ========= -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="index.html" class="logo-link">
+                <img src="assets/img/logo.png" alt="TEBF STUDIO Logo" class="logo-image" onerror="this.onerror=null;this.src='https://placehold.co/150x50/000000/FFFFFF?text=Logo';">
+            </a>
+            
+            <div class="nav-wrapper">
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#gear">Gear</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <div class="lang-switcher">
+                    <a href="index.html" class="lang-link active">EN</a>
+                    <span>|</span>
+                    <a href="index-es.html" class="lang-link">ES</a>
+                </div>
+                <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu">
+                    <i class="ri-menu-line" id="mobile-nav-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="mobile-nav" id="mobile-nav">
+        <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#gear">Gear</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <!-- ========= HEADER END ========= -->
+
+    <!-- ========= HERO SECTION START ========= -->
+    <section id="hero" class="hero-section">
+        <video autoplay muted playsinline class="hero-video" id="heroVideo">
+            <source src="assets/logo-animado.webm" type="video/webm">
+            <source src="assets/logo-animado.mp4" type="video/mp4">
+            Your browser does not support video tags.
+        </video>
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1 class="hero-title">Forging the Beat that Defines You</h1>
+            </div>
+        </div>
+        <button class="sound-button is-blinking" id="sound-toggle">
+            <i class="ri-volume-mute-line" id="icon-mute"></i>
+            <i class="ri-volume-up-line is-hidden" id="icon-unmute"></i>
+        </button>
+    </section>
+    <!-- ========= HERO SECTION END ========= -->
+
+    <main>
+        <!-- ========= SERVICES SECTION START (NUEVA VERSIÓN DINÁMICA) ========= -->
+        <section id="services" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Our Services</h2>
+                <p class="section-subtitle">Tailored sonic solutions for every creator. Select your profile to discover how we can forge your sound.</p>
+                
+                <div class="service-selector-container" id="service-selector">
+                    <button class="service-selector-btn active" data-client="artist">For Musical Artists</button>
+                    <button class="service-selector-btn" data-client="producer">For Music Producers</button>
+                    <button class="service-selector-btn" data-client="media">For Media Creators</button>
+                    <button class="service-selector-btn" data-client="enterprise">For Enterprises</button>
+                </div>
+
+                <div class="accordion-container" id="services-accordion">
+                    <!-- Los items del acordeón se generarán dinámicamente con JS -->
+                </div>
+
+                <div class="quote-btn-container" id="quote-btn-container">
+                    <a href="#contact" class="button quote-btn">Quote Your Project Now</a>
+                </div>
+            </div>
+        </section>
+        <!-- ========= SERVICES SECTION END ========= -->
+
+        <!-- ========= PORTFOLIO SECTION START (NUEVA VERSIÓN) ========= -->
+        <section id="portfolio" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Our Work</h2>
+                <p class="section-subtitle">Explore a selection of our diverse productions. Use the filters to navigate through different applications and styles.</p>
+                <div class="portfolio-filters">
+                    <div class="filter-group">
+                        <span class="filter-group-label">Application:</span>
+                        <button class="filter-btn active" data-filter="all" data-group="app">All</button>
+                        <button class="filter-btn" data-filter="music-production" data-group="app">Music Production</button>
+                        <button class="filter-btn" data-filter="audio-for-media" data-group="app">Audio for Media</button>
+                        <button class="filter-btn" data-filter="corporate-audio" data-group="app">Corporate Audio</button>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-group-label">Style:</span>
+                        <button class="filter-btn active" data-filter="all" data-group="style">All</button>
+                        <button class="filter-btn" data-filter="africa" data-group="style">Africa</button>
+                        <button class="filter-btn" data-filter="colombian" data-group="style">Colombian</button>
+                        <button class="filter-btn" data-filter="mexican" data-group="style">Mexican</button>
+                        <button class="filter-btn" data-filter="brazilian" data-group="style">Brazilian</button>
+                        <button class="filter-btn" data-filter="andean" data-group="style">Andean</button>
+                        <button class="filter-btn" data-filter="latin" data-group="style">Latin</button>
+                        <button class="filter-btn" data-filter="caribbean" data-group="style">Caribbean</button>
+                        <button class="filter-btn" data-filter="urban" data-group="style">Urban</button>
+                        <button class="filter-btn" data-filter="electronic" data-group="style">Electronic</button>
+                        <button class="filter-btn" data-filter="middle east/north africa" data-group="style">Middle East/North Africa</button>
+                        <button class="filter-btn" data-filter="europe/mediterranean" data-group="style">Europe/Mediterranean</button>
+                        <button class="filter-btn" data-filter="asia" data-group="style">Asia</button> 
+                        <button class="filter-btn" data-filter="rock,pop" data-group="style">Rock/Pop</button>
+                        <button class="filter-btn" data-filter="jazz/blues" data-group="style">Jazz/Blues</button>
+                        <button class="filter-btn" data-filter="funk/soul/r&b" data-group="style">Funk/Soul/R&B</button>
+                        <button class="filter-btn" data-filter="punk" data-group="style">Punk</button>
+                        <button class="filter-btn" data-filter="metal" data-group="style">Metal</button>
+                        <button class="filter-btn" data-filter="orchestral" data-group="style">Orchestral</button>
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-slider-wrapper">
+                <div class="swiper portfolio-swiper">
+                    <div class="swiper-wrapper" id="portfolio-slider">
+                        <!-- Proyectos se insertan aquí con JS -->
+                    </div>
+                </div>
+                <div class="slider-navigation">
+                    <button class="slider-btn portfolio-prev"><i class="ri-arrow-left-s-line"></i></button>
+                    <button class="slider-btn portfolio-next"><i class="ri-arrow-right-s-line"></i></button>
+                </div>
+            </div>
+        </section>
+        <!-- ========= PORTFOLIO SECTION END ========= -->
+
+        <!-- ========= GEAR SECTION START (NUEVA VERSIÓN) ========= -->
+        <section id="gear" class="content-section">
+            <div class="container">
+                <h2 class="section-title">The Factory Floor: Our Instruments & Tools</h2>
+                
+                <div class="gear-intro">
+                    <img src="assets/img/enciso-gear.jpg" alt="A photo of the studio founder, Enciso" class="gear-intro-img">
+                    <div class="gear-intro-text">
+                        <h3>The Heartbeat of the Factory</h3>
+                        <p>"My collection is more than just instruments; it's a palette of global sounds, each with a story. Here is the arsenal we use to build your beat."</p>
+                    </div>
+                </div>
+
+                <h3 class="gear-subsection-title">The Heartbeat: A World of Percussion</h3>
+                <div class="percussion-map-container">
+                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=Mapa+Mundi';">
+                    <!-- Puntos Interactivos -->
+                    <div class="map-dot" id="dot-colombia" data-region="colombia" title="Colombia"></div>
+                    <div class="map-dot" id="dot-peru" data-region="peru" title="Peru"></div>
+                    <div class="map-dot" id="dot-brazil" data-region="brazil" title="Brazil"></div>
+                    <div class="map-dot" id="dot-cuba" data-region="cuba" title="Cuba"></div>
+                    <div class="map-dot" id="dot-dominican-republic" data-region="dominican-republic" title="Dominican Republic"></div>
+                    <div class="map-dot" id="dot-north-africa" data-region="north-africa" title="North Africa"></div>
+                    <div class="map-dot" id="dot-subsaharan-africa" data-region="subsaharan-africa" title="Sub-Saharan Africa"></div>
+                    <div class="map-dot" id="dot-spain" data-region="spain" title="Spain"></div>
+                    <div class="map-dot" id="dot-symphonic" data-region="symphonic" title="Symphonic Europe"></div>
+                    <div class="map-dot" id="dot-japan" data-region="japan" title="Japan"></div>
+                    <div class="map-dot" id="dot-turkey" data-region="turkey" title="Turkey"></div>
+                    <div class="map-dot" id="dot-india" data-region="india" title="India"></div>
+                </div>
+                <p class="map-caption">A world of rhythm awaits. Click a region to explore the drums for your track.</p>
+                <!-- Paneles de Instrumentos (Ocultos por defecto) -->
+                <div id="panel-colombia" class="instrument-panel"><h4>Colombia<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="vallenato-box">Vallenato Box</button></li><li><button class="instrument-list-item" data-instrument="guacharaca">Guacharaca</button></li><li><button class="instrument-list-item" data-instrument="cununo">Cununo (Macho & Hembra)</button></li><li><button class="instrument-list-item" data-instrument="pacific-bombo">Pacific Bombo (Macho & Hembra)</button></li><li><button class="instrument-list-item" data-instrument="guasa">Guasá</button></li><li><button class="instrument-list-item" data-instrument="atlantic-tambora">Atlantic Tambora</button></li><li><button class="instrument-list-item" data-instrument="alegre-drum">Alegre Drum</button></li><li><button class="instrument-list-item" data-instrument="guacho">Guacho</button></li><li><button class="instrument-list-item" data-instrument="maracon">Maracón</button></li><li><button class="instrument-list-item" data-instrument="capachos">Capachos Llaneros</button></li></ul></div>
+                <div id="panel-cuba" class="instrument-panel"><h4>Cuba<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="congas">Congas</button></li><li><button class="instrument-list-item" data-instrument="bongo">Bongó</button></li><li><button class="instrument-list-item" data-instrument="timbales">Timbales</button></li><li><button class="instrument-list-item" data-instrument="guiro">Güiro</button></li><li><button class="instrument-list-item" data-instrument="maracas">Maracas</button></li><li><button class="instrument-list-item" data-instrument="cowbells">Bell Set (Cowbells)</button></li><li><button class="instrument-list-item" data-instrument="jam-blocks">Jam Blocks</button></li><li><button class="instrument-list-item" data-instrument="claves">Claves</button></li></ul></div>
+                <div id="panel-peru" class="instrument-panel"><h4>Peru<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="peruvian-cajon">Peruvian Cajon</button></li><li><button class="instrument-list-item" data-instrument="quijada">Quijada (Vibraslap)</button></li></ul></div>
+                <div id="panel-brazil" class="instrument-panel"><h4>Brazil<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="pandeiro">Pandeiro</button></li><li><button class="instrument-list-item" data-instrument="samba-whistle">Samba Whistle (Apito)</button></li><li><button class="instrument-list-item" data-instrument="agogo-bells">Agogô Bells</button></li><li><button class="instrument-list-item" data-instrument="caixa">Caixa</button></li><li><button class="instrument-list-item" data-instrument="surdo">Surdo</button></li><li><button class="instrument-list-item" data-instrument="timbau">Timbau</button></li><li><button class="instrument-list-item" data-instrument="cabasa">Afuche / Cabasa</button></li><li><button class="instrument-list-item" data-instrument="triangle">Triangle</button></li><li><button class="instrument-list-item" data-instrument="shaker">Shaker</button></li></ul></div>
+                <div id="panel-dominican-republic" class="instrument-panel"><h4>Dominican Republic<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="guira">Güira</button></li><li><button class="instrument-list-item" data-instrument="merengue-tambora">Merengue Tambora</button></li></ul></div>
+                <div id="panel-subsaharan-africa" class="instrument-panel"><h4>Sub-Saharan Africa<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="djembe">Djembé</button></li><li><button class="instrument-list-item" data-instrument="talking-drum">Talking Drum</button></li><li><button class="instrument-list-item" data-instrument="asalato">Asalato (Kass-Kass)</button></li></ul></div>
+                <div id="panel-north-africa" class="instrument-panel"><h4>North Africa<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="darbuka">Egyptian Darbuka (Tabla)</button></li><li><button class="instrument-list-item" data-instrument="udu-drum">Udu Drum</button></li></ul></div>
+                <div id="panel-spain" class="instrument-panel"><h4>Spain<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="flamenco-cajon">Flamenco Cajon</button></li><li><button class="instrument-list-item" data-instrument="castanets">Castanets</button></li></ul></div>
+                <div id="panel-symphonic" class="instrument-panel"><h4>Symphonic & Orchestral<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="tambourine">Tambourine</button></li><li><button class="instrument-list-item" data-instrument="sleigh-bells">Sleigh Bells</button></li><li><button class="instrument-list-item" data-instrument="timpani">Symphonic Timpani</button></li><li><button class="instrument-list-item" data-instrument="gran-cassa">Gran Cassa (Bass Drum)</button></li><li><button class="instrument-list-item" data-instrument="cymbals">Cymbals (Crash & Suspended)</button></li><li><button class="instrument-list-item" data-instrument="triangle">Triangle</button></li><li><button class="instrument-list-item" data-instrument="shaker">Shaker</button></li><li><button class="instrument-list-item" data-instrument="celesta">Celesta Bar (Wind/Chime Bells)</button></li></ul></div>
+                <div id="panel-india" class="instrument-panel"><h4>India<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="tabla">Tabla</button></li></ul></div>
+                <div id="panel-japan" class="instrument-panel"><h4>Japan<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="taiko">Taiko Set</button></li></ul></div>
+                <div id="panel-turkey" class="instrument-panel"><h4>Turkey<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="turkish-darbuka">Turkish Darbuka</button></li><li><button class="instrument-list-item" data-instrument="daf">Daf</button></li></ul></div>
+
+                <!-- SECCIÓN DE BATERÍAS -->
+                <h3 class="gear-subsection-title">The Engine Room: Sonic Blueprints</h3>
+                <div class="drum-kits-container">
+                    <div class="drum-kit-card">
+                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Yamaha';">
+                        <h3>The "Big Rig" Configuration</h3>
+                        <p>This is our workhorse for a sound that is both massive and explosive. We configure the Yamaha Maple Custom Absolute with a thunderous 22" kick and a full set of toms (10" to 16") to deliver a deep, fat tone with a commanding punch. It's the definitive choice for creating a powerful, resonant foundation in Rock, Pop, Funk, Latin and Metal.</p>
+                    </div>
+                    <div class="drum-kit-card">
+                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Gretsch';">
+                        <h3>The "Finesse" Configuration</h3>
+                        <p>When precision is paramount, we re-tool the kit for its "Finesse" setup. Centered on a tight, melodic 18" kick and smaller, responsive toms, this configuration produces a crisp, articulate sound that sings with warmth and nuance. It’s the perfect choice for capturing every ghost note and subtle detail in Jazz, Fusion, Folkloric, Urban, R&B, and Singer-Songwriter sessions.</p>
+                    </div>
+                </div>
+                <div class="drum-palette-container">
+                    <h3>The Final Touch: Your Sonic Fingerprint</h3>
+                    <p>The kit configuration sets the foundation, but the snares and cymbals define its unique voice. This is the final calibration. We offer a full palette of options—different sizes and materials for snare drums; and a wide range of hi-hats, rides, crashes, chinas, splashes, and stacks—to find the unique combination that will become your beat's sonic fingerprint.</p>
+                    <div class="drum-palette-images">
+                        <img src="assets/img/snares-collection.jpg" alt="Collection of various snare drums">
+                        <img src="assets/img/cymbals-selection.jpg" alt="Selection of various cymbals">
+                    </div>
+                </div>
+
+                <!-- NUEVA SECCIÓN DE INSTRUMENTOS MELÓDICOS -->
+                <h3 class="gear-subsection-title">Beyond Rhythm: Melodic & Harmonic Foundations</h3>
+                <p class="section-subtitle">The Beat Factory isn't just about the pulse; it's about building the harmonic and melodic soul that elevates your production. We have a unique range of mallet instruments to add authenticity, color, and convey every emotion.</p>
+                <div class="mallet-instrument-container">
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>Marimba de Chonta</h4>
+                            <p>The piano of the Colombian jungle... its wooden keys hold the secrets of the Pacific rainforest. We use it to add organic warmth, hypnotic textures, and a deeply ancestral flavor to your tracks, bringing a unique and soulful character to your music.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/marimba-de-chonta.jpg" alt="Marimba de Chonta">
+                        </div>
+                    </div>
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>Vibraphone</h4>
+                            <p>Ethereal, metallic, and full of soul. The vibraphone adds a layer of sophisticated harmony and a dreamy, shimmering sustain that is perfect for jazz, lo-fi, and cinematic soundscapes. Its unique vibrato creates a captivating and unforgettable atmosphere.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/vibraphone.jpg" alt="Vibraphone">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INICIO: NUEVA SECCIÓN DIGITAL -->
+                <h3 class="gear-subsection-title">The Modern Forge: Where Bytes Become Beats</h3>
+                <div class="mallet-instrument-container" style="margin-bottom: 60px;">
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>The Infinite Rhythmic Canvas</h4>
+                            <p>While our soul is analog, our brain is digital. This is where the physical world is deconstructed and rebuilt without limits. Our electronic setup is not just a drum machine with a collection of sounds; it's a powerful tool capable of capturing any texture, loop it for creating hypnotic patterns, and surgically chopping and re-imagining any audio source. Combined with our vast libraries of unique sounds, we can design hybrid beats, forge futuristic textures, or build entire rhythmic universes from a single spark of inspiration. It's the perfect complement to our acoustic arsenal, offering boundless creativity and sonic precision.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/digital-set.jpg" alt="Electronic drum kit and sampler setup" onerror="this.onerror=null;this.src='https://placehold.co/600x450/073B38/FFFFFF?text=Digital+Set';">
+                        </div>
+                    </div>
+                </div>
+                <!-- FIN: NUEVA SECCIÓN DIGITAL -->
+
+                <h3 class="gear-subsection-title">The Arsenal: Studio & Technical Gear</h3>
+                <div class="tech-gear-grid">
+                    <div class="gear-category">
+                        <h3><i class="ri-hard-drive-3-line"></i> Core System & A/D Conversion</h3>
+                        <ul>
+                            <li>Antelope Orion Studio Synergy Core</li>
+                            <li>(Real-Time FPGA FX Circuit-Level Recreations)</li>
+                        </ul>
+                    </div>
+                    <div class="gear-category">
+                        <h3><i class="ri-keyboard-box-line"></i> Creative Controllers & Tools</h3>
+                        <ul>
+                            <li>Akai Pro MPK Mini Plus</li>
+                            <li>Yamaha DTX Multi 12</li>
+                            <li>Yamaha MIDI Breath Controller</li>
+                        </ul>
+                    </div>
+                    <div class="gear-category">
+                        <h3><i class="ri-equalizer-2-line"></i> Digital Processing & Plugins</h3>
+                        <ul>
+                            <li>Pro Tools Ultimate</li>
+                            <li>Full Suite FabFilter, iZotope, Waves & SSL</li>
+                            <li>Adobe Creative Suite (Audio for Video)</li>
+                            <li>Extensive Sound Libraries</li>
+                        </ul>
+                    </div>
+                    <div class="gear-category">
+                        <h3><i class="ri-speaker-2-line"></i> Monitoring</h3>
+                        <ul>
+                            <li>Adam Audio T5V</li>
+                            <li>Adam Audio T10S Subwoofer</li>
+                            <li>Audio-Technica ATH-M70x</li>
+                        </ul>
+                    </div>
+                    <div class="gear-category">
+                        <h3><i class="ri-mic-2-line"></i> Microphones</h3>
+                        <ul>
+                            <li>Antelope Edge Duo</li>
+                            <li>Sennheiser MD421-II</li>
+                            <li>Sennheiser MD421 Kompakt</li>
+                            <li>Shure SM57</li>
+                            <li>Shure Beta57a</li>
+                            <li>Audix i5</li>
+                            <li>Shure Beta52a</li>
+                            <li>Earthworks DM6</li>
+                            <li>Antelope Audio Edge Note (Pair)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= GEAR SECTION END ========= -->
+
+        <!-- ========= ABOUT US SECTION START ========= -->
+        <section id="about" class="content-section">
+            <div class="container">
+                <h2 class="section-title">About The Beat Factory</h2>
+                <div class="about-wrapper">
+                    <div class="about-image">
+                        <img src="assets/img/enciso-about.jpg" alt="Enciso, founder of TEBF Studio, in the recording room.">
+                    </div>
+                    <div class="about-text">
+                        <h3>Our Philosophy: Analog Soul, Digital Precision</h3>
+                        <p>We believe that timeless music is born from the perfect fusion of human emotion and technical excellence. Our philosophy is simple: capture the raw, authentic soul of a performance with the warmth of analog gear, and then polish it with the limitless possibilities of the digital world. We don't just record sounds; we forge sonic identities.</p>
+                        <h3>The Architect Behind the Beat</h3>
+                        <p>The blueprint for TEBF Studio was drawn on stages worldwide. There, internationally touring percussionist Eduardo Enciso honed his innate understanding of rhythm, learning to engineer it into infectious hooks and signature sounds.</p>
+                        <p>He then assembled his 'partners in crime'—a crew of master musicians and engineers—to forge The Beat Factory. Together, they fuse deep-rooted musical traditions with cutting-edge production, building every project with precision, soul, and a global perspective.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= ABOUT US SECTION END ========= -->
+
+        <!-- ========= CONTACT SECTION START ========= -->
+        <section id="contact" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Let's Build Your Sound</h2>
+                <div class="contact-wrapper">
+                    <div class="contact-form">
+                        <form action="https://api.web3forms.com/submit" method="POST">
+                            <!-- Replace with your Access Key -->
+                            <input type="hidden" name="access_key" value="32d94313-561d-4dfe-ba15-a2a1d27625ac">
+                            <div class="form-group">
+                                <input type="text" name="name" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="message" rows="5" placeholder="Tell us about your project..." required></textarea>
+                            </div>
+                            <button type="submit" class="button">Send Message</button>
+                        </form>
+                    </div>
+                    <div class="contact-info">
+                        <div class="info-block">
+                            <i class="ri-map-pin-line"></i>
+                            <div>
+                                <h4>Location</h4>
+                                <p>Cali, Valle del Cauca<br>Colombia</p>
+                            </div>
+                        </div>
+                        <div class="info-block">
+                            <i class="ri-mail-send-line"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p><a href="mailto:info@tebfstudio.com">info@tebfstudio.com</a></p>
+                            </div>
+                        </div>
+                        <div class="info-block">
+                            <i class="ri-whatsapp-line"></i>
+                            <div>
+                                <h4>Phone / WhatsApp / Telegram / WeChat</h4>
+                                <p><a href="tel:+573155473516" id="contact-phone-link">+57 315 547 3516</a></p>
+                            </div>
+                        </div>
+                        <div class="map-placeholder">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.6683134333134!2d-76.53022949100837!3d3.4306718513463967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30a7faf769bdd1%3A0x8a593eb258c4ea9f!2sThe%20Enciso's%20Beat%20Factory%20(TEBF%20Studio)!5e0!3m2!1sen!2sco!4v1753419022987!5m2!1sen!2sco" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= CONTACT SECTION END ========= -->
+    </main>
+
+    <!-- ========= INICIO: LLAMADO A LA ACCIÓN PARA REDES SOCIALES ========= -->
+    <section class="socials-cta">
+        <div class="container socials-cta-container">
+            <div class="socials-cta-text">
+                <span class="gradient-text">Wanna know more about the factory?</span>
+            </div>
+            <div class="socials-cta-arrow">
+                <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                        refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
+                        </marker>
+                        <path id="arrow-curve" d="M 20 20 L 130 20 Q 180 20 230 80" />
+                    </defs>
+                    <use href="#arrow-curve" class="arrow-path" marker-end="url(#arrowhead)" />
+                    <text class="arrow-text">
+                        <textPath href="#arrow-curve" startOffset="45%" text-anchor="middle">
+                            CHECK OUR SOCIALS
+                        </textPath>
+                    </text>
+                </svg>
+            </div>
+        </div>
+    </section>
+    <!-- ========= FIN: LLAMADO A LA ACCIÓN PARA REDES SOCIALES ========= -->
+
+    <!-- ========= FOOTER START ========= -->
+    <footer class="site-footer-bottom">
+        <div class="container footer-container">
+            <p>&copy; 2025 TEBF STUDIO. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/TebfStudio" target="_blank" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+                <a href="https://web.facebook.com/profile.php?id=61578309329519" target="_blank" aria-label="Facebook"><i class="ri-facebook-box-line"></i></a>
+                <a href="https://www.linkedin.com/company/tebf-studio/" target="_blank" aria-label="LinkedIn"><i class="ri-linkedin-box-line"></i></a>
+                <a href="https://www.youtube.com/@TEBFSTUDIO" target="_blank" aria-label="YouTube"><i class="ri-youtube-line"></i></a>
+            </div>
+        </div>
+    </footer>
+    <!-- ========= FOOTER END ========= -->
+    
+    <!-- ========= MODAL PARA INSTRUMENTOS START ========= -->
+    <div class="modal-overlay" id="instrument-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="instrument-modal-close"><i class="ri-close-line"></i></button>
+            <div class="instrument-modal-body">
+                <div class="instrument-modal-image-container">
+                    <img src="" alt="" id="instrument-modal-img" class="instrument-modal-img">
+                </div>
+                <div class="instrument-modal-text">
+                    <h3 class="instrument-modal-title">
+                        <span id="instrument-modal-name"></span>
+                        <button id="instrument-sound-btn" class="instrument-sound-btn" title="Play sound"><i class="ri-volume-up-line"></i></button>
+                    </h3>
+                    <p id="instrument-modal-desc"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========= MODAL PARA INSTRUMENTOS END ========= -->
+
+    <!-- ========= MODAL PARA APPS DE CONTACTO START ========= -->
+    <div class="modal-overlay" id="contact-apps-modal">
+        <div class="modal-content">
+             <button class="modal-close-btn" id="contact-apps-close"><i class="ri-close-line"></i></button>
+             <h3>Contact via...</h3>
+             <div class="contact-app-buttons">
+                 <a href="https://wa.me/573155473516" target="_blank" class="contact-app-btn btn-whatsapp"><i class="ri-whatsapp-line"></i> WhatsApp</a>
+                 <a href="https://t.me/tu-usuario-telegram" target="_blank" class="contact-app-btn btn-telegram"><i class="ri-telegram-line"></i> Telegram</a>
+                 <a href="weixin://dl/chat?tu-id-wechat" class="contact-app-btn btn-wechat"><i class="ri-wechat-line"></i> WeChat</a>
+             </div>
+        </div>
+    </div>
+    <!-- ========= MODAL PARA APPS DE CONTACTO END ========= -->
+
+    <!-- Swiper.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- INICIO: LÓGICA DE SERVICIOS DINÁMICOS ---
+            const servicesData = {
+                artist: {
+                    themeColor: 'var(--color-artist)',
+                    accordion: [
+                        {
+                            title: 'I. Co-Creation: Forging Your Sonic Identity',
+                            description: 'From a spark of an idea to a fully realized track. We become your creative partner to translate your vision into a sound that is uniquely yours.',
+                            details: [
+                                {
+                                    title: 'Songwriting & Arrangement.',
+                                    text: 'Have a lyric, a melody, or just a feeling? We help you build the structure, harmony, and rhythm that will make your song unforgettable. We are your partners in the trenches.'
+                                },
+                                {
+                                    title: 'Full-Band Production.',
+                                    text: 'We bring your song to life with a complete, end-to-end production. We guide you through every step, from recording and performance coaching to the final mix, ensuring your identity shines through.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'II. Production: Capturing Your Authentic Voice',
+                            description: 'This is where your performance becomes immortal. We focus on capturing the raw emotion and energy that makes you unique.',
+                            details: [
+                                {
+                                    title: 'Vocal & Instrumental Recording.',
+                                    text: 'Our studio is your sanctuary. We create a comfortable, creative environment with world-class gear to capture your best performance, ensuring every nuance is recorded with analog warmth and digital clarity.'
+                                },
+                                {
+                                    title: 'Beat-Making & Custom Tracks.',
+                                    text: 'Need a foundation for your flow or a unique instrumental? We create custom beats and full tracks from scratch, tailored to your style, from organic folkloric rhythms to hard-hitting urban beats.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'III. Post-Production: Polishing Your Art for the World',
+                            description: 'The final step to ensure your music connects with listeners on any platform, from headphones to festival speakers.',
+                            details: [
+                                {
+                                    title: 'Mixing & Mastering.',
+                                    text: 'We sculpt your sound to achieve a professional, competitive mix that feels powerful and emotionally resonant. Your music will be ready to shine on Spotify, Apple Music, and beyond.'
+                                },
+                                {
+                                    title: 'Immersive Audio (Dolby Atmos).',
+                                    text: 'Offer your fans a revolutionary listening experience. We mix your music in Dolby Atmos, creating a 3D soundscape that puts them right in the middle of your song.'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                producer: {
+                    themeColor: 'var(--color-producer)',
+                    accordion: [
+                        {
+                            title: 'I. Pre-Production: Reinforcing Your Workflow',
+                            description: 'Specialized support to streamline your pre-production phase, providing the foundational elements your project needs to succeed.',
+                            details: [
+                                {
+                                    title: 'High-Fidelity Mockups & Demos.',
+                                    text: 'Need to present a polished concept to an artist or label? We create professional-grade demos with top-tier virtual instruments and sound design to accurately represent your production vision.'
+                                },
+                                {
+                                    title: 'Session Musician & Talent Scouting.',
+                                    text: 'Looking for that perfect instrumentalist? We connect you with our network of world-class session musicians to bring the exact flavor and skill your production requires.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'II. Production: Your Secret Weapon in the Studio',
+                            description: 'Access our unique sonic arsenal and specialized expertise to add that missing ingredient to your tracks, all while you maintain full creative control.',
+                            details: [
+                                {
+                                    title: 'Drum & Percussion Tracking.',
+                                    text: 'This is our specialty. Send us your tracks and we’ll record our world-class acoustic drums and vast ethnic percussion collection, providing you with perfectly edited, mix-ready stems.'
+                                },
+                                {
+                                    title: 'The Digital Anvil.',
+                                    text: 'Get the sonic weight of true analog re-amping at a fraction of the cost. Forget plugins that just imitate; our FPGA chip recreates the circuits of legendary hardware, giving you more than 95% of the depth and warmth of the real thing, with a convenience and price point no plugin can ever touch.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'III. Post-Production: The Objective Final Touch',
+                            description: 'A fresh, expert perspective to give your mix the final polish it needs to compete on a global scale.',
+                            details: [
+                                {
+                                    title: 'Stem Mixing & Mastering.',
+                                    text: 'You’ve done the hard work. Send us your stems, and we will provide an objective, high-end mix and master that respects your vision while maximizing punch, clarity, and loudness for all platforms.'
+                                },
+                                {
+                                    title: 'Drum Editing & Enhancement.',
+                                    text: 'Tighten up your rhythm section. We provide surgical editing, sample reinforcement, and processing to make your recorded drums sound powerful and perfectly in the pocket.'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                media: {
+                    themeColor: 'var(--color-media)',
+                    accordion: [
+                        {
+                            title: 'I. Pre-Production: Scripting the Sound of Your Story',
+                            description: 'We align with your narrative from day one, designing a sonic strategy that enhances your story and captivates your audience.',
+                            details: [
+                                {
+                                    title: 'Sonic Concept & Storyboarding.',
+                                    text: 'We collaborate with you on the script or concept to define the sonic palette. We design the emotional arc of the audio to perfectly complement your visuals, whether for a film, podcast, or video game.'
+                                },
+                                {
+                                    title: 'Custom Music Scoring.',
+                                    text: 'From an epic orchestral theme to a subtle, atmospheric underscore, we compose original music that becomes an integral part of your narrative, enhancing emotion and driving the story forward.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'II. Production: Building Your Immersive World',
+                            description: 'We create all the sonic assets your project needs, recorded and designed with the highest fidelity to build a believable and engaging world.',
+                            details: [
+                                {
+                                    title: 'Foley & Sound Effects (SFX).',
+                                    text: 'Every footstep, every rustle, every explosion is crafted to perfection. We record and design custom sound effects that bring your visual world to life with stunning realism.'
+                                },
+                                {
+                                    title: 'Voice-Over & Dialogue Recording.',
+                                    text: 'We provide crystal-clear voice-over recording and ADR (Automated Dialogue Replacement) in a pristine acoustic environment, ensuring every word is heard with perfect clarity.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'III. Post-Production: The Final Cinematic Mix',
+                            description: 'The final step where all sonic elements are woven together to create a seamless, immersive, and impactful audio experience.',
+                            details: [
+                                {
+                                    title: 'Full Audio Post-Production.',
+                                    text: 'We handle the complete audio post-production workflow: dialogue editing, sound design, mixing, and mastering to industry standards for film, broadcast, or streaming.'
+                                },
+                                {
+                                    title: 'Interactive Audio for Games & Apps.',
+                                    text: 'We design and mix sound that reacts to the user. From adaptive music to dynamic sound effects, we create audio that enhances gameplay and user experience.'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                enterprise: {
+                    themeColor: 'var(--color-enterprise)',
+                    accordion: [
+                        {
+                            title: 'I. Pre-Production: Defining Your Brand\'s Sonic Voice',
+                            description: 'We work with you to understand your brand identity and communication goals, creating a strategic audio plan that resonates with your target audience.',
+                            details: [
+                                {
+                                    title: 'Audio Branding Strategy.',
+                                    text: 'What does your brand sound like? We help you develop a unique sonic identity, from a memorable sonic logo (audio logo) to a consistent musical and vocal tone for all your communications.'
+                                },
+                                {
+                                    title: 'Scripting & Creative Consultation.',
+                                    text: 'We collaborate with your marketing team to refine scripts for commercials, corporate videos, or internal communications, ensuring the message is clear, concise, and impactful when spoken.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'II. Production: Crafting Your Message with Excellence',
+                            description: 'We produce high-quality audio assets that reflect the professionalism of your brand and effectively convey your message.',
+                            details: [
+                                {
+                                    title: 'Corporate Voice-Overs & Narration.',
+                                    text: 'From polished narrations for training videos to engaging voice-overs for commercials, we provide a wide range of professional voice talent to perfectly match your brand’s personality.'
+                                },
+                                {
+                                    title: 'Jingle & Commercial Music Production.',
+                                    text: 'We compose and produce catchy, effective jingles and custom music tracks that make your brand unforgettable and drive your marketing campaigns.'
+                                }
+                            ]
+                        },
+                        {
+                            title: 'III. Post-Production: Ensuring a Polished Delivery',
+                            description: 'The final quality control stage to ensure your audio is optimized for every channel, from a TV commercial to a podcast ad.',
+                            details: [
+                                {
+                                    title: 'Podcast & Audiovisual Mixing.',
+                                    text: 'We edit and mix your corporate podcasts, webinars, or video presentations, ensuring clean audio, balanced levels, and a professional finish that keeps your audience engaged.'
+                                },
+                                {
+                                    title: 'Audio Mastering for Advertising.',
+                                    text: 'We master your audio to meet the specific loudness standards (LUFS) of all advertising platforms, ensuring your message is delivered with clarity and impact, everywhere.'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+
+            const serviceSelector = document.getElementById('service-selector');
+            const accordionContainer = document.getElementById('services-accordion');
+            const quoteBtn = document.querySelector('.quote-btn');
+            const root = document.documentElement;
+
+            function createAccordionItem(item) {
+                const detailsHTML = item.details.map(detail => `
+                    <div class="service-detail-item">
+                        <h4>${detail.title}</h4>
+                        <p>${detail.text}</p>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-text">
+                                <h3 class="accordion-title">${item.title}</h3>
+                                <p class="accordion-description">${item.description}</p>
+                            </div>
+                            <button class="accordion-toggle" aria-expanded="false">
+                                <i class="ri-arrow-down-s-line"></i>
+                            </button>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="service-detail-list">
+                                ${detailsHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function updateServices(clientType) {
+                const clientData = servicesData[clientType];
+                if (!clientData) return;
+
+                // 1. Actualizar color del tema
+                root.style.setProperty('--current-service-color', clientData.themeColor);
+
+                // 2. Actualizar botones
+                document.querySelectorAll('.service-selector-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.client === clientType);
+                });
+
+                // 3. Renderizar el acordeón
+                accordionContainer.innerHTML = clientData.accordion.map(createAccordionItem).join('');
+                
+                // 4. Re-asignar eventos al nuevo acordeón
+                assignAccordionEvents();
+            }
+
+            function assignAccordionEvents() {
+                const accordionItems = accordionContainer.querySelectorAll('.accordion-item');
+                accordionItems.forEach(item => {
+                    const header = item.querySelector('.accordion-header');
+                    header.addEventListener('click', () => {
+                        const content = item.querySelector('.accordion-content');
+                        const wasActive = item.classList.contains('active');
+
+                        // Cerrar todos los demás
+                        accordionItems.forEach(otherItem => {
+                            if (otherItem !== item) {
+                                otherItem.classList.remove('active');
+                                otherItem.querySelector('.accordion-content').style.maxHeight = null;
+                            }
+                        });
+
+                        // Abrir o cerrar el actual
+                        if (!wasActive) {
+                            item.classList.add('active');
+                            content.style.maxHeight = content.scrollHeight + "px";
+                            setTimeout(() => {
+                                item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                        } else {
+                             item.classList.remove('active');
+                             content.style.maxHeight = null;
+                        }
+                    });
+                });
+            }
+
+            serviceSelector.addEventListener('click', (e) => {
+                if (e.target.matches('.service-selector-btn')) {
+                    const clientType = e.target.dataset.client;
+                    updateServices(clientType);
+                }
+            });
+
+            // Carga inicial
+            updateServices('artist');
+            // --- FIN: LÓGICA DE SERVICIOS DINÁMICOS ---
+
+
+            // --- SCRIPT FOR ALL OTHER PAGE FUNCTIONALITY ---
+
+            // Sound Button Logic
+            const video = document.getElementById('heroVideo');
+            const soundButton = document.getElementById('sound-toggle');
+            const iconMute = document.getElementById('icon-mute');
+            const iconUnmute = document.getElementById('icon-unmute');
+            const heroOverlay = document.querySelector('.hero-overlay');
+
+            if (soundButton && video && iconMute && iconUnmute && heroOverlay) {
+                soundButton.addEventListener('click', () => {
+                    if (video.muted) {
+                        video.muted = false;
+                        video.currentTime = 0;
+                        video.play();
+                        
+                        iconMute.classList.add('is-hidden');
+                        iconUnmute.classList.remove('is-hidden');
+                        heroOverlay.classList.add('sound-is-active');
+                        soundButton.classList.remove('is-blinking');
+                    } else {
+                        video.muted = true;
+                        
+                        iconMute.classList.remove('is-hidden');
+                        iconUnmute.classList.add('is-hidden');
+                        heroOverlay.classList.remove('sound-is-active');
+                        soundButton.classList.add('is-blinking');
+                    }
+                });
+            }
+
+            // Custom Loop Logic
+            if (video) {
+                video.addEventListener('timeupdate', function() {
+                    const loopThreshold = 0.18; 
+                    if (this.duration && (this.currentTime > this.duration - loopThreshold)) {
+                        this.currentTime = 0;
+                        this.play();
+                    }
+                });
+            }
+
+            // Mobile Navigation Logic
+            const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+            const mobileNav = document.getElementById('mobile-nav');
+            const mobileNavIcon = document.getElementById('mobile-nav-icon');
+            const navLinks = mobileNav.querySelectorAll('a');
+
+            if (mobileNavToggle && mobileNav && mobileNavIcon) {
+                mobileNavToggle.addEventListener('click', () => {
+                    const isOpen = mobileNav.classList.toggle('is-open');
+                    mobileNavIcon.className = isOpen ? 'ri-close-line' : 'ri-menu-line';
+                });
+
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileNav.classList.remove('is-open');
+                        mobileNavIcon.className = 'ri-menu-line';
+                    });
+                });
+            }
+
+            // Interactive Map Logic
+            const mapDots = document.querySelectorAll('.map-dot');
+            const instrumentPanels = document.querySelectorAll('.instrument-panel');
+            const closePanelButtons = document.querySelectorAll('.close-panel-btn');
+            const mapContainer = document.querySelector('.percussion-map-container');
+
+            mapDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const region = dot.dataset.region;
+                    const targetPanel = document.getElementById(`panel-${region}`);
+
+                    if (dot.classList.contains('active')) {
+                        dot.classList.remove('active');
+                        if (targetPanel) targetPanel.style.display = 'none';
+                    } else {
+                        mapDots.forEach(d => d.classList.remove('active'));
+                        instrumentPanels.forEach(p => p.style.display = 'none');
+                        dot.classList.add('active');
+                        if (targetPanel) {
+                            targetPanel.style.display = 'block';
+                            targetPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+            });
+
+            closePanelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const panelToClose = button.closest('.instrument-panel');
+                    const region = panelToClose.id.replace('panel-', '');
+                    const dotToDeactivate = document.getElementById(`dot-${region}`);
+                    
+                    panelToClose.style.display = 'none';
+                    if (dotToDeactivate) dotToDeactivate.classList.remove('active');
+                    
+                    if (mapContainer) {
+                        mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
+
+            // Portfolio Carousel & Filter Logic
+            const portfolioSliderEl = document.getElementById('portfolio-slider');
+            const portfolioItemsData = [
+                { 
+                    title: 'Desde Cero - David Sierra & La Ple-B', 
+                    desc: 'Drums & Percussion Recording', 
+                    tags: 'music-production mexican', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6',
+                        instagram: 'https://www.instagram.com/davidsierramusica',
+                        youtube: 'https://www.youtube.com/davidsierramusica',
+                        facebook: 'https://www.facebook.com/davidsierramusica'
+                    }
+                },
+                                { 
+                    title: 'Andarele - Isabel Deverell', 
+                    desc: 'Marimba & Ethnic Percussion Recording', 
+                    tags: 'music-production colombian africa latin', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/andarele-fragment',
+                    artistLinks: {
+                        spotify: 'https://www.deezer.com/en/artist/186445987',
+                        instagram: 'https://www.instagram.com/isabeldeverell/',
+                        youtube: 'https://www.youtube.com/channel/UCYVDJeWBjuxvP5BxQCc-VXg',
+                        facebook: 'https://www.facebook.com/isabel.deverellvallarino/'
+                    }
+                },
+                { 
+                    title: 'Que Bello - Mer Jack', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production pop', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/que-bello-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/merjack3/',
+                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
+                        facebook: 'https://www.facebook.com/lacovidparranda'
+                    }
+                },
+                { 
+                    title: 'Ontabas - Dame El Panuelo (Fundación Nuna Kallpa)', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'audio-for-media colombian andean', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ontabas-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
+                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
+                    }
+                },
+                { 
+                    title: 'Somos Parte - Ioel', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production Latin Pop', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/somos-parte-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
+                        instagram: 'https://www.instagram.com/ioel_cantautor/',
+                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
+                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
+                    }
+                },
+                { 
+                    title: 'Maldito sea tu nombre - Alter Ego Band', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production metal rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/maldito-sea-tu-nombre-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/3OP33dSoBD8AFkgmUcyZqa',
+                        instagram: 'https://www.instagram.com/alter.ego_band/',
+                        youtube: 'https://www.youtube.com/@alteregooficcial7149',
+                        facebook: 'https://www.facebook.com/profile.php?id=61551394173133'
+                    }
+                },
+                { 
+                    title: 'Cóncavo y Convexo - Jonji Camacho', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production pop rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/concavo-y-convexo-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/jonathan_camacho_oficial/',
+                        youtube: 'https://www.youtube.com/@jonjicamach',
+                        facebook: 'https://www.facebook.com/jonathan.camacho.1789'
+                    }
+                },
+                { 
+                    title: 'Voy a Vivir - Mer Jack', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production funk', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/voy-a-vivir-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/merjack3/',
+                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
+                        facebook: 'https://www.facebook.com/lacovidparranda'
+                    }
+                },
+                { 
+                    title: 'Elena - Dame El Panuelo (Fundación Nuna Kallpa)', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'audio-for-media colombian africa', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/elena-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
+                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
+                    }
+                },
+                { 
+                    title: 'Corporative Audio & Locution', 
+                    desc: 'Composing & Full Production', 
+                    tags: 'corporate-audio electronic', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/corporative-music-locution',
+                    artistLinks: {
+                        website: 'https://www.cognosiaai.com',
+                        linkedin: 'https://www.linkedin.com/company/cognosia-ai/'
+                    }
+                },
+                { 
+                    title: 'Bye - Jane Riascos', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production urban electronic caribbean', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/bye-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b',
+                        instagram: 'https://www.instagram.com/janeriascos/',
+                        youtube: 'https://www.youtube.com/@janeriascosmusic',
+                        facebook: 'https://www.facebook.com/janeriascos/'
+                    }
+                },
+                { 
+                    title: 'Shadow Love - Jon Wolff', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production latin rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/shadow-love-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz',
+                        youtube: 'https://www.youtube.com/@jonwolff_',
+                    }
+                },
+                { 
+                    title: 'Como yo la quise - Alain Elcubano', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production latin urban', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/como-yo-la-quise-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/alainelcuban0/',
+                        facebook: 'https://www.facebook.com/alainelcuban0'
+                    }
+                },
+                { 
+                    title: 'Si tú no estás aquí - Alter Ego Band', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production metal rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/si-tu-no-estas-aqui-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/3OP33dSoBD8AFkgmUcyZqa',
+                        instagram: 'https://www.instagram.com/alter.ego_band/',
+                        youtube: 'https://www.youtube.com/@alteregooficcial7149',
+                        facebook: 'https://www.facebook.com/profile.php?id=61551394173133'
+                    }
+                },
+                { 
+                    title: 'Al final - Mer Jack', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production rock pop', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/al-final-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/merjack3/',
+                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
+                        facebook: 'https://www.facebook.com/lacovidparranda'
+                    }
+                },
+                { 
+                    title: 'Las Mayoras - Ioel', 
+                    desc: 'Marimba & Ethnic Percussion Recording', 
+                    tags: 'music-production urban colombian africa', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/las-mayoras-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
+                        instagram: 'https://www.instagram.com/ioel_cantautor/',
+                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
+                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
+                    }
+                },
+                { 
+                    title: 'El Trompo Sarandengue - David Sierra & La Ple-B', 
+                    desc: 'Drums & Percussion Recording', 
+                    tags: 'music-production mexican colombian', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/el-trompo-sarandengue-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6',
+                        instagram: 'https://www.instagram.com/davidsierramusica',
+                        youtube: 'https://www.youtube.com/davidsierramusica',
+                        facebook: 'https://www.facebook.com/davidsierramusica'
+                    }
+                },
+                { 
+                    title: 'Tantu Pa´lante- Jane Riascos FT Qritiqal', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production urban electronic caribbean', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tantu-palante-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b',
+                        instagram: 'https://www.instagram.com/janeriascos/',
+                        youtube: 'https://www.youtube.com/@janeriascosmusic',
+                        facebook: 'https://www.facebook.com/janeriascos/'
+                    }
+                },
+                { 
+                    title: 'Cariñito - Alain Elcubano', 
+                    desc: 'Ethnic percussion recording', 
+                    tags: 'music-production latin urban colombian', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/carinito-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/alainelcuban0/',
+                        facebook: 'https://www.facebook.com/alainelcuban0'
+                    }
+                },
+                { 
+                    title: 'Y si tal vez es nunca - Mer Jack', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/y-si-tal-vez-es-nunca-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/merjack3/',
+                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
+                        facebook: 'https://www.facebook.com/lacovidparranda'
+                    }
+                },
+                { 
+                    title: 'Migrante - Ioel', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production latin urban', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/migrante-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
+                        instagram: 'https://www.instagram.com/ioel_cantautor/',
+                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
+                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
+                    }
+                },
+                { 
+                    title: 'Ruge - Jon Wolff', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ruge-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz',
+                        youtube: 'https://www.youtube.com/@jonwolff_',
+                    }
+                },
+                { 
+                    title: 'Maldigo el amor - David Sierra & La Ple-B', 
+                    desc: 'Drums & Percussion Recording', 
+                    tags: 'music-production mexican', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/maldigo-el-amor-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6',
+                        instagram: 'https://www.instagram.com/davidsierramusica',
+                        youtube: 'https://www.youtube.com/davidsierramusica',
+                        facebook: 'https://www.facebook.com/davidsierramusica'
+                    }
+                },                
+                { 
+                    title: 'Contrabandista - Dame El Panuelo (Fundación Nuna Kallpa)', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'audio-for-media colombian andean', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/contrabandista-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
+                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
+                    }
+                },
+                { 
+                    title: 'Te Amaré - Jonji Camacho', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production pop', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/te-amare-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/jonathan_camacho_oficial/',
+                        youtube: 'https://www.youtube.com/@jonjicamach',
+                        facebook: 'https://www.facebook.com/jonathan.camacho.1789'
+                    }
+                },
+                { 
+                    title: 'Dioses de Papel - Ioel', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production mexican urban', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/dioses-de-papel-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
+                        instagram: 'https://www.instagram.com/ioel_cantautor/',
+                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
+                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
+                    }
+                },
+                { 
+                    title: 'No me amas - Mer Jack', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production rock pop', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/no-me-amas-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/merjack3/',
+                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
+                        facebook: 'https://www.facebook.com/lacovidparranda'
+                    }
+                },
+                { 
+                    title: 'Monsters - Jon Wolff', 
+                    desc: 'Drums & Remaster', 
+                    tags: 'music-production rock', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/monsters-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz',
+                        youtube: 'https://www.youtube.com/@jonwolff_',
+                    }
+                },
+                { 
+                    title: 'Tascualeña - Dame El Panuelo (Fundación Nuna Kallpa)', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'audio-for-media colombian andean', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tascualena-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
+                    artistLinks: {
+                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
+                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
+                    }
+                },
+                { 
+                    title: 'Relajao - Ioel FT Rob Castellanos', 
+                    desc: 'Percussion & Remaster', 
+                    tags: 'music-production mexican urban', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/relajao-fragment',
+                    artistLinks: {
+                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
+                        instagram: 'https://www.instagram.com/ioel_cantautor/',
+                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
+                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
+                    }
+                },
+                { 
+                    title: 'Viernes y el cuerpo lo sabe - Fercho Son', 
+                    desc: 'Percussion Recording', 
+                    tags: 'music-production latin', 
+                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/viernes-y-el-cuerpo-lo-sabe-fragment',
+                    artistLinks: {
+                        facebook: 'https://www.facebook.com/hernando.velasquez.9847',
+                        instagram: 'https://www.instagram.com/fercho_son/',
+                        youtube: 'https://www.youtube.com/@ferchoson'
+                    }
+                },
+            ];
+
+            let swiperInstance;
+            const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+
+            function initializeSwiper(slidesHTML) {
+                if (swiperInstance) {
+                    swiperInstance.destroy(true, true);
+                }
+                
+                portfolioSliderEl.innerHTML = slidesHTML;
+
+                swiperInstance = new Swiper('.portfolio-swiper', {
+                    loop: portfolioSliderEl.children.length > 2,
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    spaceBetween: 30,
+                    grabCursor: true,
+                    navigation: {
+                        nextEl: '.portfolio-next',
+                        prevEl: '.portfolio-prev',
+                    },
+                    breakpoints: {
+                        320: { slidesPerView: 'auto', spaceBetween: 15 },
+                        768: { slidesPerView: 'auto', spaceBetween: 20 },
+                        1024: { slidesPerView: 'auto', spaceBetween: 30 },
+                    }
+                });
+
+                const portfolioSection = document.getElementById('portfolio');
+                const scrollToPortfolio = () => {
+                    if (portfolioSection) {
+                        portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                };
+
+                const handleCarouselInteraction = (event) => {
+                    if (window.innerWidth <= 820) return;
+                    if (event && event.target && event.target.closest('a')) return;
+                    scrollToPortfolio();
+                };
+                
+                swiperInstance.on('navigationNext', handleCarouselInteraction);
+                swiperInstance.on('navigationPrev', handleCarouselInteraction);
+                swiperInstance.on('touchStart', (swiper, event) => handleCarouselInteraction(event));
+            }
+            
+            function createPortfolioItem(item) {
+                const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
+                let mediaHTML;
+                const iconMap = { spotify: { class: 'ri-spotify-fill', title: 'Listen on Spotify' }, instagram: { class: 'ri-instagram-line', title: 'Follow on Instagram' }, youtube: { class: 'ri-youtube-line', title: 'Watch on YouTube' }, facebook: { class: 'ri-facebook-box-line', title: 'Find on Facebook' }, website: { class: 'ri-global-line', title: 'Visit Website' }, linkedin: { class: 'ri-linkedin-box-line', title: 'View on LinkedIn' }, tiktok: { class: 'ri-tiktok-line', title: 'Follow on TikTok' }, soundcloud: { class: 'ri-soundcloud-line', title: 'Listen on SoundCloud' } };
+                let linksHTML = '';
+                if (item.artistLinks) {
+                    const linksArray = Object.keys(item.artistLinks).map(key => iconMap[key] && item.artistLinks[key] ? `<a href="${item.artistLinks[key]}" target="_blank" title="${iconMap[key].title}"><i class="${iconMap[key].class}"></i></a>` : '').join('');
+                    if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
+                }
+                if (item.soundcloudUrl) {
+                    const encodedUrl = encodeURIComponent(item.soundcloudUrl);
+                    mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true"></iframe></div>`;
+                } else {
+                    mediaHTML = `<img src="${item.imgSrc}" alt="Cover art for ${item.title}" class="portfolio-image">`;
+                }
+                return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
+            }
+            
+            function applyFilters() {
+                let noResultsContainer = document.getElementById('no-results-container');
+                if (!noResultsContainer) {
+                    noResultsContainer = document.createElement('div');
+                    noResultsContainer.id = 'no-results-container';
+                    noResultsContainer.className = 'no-results-message is-hidden';
+                    portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
+                }
+
+                let activeAppFilters = Array.from(document.querySelectorAll('.filter-btn[data-group="app"].active')).map(btn => btn.dataset.filter);
+                let activeStyleFilters = Array.from(document.querySelectorAll('.filter-btn[data-group="style"].active')).map(btn => btn.dataset.filter);
+
+                if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
+                if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
+
+                const filteredData = portfolioItemsData.filter(item => {
+                    const tags = item.tags.split(' ');
+                    const appMatch = activeAppFilters.length === 0 || activeAppFilters.some(filter => {
+                        const subFilters = filter.split(',');
+                        return subFilters.some(subFilter => tags.includes(subFilter.trim()));
+                    });
+                    const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => {
+                        const subFilters = filter.split(',');
+                        return subFilters.some(subFilter => tags.includes(subFilter.trim()));
+                    });
+                    return appMatch && styleMatch;
+                });
+
+                if (filteredData.length > 0) {
+                    portfolioSliderWrapper.classList.remove('is-hidden');
+                    noResultsContainer.classList.add('is-hidden');
+                    const filteredSlidesHTML = filteredData.map(createPortfolioItem).join('');
+                    initializeSwiper(filteredSlidesHTML);
+                } else {
+                    if (swiperInstance) swiperInstance.destroy(true, true);
+                    swiperInstance = null;
+                    portfolioSliderWrapper.classList.add('is-hidden');
+                    noResultsContainer.classList.remove('is-hidden');
+                    noResultsContainer.innerHTML = `<h3>No Matches Found</h3><p>Try adjusting your filters or reset them to see all projects.</p><button class="reset-filters-btn">Reset Filters</button>`;
+                    noResultsContainer.querySelector('.reset-filters-btn').addEventListener('click', () => {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
+                        applyFilters();
+                    });
+                }
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const group = button.dataset.group;
+                    const filter = button.dataset.filter;
+                    if (filter === 'all') {
+                        document.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                    } else {
+                        document.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
+                        button.classList.toggle('active');
+                        if (!document.querySelector(`.filter-btn[data-group="${group}"].active`)) {
+                            document.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
+                        }
+                    }
+                    applyFilters();
+                });
+            });
+            applyFilters();
+
+            // --- INICIO: LÓGICA DEL MODAL DE INSTRUMENTOS ---
+            const instrumentData = {
+    'vallenato-box': { 
+        name: 'Vallenato Box', 
+        description: 'The "caja vallenata" is the rhythmic soul of Vallenato music. This small drum is held between the knees and played with bare hands. Its goatskin head produces a wide range of sounds, from a deep bass tone in the center to a sharp, cracking slap on the rim, creating a dynamic percussive line that drives the music and complements the accordion.' 
+    },
+    'guacharaca': { 
+        name: 'Guacharaca', 
+        description: 'Indispensable in Vallenato and Cumbia, the guacharaca is a wooden tube with ridges, scraped with a wire fork. Named after a native Colombian bird, it provides a constant, high-frequency "ch-ch-ch" sound. This textured rhythmic base interlocks perfectly with the caja (vallenato box) and accordion, driving the rhythm forward.' 
+    },
+    'cununo': { 
+        name: 'Cununo', 
+        description: 'From Colombia\'s Afro-Colombian Pacific coast, the cununo is a tall, conical hand drum with a single animal-hide head. Pitched as male (macho) and female (hembra), it serves as the improvising, conversational voice in marimba music, playing sharp, intricate patterns that respond to the melody and dancers.' 
+    },
+    'pacific-bombo': { 
+        name: 'Pacific Bombo', 
+        description: 'The heartbeat of Colombia\'s Pacific coast music, the bombo is a large, two-headed drum providing a deep, foundational pulse. In the southern Pacific, it is played in male-female pairs in marimba music. In the northern Pacific, a single bombo is used in chirimía ensembles. Played with a mallet and stick, its powerful, booming rhythm is essential to genres like Currulao.' 
+    },
+    'guasa': { 
+        name: 'Guasá', 
+        description: 'A key textural instrument from Colombia\'s Pacific coast, the guasá is a cylindrical bamboo shaker filled with seeds. Unlike a maraca, it creates a continuous, flowing, river-like sound that fills the sonic space. It\'s shaken with a consistent motion to provide a smooth, shimmering rhythmic carpet for other instruments.' 
+    },
+    'atlantic-tambora': { 
+        name: 'Atlantic Tambora', 
+        description: 'Central to traditional Cumbia, this two-headed drum is laid on the lap. A unique playing style—using a stick on the head and wooden shell ("cáscara") while the other hand plays the opposite head—allows a single player to create the complex polyrhythm that defines the Cumbia groove.' 
+    },
+    'alegre-drum': { 
+        name: 'Alegre Drum', 
+        description: 'The "tambor alegre" ("happy drum") is the lead, improvising voice in a traditional Cumbia percussion trio. A skilled player uses this single-headed drum to produce a variety of sounds, including deep bass, crisp open tones, and sharp slaps, allowing for joyful and spontaneous rhythmic conversations.' 
+    },
+    'guacho': { 
+        name: 'Guacho', 
+        description: 'The guacho is a metal tube shaker from Colombia\'s Atlantic region, serving a similar function to the guacharaca in Cumbia ensembles. Its metallic construction gives it a sharper and brighter sound, providing a persistent, high-frequency sizzle that drives the rhythm and adds a distinct layer of energy.' 
+    },
+    'maracon': { 
+        name: 'Maracón', 
+        description: 'The maracón is a large, single maraca used in the traditional music of the Colombian plains (Llanos). Its size gives it a lower pitch and a more powerful, resonant sound than its paired cousins. It is used to mark a strong, steady pulse that grounds the swirling melodies of the harp and cuatro.' 
+    },
+    'capachos': { 
+        name: 'Capachos', 
+        description: 'Capachos are small maracas essential to the fast-paced Joropo music from the plains (Llanos). Traditionally made from the capacho plant, they are played in pairs. The player produces incredibly fast and complex rhythmic patterns that interlock with the harp and cuatro, creating a dense percussive drive.' 
+    },
+    'congas': { 
+        name: 'Congas', 
+        description: 'Originating from Afro-Cuban traditions, congas are tall, single-headed drums that form the core of the rhythm section in Salsa. Played in sets of two or three, they produce a range of tones from deep bass notes to sharp slaps. The foundational "tumbao" pattern provides a constant, syncopated groove.' 
+    },
+    'bongo': { 
+        name: 'Bongó', 
+        description: 'The bongó is a pair of small, connected Afro-Cuban drums: the smaller "macho" and larger "hembra." Held between the knees and played with the fingertips, they produce high-pitched, conversational rhythms. In salsa, the bongosero plays a steady "martillo" (hammer) pattern and improvises freely.' 
+    },
+    'timbales': { 
+        name: 'Timbales', 
+        description: 'Timbales are a pair of shallow, metal-cased drums, a staple in salsa and Latin jazz. Played with thin sticks, they produce sharp, cutting tones. The setup often includes cowbells and a cymbal, and the timbalero plays rhythmic patterns on the shells ("cáscara") as well as taking fiery solos.' 
+    },
+    'guiro': { 
+        name: 'Güiro', 
+        description: 'The güiro is traditionally a hollowed-out gourd with parallel notches cut into one side. It is played by rubbing a stick along these ridges, which produces a characteristic scraping, rhythmic sound. This provides a driving texture in genres like salsa, son, and bolero.' 
+    },
+    'maracas': { 
+        name: 'Maracas', 
+        description: 'Maracas are rattles, played in pairs, that appear in a vast array of Caribbean and Latin American music. Traditionally made from dried gourds filled with seeds, they are shaken to add a high-frequency rhythmic layer, creating either a steady pulse or complex, syncopated patterns.' 
+    },
+    'cowbells': { 
+        name: 'Cowbells', 
+        description: 'In Latin music, the cowbell, or "cencerro," is a crucial rhythmic instrument struck with a stick. In a salsa band, the bongosero switches to a hand-held cowbell during the high-energy "montuno" sections, playing a driving pattern that anchors the rhythm section.' 
+    },
+    'jam-blocks': { 
+        name: 'Jam Blocks', 
+        description: 'Jam Blocks are the modern, durable evolution of the traditional wood block. Made from high-impact plastic, they are designed to replicate the sharp, piercing "clack" of their wooden counterparts. They are often integrated into drum kits in various pitches for accents and rhythmic patterns.' 
+    },
+    'claves': { 
+        name: 'Claves', 
+        description: 'Despite their simplicity—just two short, thick dowels of wood—claves are the rhythmic key to Afro-Cuban music. One is held to create a resonant chamber and is struck by the other. They are used to play the "clave," a five-note pattern that is the structural core for Son, Rumba, and Salsa.' 
+    },
+    'peruvian-cajon': { 
+        name: 'Peruvian Cajon', 
+        description: 'A masterpiece of ingenuity, the Peruvian cajón ("box") is a six-sided box drum with Afro-Peruvian roots. The musician sits on top and plays the front face with their hands, producing a range of sounds from a deep bass tone to a sharp slap, effectively creating the sound of a full drum kit.' 
+    },
+    'quijada': { 
+        name: 'Quijada (Vibra-slap)', 
+        description: 'The quijada is a traditional Afro-Peruvian instrument made from the jawbone of a donkey, horse, or mule, whose loose molars produce a distinctive rattling sound when struck. The Vibra-slap is the modern, durable version that faithfully recreates this unique sound.' 
+    },
+    'pandeiro': { 
+        name: 'Pandeiro', 
+        description: 'Often called the "Brazilian tambourine," the pandeiro is a highly versatile hand frame drum with a tunable head and drier-sounding jingles ("platinelas"). A master player can mimic the rhythms of an entire drum kit, making it a cornerstone of Samba, Choro, and Capoeira.' 
+    },
+    'samba-whistle': { 
+        name: 'Samba Whistle', 
+        description: 'The samba whistle, or "apito," is the conductor\'s baton of the Brazilian "bateria" (percussion ensemble). This high-pitched whistle is used by the leader to communicate with hundreds of drummers, cueing rhythmic breaks, call-and-response sections, and endings with clear signals.' 
+    },
+    'agogo-bells': { 
+        name: 'Agogô Bells', 
+        description: 'The agogô is a set of two or more conical bells of different sizes, with origins in Yoruba music. It is a key melodic and rhythmic instrument in Brazilian styles like Samba. Played with a stick, the agogô typically plays a repeating, syncopated pattern that serves as a guidepost for the ensemble.' 
+    },
+    'caixa': { 
+        name: 'Caixa', 
+        description: 'The caixa, or "caixa de guerra," is the Brazilian equivalent of the snare drum and the engine of a samba bateria. Played with two sticks, the caixas provide a constant, driving, and highly syncopated rhythm that creates the characteristic "swing" of samba.' 
+    },
+    'surdo': { 
+        name: 'Surdo', 
+        description: 'The surdo is the heart of samba, a large bass drum that provides the powerful, low-end foundation for the music. In a samba bateria, surdos are played in tuned sets of at least three sizes. Their combined boom is the deep, resonant pulse that can be felt in your chest.' 
+    },
+    'timbau': { 
+        name: 'Timbau', 
+        description: 'The timbau is a tall, cone-shaped Brazilian hand drum, popularized in movements like Samba-Reggae. Played with the hands, it is known for its incredible dynamic range, capable of producing very high, cutting slaps and deep, resonant bass tones.' 
+    },
+    'cabasa': { 
+        name: 'Afuche / Cabasa', 
+        description: 'The afuche-cabasa is a modern instrument constructed with loops of steel ball chain wrapped around a wide, textured cylinder. The sound is produced by shaking it or by twisting the cylinder against the palm, creating a precise, rhythmic, and metallic scraping sound.' 
+    },
+    'triangle': { 
+        name: 'Triangle', 
+        description: 'In Brazilian Forró music, the triangle plays a vital role. It is not just used for occasional accents, but plays a constant, driving, and highly syncopated pattern that interlocks with the zabumba (bass drum) and accordion, creating a bright, metallic, and dance-inducing texture.' 
+    },
+    'shaker': { 
+        name: 'Shaker', 
+        description: 'A broad category of instrument, a shaker creates its sound through the movement of small particles within a container. Their primary function is to provide a high-frequency rhythmic layer, adding energy and filling the sonic space with a continuous shimmer or a precisely articulated pattern.' 
+    },
+    'guira': { 
+        name: 'Güira', 
+        description: 'The güira is a metal scraper essential to Dominican music like Merengue and Bachata. It consists of a sheet of metal with a rough texture, played by scraping it with a metal fork. The resulting sound is much brighter and sharper than the güiro, providing a driving, high-frequency pulse.' 
+    },
+    'merengue-tambora': { 
+        name: 'Merengue Tambora', 
+        description: 'The Dominican tambora is a two-headed drum that provides the rhythmic backbone for Merengue. It is held on the lap and played with a unique technique: one hand plays the head, while a stick in the other hand strikes the opposite head and the wooden shell of the drum.' 
+    },
+    'djembe': { 
+        name: 'Djembé', 
+        description: 'The djembé is a goblet-shaped drum from West Africa, tuned with a system of ropes that allows for high tension. Played with bare hands, it is known for its wide tonal range, centered around three fundamental sounds: the deep "bass," the full "tone," and the sharp, cutting "slap."' 
+    },
+    'talking-drum': { 
+        name: 'Talking Drum', 
+        description: 'This remarkable instrument from West Africa is named for its ability to mimic the pitch and tone of human speech. Its hourglass shape allows the player to squeeze ropes connecting the two drumheads, altering the pitch to create melodic, speech-like phrases.' 
+    },
+    'asalato': { 
+        name: 'Asalato', 
+        description: 'Also known as the kashaka, the asalato consists of two small gourds, filled with seeds, connected by a short string. A player holds one gourd and swings the other, creating intricate polyrhythms as the gourds click together and the seeds provide a continuous shake.' 
+    },
+    'darbuka': { 
+        name: 'Egyptian Darbuka', 
+        description: 'Also known as the Tabla in Egypt, this goblet-shaped drum is a cornerstone of Middle Eastern music. Its high-tension head produces the instrument\'s signature sounds: a deep, resonant bass tone called the "doum" (from the center) and a high-pitched, crisp crack called the "tek" (from the rim).' 
+    },
+    'udu-drum': { 
+        name: 'Udu Drum', 
+        description: 'The Udu is a clay pot drum from Nigeria. This unique instrument is both an idiophone and an aerophone. In addition to sounds from striking the clay body, the player can produce a distinctive, deep, and watery bass sound by quickly hitting a small hole in the side with their palm.' 
+    },
+    'flamenco-cajon': { 
+        name: 'Flamenco Cajon', 
+        description: 'While the cajón originated in Peru, it was adapted for Flamenco music by adding guitar strings or snare wires against the inside of the playing surface. This creates a buzzing, snare-like sizzle which perfectly complements the sharp footwork (zapateado) and hand claps (palmas) of Flamenco.' 
+    },
+    'castanets': { 
+        name: 'Castanets', 
+        description: 'A signature sound of Spanish dance, castanets are a pair of concave shells clicked together in the palm. They are used to produce intricate rhythmic patterns and rapid, rippling rolls called "carretillas." They serve as a percussive extension of the dancer’s body, accentuating their movements.' 
+    },
+    'tambourine': { 
+        name: 'Tambourine', 
+        description: 'The tambourine is an ancient frame drum with pairs of small metal jingles called "zills." Its versatility is immense; it can be struck, shaken for a continuous shimmer, or have a finger rolled across the head to create a rapid, sustained jingle.' 
+    },
+    'sleigh-bells': { 
+        name: 'Sleigh Bells', 
+        description: 'This instrument consists of a collection of "jingle" bells mounted on a handle or strap. Each bell contains a small ball bearing that creates a bright, metallic jingle sound when shaken. They are used to evoke a sense of winter or festivity, adding a high-frequency shimmer.' 
+    },
+    'celesta': { 
+        name: 'Celesta Bar (Wind/Chime Bells)', 
+        description: 'Often called a Mark Tree, this instrument consists of numerous small, graduated metal chimes suspended from a wooden frame. When a hand is swept across the chimes, they produce a shimmering, cascading glissando, often used to signify a magical or dream-like transition.' 
+    },
+    'timpani': { 
+        name: 'Symphonic Timpani', 
+        description: 'Also known as kettledrums, timpani are the foundation of the orchestral percussion section. These large copper bowls are capable of producing definite, powerful pitches. A foot pedal mechanism allows the timpanist to change the pitch, reinforcing harmonies and building immense drama.' 
+    },
+    'gran-cassa': { 
+        name: 'Gran Cassa', 
+        description: 'The Gran Cassa is the orchestral bass drum, an instrument of immense size and power. It produces a very low, resonant tone of indefinite pitch. Its role is to provide a deep, foundational anchor to the ensemble, marking significant moments with a powerful boom.' 
+    },
+    'cymbals': { 
+        name: 'Cymbals', 
+        description: 'Orchestral cymbals provide high-frequency shimmer and dramatic accents. They are most often used as crash cymbals, played in pairs and struck together for an explosive sound at musical climaxes. A single cymbal can also be suspended and played with mallets for a sustained, shimmering roll.' 
+    },
+    'tabla': { 
+        name: 'Tabla', 
+        description: 'The tabla is the iconic percussion instrument of North Indian classical music. It consists of a pair of small hand drums: the smaller, higher-pitched dayan, and the larger bayan bass drum. A master player uses complex finger and palm strokes to create intricate rhythmic cycles (talas).' 
+    },
+    'taiko': { 
+        name: 'Taiko', 
+        description: 'Taiko refers both to a range of Japanese drums and to the art of ensemble drumming. It is a deeply physical and visually stunning art form. The drums themselves range from the small shime-daiko to the massive o-daiko, whose thunderous sound is capable of shaking the ground.' 
+    },
+    'turkish-darbuka': { 
+        name: 'Turkish Darbuka', 
+        description: 'While similar to the Egyptian darbuka, the Turkish style has key differences. It is often made of lightweight metal and its head is attached with an exposed rim. This edge allows players to use advanced finger-snapping techniques, enabling incredibly fast and intricate rhythmic patterns.' 
+    },
+    'daf': { 
+        name: 'Daf', 
+        description: 'The daf is a large frame drum with ancient origins in the Middle East. It is composed of a wooden hoop with a skin membrane. A distinctive feature is the presence of interlocking metal rings on the inside, which produce a loud, jingling, and buzzing sound when the drum is played.' 
+    }
+};
+
+            const instrumentModal = document.getElementById('instrument-modal');
+            const modalImg = document.getElementById('instrument-modal-img');
+            const modalName = document.getElementById('instrument-modal-name');
+            const modalDesc = document.getElementById('instrument-modal-desc');
+            const soundBtn = document.getElementById('instrument-sound-btn');
+            const closeModalBtn = document.getElementById('instrument-modal-close');
+            let currentAudio = null;
+
+            document.querySelectorAll('.instrument-list').forEach(list => {
+                list.addEventListener('click', (e) => {
+                    if (e.target.matches('.instrument-list-item')) {
+                        const instrumentId = e.target.dataset.instrument;
+                        const data = instrumentData[instrumentId];
+                        if (data) {
+                            const audioSrc = `assets/audio/${instrumentId}.mp3`;
+                            const imgSrc = `assets/img/instruments/${instrumentId}.jpg`;
+
+                            modalName.textContent = data.name;
+                            modalDesc.textContent = data.description;
+                            modalImg.src = imgSrc;
+                            modalImg.alt = data.name;
+                            modalImg.onerror = () => {
+                                modalImg.src = `https://placehold.co/200x200/073B38/FFFFFF?text=${data.name.replace(/ /g, '+')}`;
+                            };
+                            soundBtn.dataset.audioSrc = audioSrc;
+                            instrumentModal.classList.add('is-visible');
+                        }
+                    }
+                });
+            });
+
+            const playSound = (src) => {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                }
+                currentAudio = new Audio(src);
+                currentAudio.play().catch(error => {
+                    console.error("Error playing audio:", error);
+                });
+            };
+
+            soundBtn.addEventListener('click', () => {
+                const audioSrc = soundBtn.dataset.audioSrc;
+                if (audioSrc) {
+                    playSound(audioSrc);
+                }
+            });
+
+            const closeInstrumentModal = () => {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                }
+                instrumentModal.classList.remove('is-visible');
+            };
+            
+            closeModalBtn.addEventListener('click', closeInstrumentModal);
+            instrumentModal.addEventListener('click', (e) => {
+                if (e.target === instrumentModal) {
+                    closeInstrumentModal();
+                }
+            });
+            // --- FIN: LÓGICA DEL MODAL DE INSTRUMENTOS ---
+
+            // --- INICIO: LÓGICA DEL MODAL DE CONTACTO MÓVIL ---
+            const contactPhoneLink = document.getElementById('contact-phone-link');
+            const contactAppsModal = document.getElementById('contact-apps-modal');
+            const contactAppsCloseBtn = document.getElementById('contact-apps-close');
+            
+            const isMobile = () => window.innerWidth <= 768;
+
+            contactPhoneLink.addEventListener('click', (e) => {
+                if (isMobile()) {
+                    e.preventDefault(); 
+                    contactAppsModal.classList.add('is-visible');
+                }
+            });
+
+            const closeContactModal = () => contactAppsModal.classList.remove('is-visible');
+            contactAppsCloseBtn.addEventListener('click', closeContactModal);
+            contactAppsModal.addEventListener('click', (e) => {
+                if (e.target === contactAppsModal) {
+                    closeContactModal();
+                }
+            });
+            // --- FIN: LÓGICA DEL MODAL DE CONTACTO MÓVIL ---
+        });
+    </script>
+
+</body>
+</html>
+```
