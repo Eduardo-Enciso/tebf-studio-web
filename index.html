@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEBF STUDIO - The Enciso's Beat Factory</title>
     
-    <!-- CODE CHANGE: Preload critical assets for faster initial rendering -->
+    <!-- Preload critical assets for faster initial rendering -->
     <link rel="preload" href="assets/img/logo.png" as="image">
     <link rel="preload" href="assets/logo-animado.webm" as="video" type="video/webm">
     <link rel="preload" href="assets/logo-animado.mp4" as="video" type="video/mp4">
@@ -269,7 +269,6 @@
             display: none;
         }
         
-        /* CODE CHANGE: Added scroll down indicator for mobile */
         .scroll-indicator {
             display: none; /* Hidden by default on desktop */
             position: absolute;
@@ -1430,19 +1429,22 @@
         }
 
         @media (max-width: 768px) {
-             /* CODE CHANGE: Adjust hero section for mobile */
             .hero-section {
-                min-height: 85vh; /* Reduce height to avoid excessive space */
+                min-height: 85vh;
                 height: auto;
             }
             .hero-video {
-                transform: translate(-50%, -50%) scale(1.2); /* Make video slightly larger to fill space */
+                transform: translate(-50%, -50%) scale(1.1);
             }
             .hero-content {
-                padding-bottom: 25vh; /* Push content higher up */
+                padding-bottom: 20vh;
+            }
+            .hero-title {
+                font-size: clamp(24px, 6vw, 30px);
+                line-height: 1.2;
             }
             .scroll-indicator {
-                display: block; /* Show scroll indicator on mobile */
+                display: block;
             }
             
             .gear-intro, .drum-kits-container, .contact-wrapper, .mallet-card, .mallet-card:nth-child(even), .about-wrapper {
@@ -1450,8 +1452,7 @@
                 text-align: center;
                 grid-template-columns: 1fr;
             }
-             /* CODE CHANGE: Align all contact info blocks to the left */
-            .contact-info {
+             .contact-info {
                 text-align: left;
             }
              .contact-info .info-block {
@@ -1549,7 +1550,6 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1 class="hero-title">Forging the Beat that Defines You</h1>
-            <!-- CODE CHANGE: Added scroll down indicator HTML -->
             <div class="scroll-indicator">
                 <span>Scroll Down</span>
                 <i class="ri-arrow-down-line"></i>
@@ -2739,22 +2739,32 @@
             function createPortfolioItem(item) {
                 const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
                 let mediaHTML;
-                const iconMap = { spotify: { class: 'ri-spotify-fill', title: 'Listen on Spotify' }, instagram: { class: 'ri-instagram-line', title: 'Follow on Instagram' }, youtube: { class: 'ri-youtube-line', title: 'Watch on YouTube' }, facebook: { class: 'ri-facebook-box-line', title: 'Find on Facebook' }, website: { class: 'ri-global-line', title: 'Visit Website' }, linkedin: { class: 'ri-linkedin-box-line', title: 'View on LinkedIn' }, tiktok: { class: 'ri-tiktok-line', title: 'Follow on TikTok' }, soundcloud: { class: 'ri-soundcloud-line', title: 'Listen on SoundCloud' } };
+                const iconMap = { 
+                    spotify: { class: 'ri-spotify-fill', title: 'Listen on Spotify' }, 
+                    instagram: { class: 'ri-instagram-line', title: 'Follow on Instagram' }, 
+                    youtube: { class: 'ri-youtube-line', title: 'Watch on YouTube' }, 
+                    facebook: { class: 'ri-facebook-box-line', title: 'Find on Facebook' }, 
+                    website: { class: 'ri-global-line', title: 'Visit Website' }, 
+                    linkedin: { class: 'ri-linkedin-box-line', title: 'View on LinkedIn' }
+                };
                 let linksHTML = '';
                 if (item.artistLinks) {
                     const linksArray = Object.keys(item.artistLinks).map(key => iconMap[key] && item.artistLinks[key] ? `<a href="${item.artistLinks[key]}" target="_blank" title="${iconMap[key].title}"><i class="${iconMap[key].class}"></i></a>` : '').join('');
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
                 if (item.soundcloudUrl) {
+                    const isMobile = window.innerWidth <= 768;
                     const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                    /* CODE CHANGE: Added visual=true and show_teaser=false to improve mobile embed */
-                    mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"></iframe></div>`;
+                    // Conditionally set the 'visual' parameter for mobile view
+                    const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${isMobile}`;
+                    mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
                 } else {
-                    mediaHTML = `<img src="${item.imgSrc}" alt="Cover art for ${item.title}" class="portfolio-image" loading="lazy">`;
+                    // Fallback for items without a soundcloud link
+                    mediaHTML = `<img src="assets/img/placeholder.jpg" alt="Cover art for ${item.title}" class="portfolio-image" loading="lazy">`;
                 }
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
-            
+
             function applyFilters() {
                 let noResultsContainer = document.getElementById('no-results-container');
                 if (!noResultsContainer) {
@@ -3031,7 +3041,6 @@
                         const instrumentId = e.target.dataset.instrument;
                         const data = instrumentData[instrumentId];
                         if (data) {
-                            /* CODE CHANGE: Clear previous image src to prevent flicker */
                             modalImg.src = 'about:blank'; 
 
                             const audioSrc = `assets/audio/${instrumentId}.mp3`;
@@ -3112,3 +3121,4 @@
 
 </body>
 </html>
+
