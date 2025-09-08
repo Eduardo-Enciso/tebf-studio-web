@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEBF STUDIO - The Enciso's Beat Factory</title>
     
+    <!-- Favicon Links -->
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    
     <!-- Preload critical assets for faster initial rendering -->
     <link rel="preload" href="assets/img/logo.png" as="image">
     <link rel="preload" href="assets/logo-animado.webm" as="video" type="video/webm">
@@ -484,11 +490,8 @@
             padding-right: 0;
         }
         .portfolio-filters-container {
-            background-color: rgba(7, 59, 56, 0.3);
             padding: 30px 0;
             margin-bottom: 40px;
-            border-top: 1px solid rgba(238, 143, 0, 0.2);
-            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
         }
         .portfolio-filters {
             display: flex;
@@ -1428,7 +1431,123 @@
             color: var(--color-accent);
         }
 
+        /* --- FILTROS MÓVILES --- */
+        .mobile-filter-trigger {
+            display: none;
+        }
+
+        .filter-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .filter-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--color-bg-1);
+            border-top: 1px solid var(--color-secondary);
+            border-radius: 16px 16px 0 0;
+            z-index: 2000;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .filter-panel-overlay.is-open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .filter-panel-overlay.is-open .filter-panel {
+            transform: translateY(0);
+        }
+
+        .filter-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .filter-panel-header h3 {
+            font-family: var(--font-headings);
+            font-size: 20px;
+        }
+        .filter-panel-close-btn {
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .filter-panel-body .filter-group {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .filter-panel-body .filter-group-label {
+            margin-bottom: 10px;
+        }
+        .filter-panel-body .button-grid {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 10px;
+        }
+        .filter-panel-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .filter-panel-footer .button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+        }
+        .clear-filters-btn {
+            background-color: transparent;
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+        }
+
         @media (max-width: 768px) {
+            .portfolio-filters-container {
+                 background: none;
+                 border: none;
+                 padding: 0;
+            }
+            .portfolio-filters {
+                display: none;
+            }
+            .mobile-filter-trigger {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: var(--color-bg-2);
+                border: 1px solid var(--color-primary);
+                color: var(--color-primary);
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                margin: 0 auto 40px;
+            }
+            .mobile-filter-trigger i {
+                font-size: 20px;
+            }
+
             .hero-section {
                 min-height: 85vh;
                 height: auto;
@@ -1497,7 +1616,7 @@
 </head>
 <body>
 
-    <!-- ========= HEADER START (Estructura Definitiva) ========= -->
+    <!-- ========= HEADER START ========= -->
     <header class="site-header">
         <div class="container header-container">
             <a href="index.html" class="logo-link">
@@ -1563,7 +1682,7 @@
     <!-- ========= HERO SECTION END ========= -->
 
     <main>
-        <!-- ========= SERVICES SECTION START (NUEVA VERSIÓN DINÁMICA) ========= -->
+        <!-- ========= SERVICES SECTION START ========= -->
         <section id="services" class="content-section">
             <div class="container">
                 <h2 class="section-title">Our Services</h2>
@@ -1587,40 +1706,54 @@
         </section>
         <!-- ========= SERVICES SECTION END ========= -->
 
-        <!-- ========= PORTFOLIO SECTION START (NUEVA VERSIÓN) ========= -->
+        <!-- ========= PORTFOLIO SECTION START ========= -->
         <section id="portfolio" class="content-section">
             <div class="container">
                 <h2 class="section-title">Our Work</h2>
                 <p class="section-subtitle">Explore a selection of our diverse productions. Use the filters to navigate through different applications and styles.</p>
-                <div class="portfolio-filters">
-                    <div class="filter-group">
-                        <span class="filter-group-label">Application:</span>
-                        <button class="filter-btn active" data-filter="all" data-group="app">All</button>
-                        <button class="filter-btn" data-filter="music-production" data-group="app">Music Production</button>
-                        <button class="filter-btn" data-filter="audio-for-media" data-group="app">Audio for Media</button>
-                        <button class="filter-btn" data-filter="corporate-audio" data-group="app">Corporate Audio</button>
-                    </div>
-                    <div class="filter-group">
-                        <span class="filter-group-label">Style:</span>
-                        <button class="filter-btn active" data-filter="all" data-group="style">All</button>
-                        <button class="filter-btn" data-filter="africa" data-group="style">Africa</button>
-                        <button class="filter-btn" data-filter="colombian" data-group="style">Colombian</button>
-                        <button class="filter-btn" data-filter="mexican" data-group="style">Mexican</button>
-                        <button class="filter-btn" data-filter="brazilian" data-group="style">Brazilian</button>
-                        <button class="filter-btn" data-filter="andean" data-group="style">Andean</button>
-                        <button class="filter-btn" data-filter="latin" data-group="style">Latin</button>
-                        <button class="filter-btn" data-filter="caribbean" data-group="style">Caribbean</button>
-                        <button class="filter-btn" data-filter="urban" data-group="style">Urban</button>
-                        <button class="filter-btn" data-filter="electronic" data-group="style">Electronic</button>
-                        <button class="filter-btn" data-filter="middle east/north africa" data-group="style">Middle East/North Africa</button>
-                        <button class="filter-btn" data-filter="europe/mediterranean" data-group="style">Europe/Mediterranean</button>
-                        <button class="filter-btn" data-filter="asia" data-group="style">Asia</button> 
-                        <button class="filter-btn" data-filter="rock,pop" data-group="style">Rock/Pop</button>
-                        <button class="filter-btn" data-filter="jazz/blues" data-group="style">Jazz/Blues</button>
-                        <button class="filter-btn" data-filter="funk/soul/r&b" data-group="style">Funk/Soul/R&B</button>
-                        <button class="filter-btn" data-filter="punk" data-group="style">Punk</button>
-                        <button class="filter-btn" data-filter="metal" data-group="style">Metal</button>
-                        <button class="filter-btn" data-filter="orchestral" data-group="style">Orchestral</button>
+                
+                <div class="portfolio-filters-container">
+                    <!-- Botón para abrir filtros en móvil -->
+                    <button class="mobile-filter-trigger" id="mobile-filter-trigger">
+                        <i class="ri-filter-3-line"></i>
+                        <span>Filter Projects</span>
+                    </button>
+                    
+                    <!-- Filtros para Desktop -->
+                    <div class="portfolio-filters">
+                        <div class="filter-group">
+                            <span class="filter-group-label">Application:</span>
+                            <div class="button-grid">
+                                <button class="filter-btn active" data-filter="all" data-group="app">All</button>
+                                <button class="filter-btn" data-filter="music-production" data-group="app">Music Production</button>
+                                <button class="filter-btn" data-filter="audio-for-media" data-group="app">Audio for Media</button>
+                                <button class="filter-btn" data-filter="corporate-audio" data-group="app">Corporate Audio</button>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <span class="filter-group-label">Style:</span>
+                            <div class="button-grid">
+                                <button class="filter-btn active" data-filter="all" data-group="style">All</button>
+                                <button class="filter-btn" data-filter="africa" data-group="style">Africa</button>
+                                <button class="filter-btn" data-filter="colombian" data-group="style">Colombian</button>
+                                <button class="filter-btn" data-filter="mexican" data-group="style">Mexican</button>
+                                <button class="filter-btn" data-filter="brazilian" data-group="style">Brazilian</button>
+                                <button class="filter-btn" data-filter="andean" data-group="style">Andean</button>
+                                <button class="filter-btn" data-filter="latin" data-group="style">Latin</button>
+                                <button class="filter-btn" data-filter="caribbean" data-group="style">Caribbean</button>
+                                <button class="filter-btn" data-filter="urban" data-group="style">Urban</button>
+                                <button class="filter-btn" data-filter="electronic" data-group="style">Electronic</button>
+                                <button class="filter-btn" data-filter="middle east/north africa" data-group="style">Middle East/North Africa</button>
+                                <button class="filter-btn" data-filter="europe/mediterranean" data-group="style">Europe/Mediterranean</button>
+                                <button class="filter-btn" data-filter="asia" data-group="style">Asia</button> 
+                                <button class="filter-btn" data-filter="rock,pop" data-group="style">Rock/Pop</button>
+                                <button class="filter-btn" data-filter="jazz/blues" data-group="style">Jazz/Blues</button>
+                                <button class="filter-btn" data-filter="funk/soul/r&b" data-group="style">Funk/Soul/R&B</button>
+                                <button class="filter-btn" data-filter="punk" data-group="style">Punk</button>
+                                <button class="filter-btn" data-filter="metal" data-group="style">Metal</button>
+                                <button class="filter-btn" data-filter="orchestral" data-group="style">Orchestral</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1931,6 +2064,24 @@
         </div>
     </div>
     <!-- ========= MODAL PARA INSTRUMENTOS END ========= -->
+
+    <!-- ========= MOBILE FILTER PANEL START ========= -->
+    <div class="filter-panel-overlay" id="filter-panel-overlay">
+        <div class="filter-panel" id="filter-panel">
+            <div class="filter-panel-header">
+                <h3>Filter Projects</h3>
+                <button class="filter-panel-close-btn" id="filter-panel-close-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="filter-panel-body">
+                <!-- Filter groups will be inserted here by JS -->
+            </div>
+            <div class="filter-panel-footer">
+                <button class="button clear-filters-btn" id="clear-filters-btn">Clear</button>
+                <button class="button" id="apply-filters-btn">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+    <!-- ========= MOBILE FILTER PANEL END ========= -->
 
     <!-- ========= MODAL PARA APPS DE CONTACTO START ========= -->
     <div class="modal-overlay" id="contact-apps-modal">
@@ -2692,8 +2843,8 @@
 
             let swiperInstance;
             const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
-            const filterButtons = document.querySelectorAll('.filter-btn');
-
+            const desktopFilterContainer = document.querySelector('.portfolio-filters');
+            
             function initializeSwiper(slidesHTML) {
                 if (swiperInstance) {
                     swiperInstance.destroy(true, true);
@@ -2755,17 +2906,24 @@
                 if (item.soundcloudUrl) {
                     const isMobile = window.innerWidth <= 768;
                     const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                    // Conditionally set the 'visual' parameter for mobile view
                     const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${isMobile}`;
                     mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
                 } else {
-                    // Fallback for items without a soundcloud link
                     mediaHTML = `<img src="assets/img/placeholder.jpg" alt="Cover art for ${item.title}" class="portfolio-image" loading="lazy">`;
                 }
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
 
-            function applyFilters() {
+            function applyFilters(source = 'desktop') {
+                let activeAppFilters, activeStyleFilters;
+                let container = source === 'mobile' ? document.querySelector('.filter-panel-body') : desktopFilterContainer;
+                
+                activeAppFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="app"].active')).map(btn => btn.dataset.filter);
+                activeStyleFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="style"].active')).map(btn => btn.dataset.filter);
+
+                if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
+                if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
+                
                 let noResultsContainer = document.getElementById('no-results-container');
                 if (!noResultsContainer) {
                     noResultsContainer = document.createElement('div');
@@ -2773,12 +2931,6 @@
                     noResultsContainer.className = 'no-results-message is-hidden';
                     portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
                 }
-
-                let activeAppFilters = Array.from(document.querySelectorAll('.filter-btn[data-group="app"].active')).map(btn => btn.dataset.filter);
-                let activeStyleFilters = Array.from(document.querySelectorAll('.filter-btn[data-group="style"].active')).map(btn => btn.dataset.filter);
-
-                if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
-                if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
 
                 const filteredData = portfolioItemsData.filter(item => {
                     const tags = item.tags.split(' ');
@@ -2805,227 +2957,271 @@
                     noResultsContainer.classList.remove('is-hidden');
                     noResultsContainer.innerHTML = `<h3>No Matches Found</h3><p>Try adjusting your filters or reset them to see all projects.</p><button class="reset-filters-btn">Reset Filters</button>`;
                     noResultsContainer.querySelector('.reset-filters-btn').addEventListener('click', () => {
-                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                         document.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
-                        applyFilters();
+                        applyFilters(source);
                     });
                 }
             }
+            
+            // --- Mobile Filter Panel Logic ---
+            const mobileFilterTrigger = document.getElementById('mobile-filter-trigger');
+            const filterPanelOverlay = document.getElementById('filter-panel-overlay');
+            const filterPanel = document.getElementById('filter-panel');
+            const closePanelBtn = document.getElementById('filter-panel-close-btn');
+            const applyFiltersBtn = document.getElementById('apply-filters-btn');
+            const clearFiltersBtn = document.getElementById('clear-filters-btn');
+            const filterPanelBody = document.querySelector('.filter-panel-body');
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const group = button.dataset.group;
-                    const filter = button.dataset.filter;
-                    if (filter === 'all') {
-                        document.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                    } else {
-                        document.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
-                        button.classList.toggle('active');
-                        if (!document.querySelector(`.filter-btn[data-group="${group}"].active`)) {
-                            document.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
-                        }
-                    }
-                    applyFilters();
-                });
+            // Populate mobile filter panel
+            filterPanelBody.innerHTML = desktopFilterContainer.innerHTML;
+
+            const openFilterPanel = () => filterPanelOverlay.classList.add('is-open');
+            const closeFilterPanel = () => filterPanelOverlay.classList.remove('is-open');
+
+            mobileFilterTrigger.addEventListener('click', openFilterPanel);
+            closePanelBtn.addEventListener('click', closeFilterPanel);
+            filterPanelOverlay.addEventListener('click', (e) => {
+                if(e.target === filterPanelOverlay) {
+                    closeFilterPanel();
+                }
             });
-            applyFilters();
+
+            applyFiltersBtn.addEventListener('click', () => {
+                applyFilters('mobile');
+                closeFilterPanel();
+            });
+
+            clearFiltersBtn.addEventListener('click', () => {
+                 filterPanelBody.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                 filterPanelBody.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
+            });
+
+            function setupFilterButtons(container, source) {
+                container.querySelectorAll('.filter-btn').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const group = button.dataset.group;
+                        const filter = button.dataset.filter;
+
+                        if (filter === 'all') {
+                            container.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+                            button.classList.add('active');
+                        } else {
+                            container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
+                            button.classList.toggle('active');
+                            if (!container.querySelector(`.filter-btn[data-group="${group}"].active`)) {
+                                container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
+                            }
+                        }
+
+                        if (source === 'desktop') {
+                            applyFilters('desktop');
+                        }
+                    });
+                });
+            }
+
+            setupFilterButtons(desktopFilterContainer, 'desktop');
+            setupFilterButtons(filterPanelBody, 'mobile');
+            
+            // Initial load
+            applyFilters('desktop');
 
             // --- INICIO: LÓGICA DEL MODAL DE INSTRUMENTOS ---
             const instrumentData = {
-    'vallenato-box': { 
-        name: 'Vallenato Box', 
-        description: 'The "caja vallenata" is the rhythmic soul of Vallenato music. This small drum is held between the knees and played with bare hands. Its goatskin head produces a wide range of sounds, from a deep bass tone in the center to a sharp, cracking slap on the rim, creating a dynamic percussive line that drives the music and complements the accordion.' 
-    },
-    'guacharaca': { 
-        name: 'Guacharaca', 
-        description: 'Indispensable in Vallenato and Cumbia, the guacharaca is a wooden tube with ridges, scraped with a wire fork. Named after a native Colombian bird, it provides a constant, high-frequency "ch-ch-ch" sound. This textured rhythmic base interlocks perfectly with the caja (vallenato box) and accordion, driving the rhythm forward.' 
-    },
-    'cununo': { 
-        name: 'Cununo', 
-        description: 'From Colombia\'s Afro-Colombian Pacific coast, the cununo is a tall, conical hand drum with a single animal-hide head. Pitched as male (macho) and female (hembra), it serves as the improvising, conversational voice in marimba music, playing sharp, intricate patterns that respond to the melody and dancers.' 
-    },
-    'pacific-bombo': { 
-        name: 'Pacific Bombo', 
-        description: 'The heartbeat of Colombia\'s Pacific coast music, the bombo is a large, two-headed drum providing a deep, foundational pulse. In the southern Pacific, it is played in male-female pairs in marimba music. In the northern Pacific, a single bombo is used in chirimía ensembles. Played with a mallet and stick, its powerful, booming rhythm is essential to genres like Currulao.' 
-    },
-    'guasa': { 
-        name: 'Guasá', 
-        description: 'A key textural instrument from Colombia\'s Pacific coast, the guasá is a cylindrical bamboo shaker filled with seeds. Unlike a maraca, it creates a continuous, flowing, river-like sound that fills the sonic space. It\'s shaken with a consistent motion to provide a smooth, shimmering rhythmic carpet for other instruments.' 
-    },
-    'atlantic-tambora': { 
-        name: 'Atlantic Tambora', 
-        description: 'Central to traditional Cumbia, this two-headed drum is laid on the lap. A unique playing style—using a stick on the head and wooden shell ("cáscara") while the other hand plays the opposite head—allows a single player to create the complex polyrhythm that defines the Cumbia groove.' 
-    },
-    'alegre-drum': { 
-        name: 'Alegre Drum', 
-        description: 'The "tambor alegre" ("happy drum") is the lead, improvising voice in a traditional Cumbia percussion trio. A skilled player uses this single-headed drum to produce a variety of sounds, including deep bass, crisp open tones, and sharp slaps, allowing for joyful and spontaneous rhythmic conversations.' 
-    },
-    'guacho': { 
-        name: 'Guacho', 
-        description: 'The guacho is a metal tube shaker from Colombia\'s Atlantic region, serving a similar function to the guacharaca in Cumbia ensembles. Its metallic construction gives it a sharper and brighter sound, providing a persistent, high-frequency sizzle that drives the rhythm and adds a distinct layer of energy.' 
-    },
-    'maracon': { 
-        name: 'Maracón', 
-        description: 'The maracón is a large, single maraca used in the traditional music of the Colombian plains (Llanos). Its size gives it a lower pitch and a more powerful, resonant sound than its paired cousins. It is used to mark a strong, steady pulse that grounds the swirling melodies of the harp and cuatro.' 
-    },
-    'capachos': { 
-        name: 'Capachos', 
-        description: 'Capachos are small maracas essential to the fast-paced Joropo music from the plains (Llanos). Traditionally made from the capacho plant, they are played in pairs. The player produces incredibly fast and complex rhythmic patterns that interlock with the harp and cuatro, creating a dense percussive drive.' 
-    },
-    'congas': { 
-        name: 'Congas', 
-        description: 'Originating from Afro-Cuban traditions, congas are tall, single-headed drums that form the core of the rhythm section in Salsa. Played in sets of two or three, they produce a range of tones from deep bass notes to sharp slaps. The foundational "tumbao" pattern provides a constant, syncopated groove.' 
-    },
-    'bongo': { 
-        name: 'Bongó', 
-        description: 'The bongó is a pair of small, connected Afro-Cuban drums: the smaller "macho" and larger "hembra." Held between the knees and played with the fingertips, they produce high-pitched, conversational rhythms. In salsa, the bongosero plays a steady "martillo" (hammer) pattern and improvises freely.' 
-    },
-    'timbales': { 
-        name: 'Timbales', 
-        description: 'Timbales are a pair of shallow, metal-cased drums, a staple in salsa and Latin jazz. Played with thin sticks, they produce sharp, cutting tones. The setup often includes cowbells and a cymbal, and the timbalero plays rhythmic patterns on the shells ("cáscara") as well as taking fiery solos.' 
-    },
-    'guiro': { 
-        name: 'Güiro', 
-        description: 'The güiro is traditionally a hollowed-out gourd with parallel notches cut into one side. It is played by rubbing a stick along these ridges, which produces a characteristic scraping, rhythmic sound. This provides a driving texture in genres like salsa, son, and bolero.' 
-    },
-    'maracas': { 
-        name: 'Maracas', 
-        description: 'Maracas are rattles, played in pairs, that appear in a vast array of Caribbean and Latin American music. Traditionally made from dried gourds filled with seeds, they are shaken to add a high-frequency rhythmic layer, creating either a steady pulse or complex, syncopated patterns.' 
-    },
-    'cowbells': { 
-        name: 'Cowbells', 
-        description: 'In Latin music, the cowbell, or "cencerro," is a crucial rhythmic instrument struck with a stick. In a salsa band, the bongosero switches to a hand-held cowbell during the high-energy "montuno" sections, playing a driving pattern that anchors the rhythm section.' 
-    },
-    'jam-blocks': { 
-        name: 'Jam Blocks', 
-        description: 'Jam Blocks are the modern, durable evolution of the traditional wood block. Made from high-impact plastic, they are designed to replicate the sharp, piercing "clack" of their wooden counterparts. They are often integrated into drum kits in various pitches for accents and rhythmic patterns.' 
-    },
-    'claves': { 
-        name: 'Claves', 
-        description: 'Despite their simplicity—just two short, thick dowels of wood—claves are the rhythmic key to Afro-Cuban music. One is held to create a resonant chamber and is struck by the other. They are used to play the "clave," a five-note pattern that is the structural core for Son, Rumba, and Salsa.' 
-    },
-    'peruvian-cajon': { 
-        name: 'Peruvian Cajon', 
-        description: 'A masterpiece of ingenuity, the Peruvian cajón ("box") is a six-sided box drum with Afro-Peruvian roots. The musician sits on top and plays the front face with their hands, producing a range of sounds from a deep bass tone to a sharp slap, effectively creating the sound of a full drum kit.' 
-    },
-    'quijada': { 
-        name: 'Quijada (Vibra-slap)', 
-        description: 'The quijada is a traditional Afro-Peruvian instrument made from the jawbone of a donkey, horse, or mule, whose loose molars produce a distinctive rattling sound when struck. The Vibra-slap is the modern, durable version that faithfully recreates this unique sound.' 
-    },
-    'pandeiro': { 
-        name: 'Pandeiro', 
-        description: 'Often called the "Brazilian tambourine," the pandeiro is a highly versatile hand frame drum with a tunable head and drier-sounding jingles ("platinelas"). A master player can mimic the rhythms of an entire drum kit, making it a cornerstone of Samba, Choro, and Capoeira.' 
-    },
-    'samba-whistle': { 
-        name: 'Samba Whistle', 
-        description: 'The samba whistle, or "apito," is the conductor\'s baton of the Brazilian "bateria" (percussion ensemble). This high-pitched whistle is used by the leader to communicate with hundreds of drummers, cueing rhythmic breaks, call-and-response sections, and endings with clear signals.' 
-    },
-    'agogo-bells': { 
-        name: 'Agogô Bells', 
-        description: 'The agogô is a set of two or more conical bells of different sizes, with origins in Yoruba music. It is a key melodic and rhythmic instrument in Brazilian styles like Samba. Played with a stick, the agogô typically plays a repeating, syncopated pattern that serves as a guidepost for the ensemble.' 
-    },
-    'caixa': { 
-        name: 'Caixa', 
-        description: 'The caixa, or "caixa de guerra," is the Brazilian equivalent of the snare drum and the engine of a samba bateria. Played with two sticks, the caixas provide a constant, driving, and highly syncopated rhythm that creates the characteristic "swing" of samba.' 
-    },
-    'surdo': { 
-        name: 'Surdo', 
-        description: 'The surdo is the heart of samba, a large bass drum that provides the powerful, low-end foundation for the music. In a samba bateria, surdos are played in tuned sets of at least three sizes. Their combined boom is the deep, resonant pulse that can be felt in your chest.' 
-    },
-    'timbau': { 
-        name: 'Timbau', 
-        description: 'The timbau is a tall, cone-shaped Brazilian hand drum, popularized in movements like Samba-Reggae. Played with the hands, it is known for its incredible dynamic range, capable of producing very high, cutting slaps and deep, resonant bass tones.' 
-    },
-    'cabasa': { 
-        name: 'Afuche / Cabasa', 
-        description: 'The afuche-cabasa is a modern instrument constructed with loops of steel ball chain wrapped around a wide, textured cylinder. The sound is produced by shaking it or by twisting the cylinder against the palm, creating a precise, rhythmic, and metallic scraping sound.' 
-    },
-    'triangle': { 
-        name: 'Triangle', 
-        description: 'In Brazilian Forró music, the triangle plays a vital role. It is not just used for occasional accents, but plays a constant, driving, and highly syncopated pattern that interlocks with the zabumba (bass drum) and accordion, creating a bright, metallic, and dance-inducing texture.' 
-    },
-    'shaker': { 
-        name: 'Shaker', 
-        description: 'A broad category of instrument, a shaker creates its sound through the movement of small particles within a container. Their primary function is to provide a high-frequency rhythmic layer, adding energy and filling the sonic space with a continuous shimmer or a precisely articulated pattern.' 
-    },
-    'guira': { 
-        name: 'Güira', 
-        description: 'The güira is a metal scraper essential to Dominican music like Merengue and Bachata. It consists of a sheet of metal with a rough texture, played by scraping it with a metal fork. The resulting sound is much brighter and sharper than the güiro, providing a driving, high-frequency pulse.' 
-    },
-    'merengue-tambora': { 
-        name: 'Merengue Tambora', 
-        description: 'The Dominican tambora is a two-headed drum that provides the rhythmic backbone for Merengue. It is held on the lap and played with a unique technique: one hand plays the head, while a stick in the other hand strikes the opposite head and the wooden shell of the drum.' 
-    },
-    'djembe': { 
-        name: 'Djembé', 
-        description: 'The djembé is a goblet-shaped drum from West Africa, tuned with a system of ropes that allows for high tension. Played with bare hands, it is known for its wide tonal range, centered around three fundamental sounds: the deep "bass," the full "tone," and the sharp, cutting "slap."' 
-    },
-    'talking-drum': { 
-        name: 'Talking Drum', 
-        description: 'This remarkable instrument from West Africa is named for its ability to mimic the pitch and tone of human speech. Its hourglass shape allows the player to squeeze ropes connecting the two drumheads, altering the pitch to create melodic, speech-like phrases.' 
-    },
-    'asalato': { 
-        name: 'Asalato', 
-        description: 'Also known as the kashaka, the asalato consists of two small gourds, filled with seeds, connected by a short string. A player holds one gourd and swings the other, creating intricate polyrhythms as the gourds click together and the seeds provide a continuous shake.' 
-    },
-    'darbuka': { 
-        name: 'Egyptian Darbuka', 
-        description: 'Also known as the Tabla in Egypt, this goblet-shaped drum is a cornerstone of Middle Eastern music. Its high-tension head produces the instrument\'s signature sounds: a deep, resonant bass tone called the "doum" (from the center) and a high-pitched, crisp crack called the "tek" (from the rim).' 
-    },
-    'udu-drum': { 
-        name: 'Udu Drum', 
-        description: 'The Udu is a clay pot drum from Nigeria. This unique instrument is both an idiophone and an aerophone. In addition to sounds from striking the clay body, the player can produce a distinctive, deep, and watery bass sound by quickly hitting a small hole in the side with their palm.' 
-    },
-    'flamenco-cajon': { 
-        name: 'Flamenco Cajon', 
-        description: 'While the cajón originated in Peru, it was adapted for Flamenco music by adding guitar strings or snare wires against the inside of the playing surface. This creates a buzzing, snare-like sizzle which perfectly complements the sharp footwork (zapateado) and hand claps (palmas) of Flamenco.' 
-    },
-    'castanets': { 
-        name: 'Castanets', 
-        description: 'A signature sound of Spanish dance, castanets are a pair of concave shells clicked together in the palm. They are used to produce intricate rhythmic patterns and rapid, rippling rolls called "carretillas." They serve as a percussive extension of the dancer’s body, accentuating their movements.' 
-    },
-    'tambourine': { 
-        name: 'Tambourine', 
-        description: 'The tambourine is an ancient frame drum with pairs of small metal jingles called "zills." Its versatility is immense; it can be struck, shaken for a continuous shimmer, or have a finger rolled across the head to create a rapid, sustained jingle.' 
-    },
-    'sleigh-bells': { 
-        name: 'Sleigh Bells', 
-        description: 'This instrument consists of a collection of "jingle" bells mounted on a handle or strap. Each bell contains a small ball bearing that creates a bright, metallic jingle sound when shaken. They are used to evoke a sense of winter or festivity, adding a high-frequency shimmer.' 
-    },
-    'celesta': { 
-        name: 'Celesta Bar (Wind/Chime Bells)', 
-        description: 'Often called a Mark Tree, this instrument consists of numerous small, graduated metal chimes suspended from a wooden frame. When a hand is swept across the chimes, they produce a shimmering, cascading glissando, often used to signify a magical or dream-like transition.' 
-    },
-    'timpani': { 
-        name: 'Symphonic Timpani', 
-        description: 'Also known as kettledrums, timpani are the foundation of the orchestral percussion section. These large copper bowls are capable of producing definite, powerful pitches. A foot pedal mechanism allows the timpanist to change the pitch, reinforcing harmonies and building immense drama.' 
-    },
-    'gran-cassa': { 
-        name: 'Gran Cassa', 
-        description: 'The Gran Cassa is the orchestral bass drum, an instrument of immense size and power. It produces a very low, resonant tone of indefinite pitch. Its role is to provide a deep, foundational anchor to the ensemble, marking significant moments with a powerful boom.' 
-    },
-    'cymbals': { 
-        name: 'Cymbals', 
-        description: 'Orchestral cymbals provide high-frequency shimmer and dramatic accents. They are most often used as crash cymbals, played in pairs and struck together for an explosive sound at musical climaxes. A single cymbal can also be suspended and played with mallets for a sustained, shimmering roll.' 
-    },
-    'tabla': { 
-        name: 'Tabla', 
-        description: 'The tabla is the iconic percussion instrument of North Indian classical music. It consists of a pair of small hand drums: the smaller, higher-pitched dayan, and the larger bayan bass drum. A master player uses complex finger and palm strokes to create intricate rhythmic cycles (talas).' 
-    },
-    'taiko': { 
-        name: 'Taiko', 
-        description: 'Taiko refers both to a range of Japanese drums and to the art of ensemble drumming. It is a deeply physical and visually stunning art form. The drums themselves range from the small shime-daiko to the massive o-daiko, whose thunderous sound is capable of shaking the ground.' 
-    },
-    'turkish-darbuka': { 
-        name: 'Turkish Darbuka', 
-        description: 'While similar to the Egyptian darbuka, the Turkish style has key differences. It is often made of lightweight metal and its head is attached with an exposed rim. This edge allows players to use advanced finger-snapping techniques, enabling incredibly fast and intricate rhythmic patterns.' 
-    },
-    'daf': { 
-        name: 'Daf', 
-        description: 'The daf is a large frame drum with ancient origins in the Middle East. It is composed of a wooden hoop with a skin membrane. A distinctive feature is the presence of interlocking metal rings on the inside, which produce a loud, jingling, and buzzing sound when the drum is played.' 
-    }
-};
+                'vallenato-box': { 
+                    name: 'Vallenato Box', 
+                    description: 'The "caja vallenata" is the rhythmic soul of Vallenato music. This small drum is held between the knees and played with bare hands. Its goatskin head produces a wide range of sounds, from a deep bass tone in the center to a sharp, cracking slap on the rim, creating a dynamic percussive line that drives the music and complements the accordion.' 
+                },
+                'guacharaca': { 
+                    name: 'Guacharaca', 
+                    description: 'Indispensable in Vallenato and Cumbia, the guacharaca is a wooden tube with ridges, scraped with a wire fork. Named after a native Colombian bird, it provides a constant, high-frequency "ch-ch-ch" sound. This textured rhythmic base interlocks perfectly with the caja (vallenato box) and accordion, driving the rhythm forward.' 
+                },
+                'cununo': { 
+                    name: 'Cununo', 
+                    description: 'From Colombia\'s Afro-Colombian Pacific coast, the cununo is a tall, conical hand drum with a single animal-hide head. Pitched as male (macho) and female (hembra), it serves as the improvising, conversational voice in marimba music, playing sharp, intricate patterns that respond to the melody and dancers.' 
+                },
+                'pacific-bombo': { 
+                    name: 'Pacific Bombo', 
+                    description: 'The heartbeat of Colombia\'s Pacific coast music, the bombo is a large, two-headed drum providing a deep, foundational pulse. In the southern Pacific, it is played in male-female pairs in marimba music. In the northern Pacific, a single bombo is used in chirimía ensembles. Played with a mallet and stick, its powerful, booming rhythm is essential to genres like Currulao.' 
+                },
+                'guasa': { 
+                    name: 'Guasá', 
+                    description: 'A key textural instrument from Colombia\'s Pacific coast, the guasá is a cylindrical bamboo shaker filled with seeds. Unlike a maraca, it creates a continuous, flowing, river-like sound that fills the sonic space. It\'s shaken with a consistent motion to provide a smooth, shimmering rhythmic carpet for other instruments.' 
+                },
+                'atlantic-tambora': { 
+                    name: 'Atlantic Tambora', 
+                    description: 'Central to traditional Cumbia, this two-headed drum is laid on the lap. A unique playing style—using a stick on the head and wooden shell ("cáscara") while the other hand plays the opposite head—allows a single player to create the complex polyrhythm that defines the Cumbia groove.' 
+                },
+                'alegre-drum': { 
+                    name: 'Alegre Drum', 
+                    description: 'The "tambor alegre" ("happy drum") is the lead, improvising voice in a traditional Cumbia percussion trio. A skilled player uses this single-headed drum to produce a variety of sounds, including deep bass, crisp open tones, and sharp slaps, allowing for joyful and spontaneous rhythmic conversations.' 
+                },
+                'guacho': { 
+                    name: 'Guacho', 
+                    description: 'The guacho is a metal tube shaker from Colombia\'s Atlantic region, serving a similar function to the guacharaca in Cumbia ensembles. Its metallic construction gives it a sharper and brighter sound, providing a persistent, high-frequency sizzle that drives the rhythm and adds a distinct layer of energy.' 
+                },
+                'maracon': { 
+                    name: 'Maracón', 
+                    description: 'The maracón is a large, single maraca used in the traditional music of the Colombian plains (Llanos). Its size gives it a lower pitch and a more powerful, resonant sound than its paired cousins. It is used to mark a strong, steady pulse that grounds the swirling melodies of the harp and cuatro.' 
+                },
+                'capachos': { 
+                    name: 'Capachos', 
+                    description: 'Capachos are small maracas essential to the fast-paced Joropo music from the plains (Llanos). Traditionally made from the capacho plant, they are played in pairs. The player produces incredibly fast and complex rhythmic patterns that interlock with the harp and cuatro, creating a dense percussive drive.' 
+                },
+                'congas': { 
+                    name: 'Congas', 
+                    description: 'Originating from Afro-Cuban traditions, congas are tall, single-headed drums that form the core of the rhythm section in Salsa. Played in sets of two or three, they produce a range of tones from deep bass notes to sharp slaps. The foundational "tumbao" pattern provides a constant, syncopated groove.' 
+                },
+                'bongo': { 
+                    name: 'Bongó', 
+                    description: 'The bongó is a pair of small, connected Afro-Cuban drums: the smaller "macho" and larger "hembra." Held between the knees and played with the fingertips, they produce high-pitched, conversational rhythms. In salsa, the bongosero plays a steady "martillo" (hammer) pattern and improvises freely.' 
+                },
+                'timbales': { 
+                    name: 'Timbales', 
+                    description: 'Timbales are a pair of shallow, metal-cased drums, a staple in salsa and Latin jazz. Played with thin sticks, they produce sharp, cutting tones. The setup often includes cowbells and a cymbal, and the timbalero plays rhythmic patterns on the shells ("cáscara") as well as taking fiery solos.' 
+                },
+                'guiro': { 
+                    name: 'Güiro', 
+                    description: 'The güiro is traditionally a hollowed-out gourd with parallel notches cut into one side. It is played by rubbing a stick along these ridges, which produces a characteristic scraping, rhythmic sound. This provides a driving texture in genres like salsa, son, and bolero.' 
+                },
+                'maracas': { 
+                    name: 'Maracas', 
+                    description: 'Maracas are rattles, played in pairs, that appear in a vast array of Caribbean and Latin American music. Traditionally made from dried gourds filled with seeds, they are shaken to add a high-frequency rhythmic layer, creating either a steady pulse or complex, syncopated patterns.' 
+                },
+                'cowbells': { 
+                    name: 'Cowbells', 
+                    description: 'In Latin music, the cowbell, or "cencerro," is a crucial rhythmic instrument struck with a stick. In a salsa band, the bongosero switches to a hand-held cowbell during the high-energy "montuno" sections, playing a driving pattern that anchors the rhythm section.' 
+                },
+                'jam-blocks': { 
+                    name: 'Jam Blocks', 
+                    description: 'Jam Blocks are the modern, durable evolution of the traditional wood block. Made from high-impact plastic, they are designed to replicate the sharp, piercing "clack" of their wooden counterparts. They are often integrated into drum kits in various pitches for accents and rhythmic patterns.' 
+                },
+                'claves': { 
+                    name: 'Claves', 
+                    description: 'Despite their simplicity—just two short, thick dowels of wood—claves are the rhythmic key to Afro-Cuban music. One is held to create a resonant chamber and is struck by the other. They are used to play the "clave," a five-note pattern that is the structural core for Son, Rumba, and Salsa.' 
+                },
+                'peruvian-cajon': { 
+                    name: 'Peruvian Cajon', 
+                    description: 'A masterpiece of ingenuity, the Peruvian cajón ("box") is a six-sided box drum with Afro-Peruvian roots. The musician sits on top and plays the front face with their hands, producing a range of sounds from a deep bass tone to a sharp slap, effectively creating the sound of a full drum kit.' 
+                },
+                'quijada': { 
+                    name: 'Quijada (Vibra-slap)', 
+                    description: 'The quijada is a traditional Afro-Peruvian instrument made from the jawbone of a donkey, horse, or mule, whose loose molars produce a distinctive rattling sound when struck. The Vibra-slap is the modern, durable version that faithfully recreates this unique sound.' 
+                },
+                'pandeiro': { 
+                    name: 'Pandeiro', 
+                    description: 'Often called the "Brazilian tambourine," the pandeiro is a highly versatile hand frame drum with a tunable head and drier-sounding jingles ("platinelas"). A master player can mimic the rhythms of an entire drum kit, making it a cornerstone of Samba, Choro, and Capoeira.' 
+                },
+                'samba-whistle': { 
+                    name: 'Samba Whistle', 
+                    description: 'The samba whistle, or "apito," is the conductor\'s baton of the Brazilian "bateria" (percussion ensemble). This high-pitched whistle is used by the leader to communicate with hundreds of drummers, cueing rhythmic breaks, call-and-response sections, and endings with clear signals.' 
+                },
+                'agogo-bells': { 
+                    name: 'Agogô Bells', 
+                    description: 'The agogô is a set of two or more conical bells of different sizes, with origins in Yoruba music. It is a key melodic and rhythmic instrument in Brazilian styles like Samba. Played with a stick, the agogô typically plays a repeating, syncopated pattern that serves as a guidepost for the ensemble.' 
+                },
+                'caixa': { 
+                    name: 'Caixa', 
+                    description: 'The caixa, or "caixa de guerra," is the Brazilian equivalent of the snare drum and the engine of a samba bateria. Played with two sticks, the caixas provide a constant, driving, and highly syncopated rhythm that creates the characteristic "swing" of samba.' 
+                },
+                'surdo': { 
+                    name: 'Surdo', 
+                    description: 'The surdo is the heart of samba, a large bass drum that provides the powerful, low-end foundation for the music. In a samba bateria, surdos are played in tuned sets of at least three sizes. Their combined boom is the deep, resonant pulse that can be felt in your chest.' 
+                },
+                'timbau': { 
+                    name: 'Timbau', 
+                    description: 'The timbau is a tall, cone-shaped Brazilian hand drum, popularized in movements like Samba-Reggae. Played with the hands, it is known for its incredible dynamic range, capable of producing very high, cutting slaps and deep, resonant bass tones.' 
+                },
+                'cabasa': { 
+                    name: 'Afuche / Cabasa', 
+                    description: 'The afuche-cabasa is a modern instrument constructed with loops of steel ball chain wrapped around a wide, textured cylinder. The sound is produced by shaking it or by twisting the cylinder against the palm, creating a precise, rhythmic, and metallic scraping sound.' 
+                },
+                'triangle': { 
+                    name: 'Triangle', 
+                    description: 'In Brazilian Forró music, the triangle plays a vital role. It is not just used for occasional accents, but plays a constant, driving, and highly syncopated pattern that interlocks with the zabumba (bass drum) and accordion, creating a bright, metallic, and dance-inducing texture.' 
+                },
+                'shaker': { 
+                    name: 'Shaker', 
+                    description: 'A broad category of instrument, a shaker creates its sound through the movement of small particles within a container. Their primary function is to provide a high-frequency rhythmic layer, adding energy and filling the sonic space with a continuous shimmer or a precisely articulated pattern.' 
+                },
+                'guira': { 
+                    name: 'Güira', 
+                    description: 'The güira is a metal scraper essential to Dominican music like Merengue and Bachata. It consists of a sheet of metal with a rough texture, played by scraping it with a metal fork. The resulting sound is much brighter and sharper than the güiro, providing a driving, high-frequency pulse.' 
+                },
+                'merengue-tambora': { 
+                    name: 'Merengue Tambora', 
+                    description: 'The Dominican tambora is a two-headed drum that provides the rhythmic backbone for Merengue. It is held on the lap and played with a unique technique: one hand plays the head, while a stick in the other hand strikes the opposite head and the wooden shell of the drum.' 
+                },
+                'djembe': { 
+                    name: 'Djembé', 
+                    description: 'The djembé is a goblet-shaped drum from West Africa, tuned with a system of ropes that allows for high tension. Played with bare hands, it is known for its wide tonal range, centered around three fundamental sounds: the deep "bass," the full "tone," and the sharp, cutting "slap."' 
+                },
+                'talking-drum': { 
+                    name: 'Talking Drum', 
+                    description: 'This remarkable instrument from West Africa is named for its ability to mimic the pitch and tone of human speech. Its hourglass shape allows the player to squeeze ropes connecting the two drumheads, altering the pitch to create melodic, speech-like phrases.' 
+                },
+                'asalato': { 
+                    name: 'Asalato', 
+                    description: 'Also known as the kashaka, the asalato consists of two small gourds, filled with seeds, connected by a short string. A player holds one gourd and swings the other, creating intricate polyrhythms as the gourds click together and the seeds provide a continuous shake.' 
+                },
+                'darbuka': { 
+                    name: 'Egyptian Darbuka', 
+                    description: 'Also known as the Tabla in Egypt, this goblet-shaped drum is a cornerstone of Middle Eastern music. Its high-tension head produces the instrument\'s signature sounds: a deep, resonant bass tone called the "doum" (from the center) and a high-pitched, crisp crack called the "tek" (from the rim).' 
+                },
+                'udu-drum': { 
+                    name: 'Udu Drum', 
+                    description: 'The Udu is a clay pot drum from Nigeria. This unique instrument is both an idiophone and an aerophone. In addition to sounds from striking the clay body, the player can produce a distinctive, deep, and watery bass sound by quickly hitting a small hole in the side with their palm.' 
+                },
+                'flamenco-cajon': { 
+                    name: 'Flamenco Cajon', 
+                    description: 'While the cajón originated in Peru, it was adapted for Flamenco music by adding guitar strings or snare wires against the inside of the playing surface. This creates a buzzing, snare-like sizzle which perfectly complements the sharp footwork (zapateado) and hand claps (palmas) of Flamenco.' 
+                },
+                'castanets': { 
+                    name: 'Castanets', 
+                    description: 'A signature sound of Spanish dance, castanets are a pair of concave shells clicked together in the palm. They are used to produce intricate rhythmic patterns and rapid, rippling rolls called "carretillas." They serve as a percussive extension of the dancer’s body, accentuating their movements.' 
+                },
+                'tambourine': { 
+                    name: 'Tambourine', 
+                    description: 'The tambourine is an ancient frame drum with pairs of small metal jingles called "zills." Its versatility is immense; it can be struck, shaken for a continuous shimmer, or have a finger rolled across the head to create a rapid, sustained jingle.' 
+                },
+                'sleigh-bells': { 
+                    name: 'Sleigh Bells', 
+                    description: 'This instrument consists of a collection of "jingle" bells mounted on a handle or strap. Each bell contains a small ball bearing that creates a bright, metallic jingle sound when shaken. They are used to evoke a sense of winter or festivity, adding a high-frequency shimmer.' 
+                },
+                'celesta': { 
+                    name: 'Celesta Bar (Wind/Chime Bells)', 
+                    description: 'Often called a Mark Tree, this instrument consists of numerous small, graduated metal chimes suspended from a wooden frame. When a hand is swept across the chimes, they produce a shimmering, cascading glissando, often used to signify a magical or dream-like transition.' 
+                },
+                'timpani': { 
+                    name: 'Symphonic Timpani', 
+                    description: 'Also known as kettledrums, timpani are the foundation of the orchestral percussion section. These large copper bowls are capable of producing definite, powerful pitches. A foot pedal mechanism allows the timpanist to change the pitch, reinforcing harmonies and building immense drama.' 
+                },
+                'gran-cassa': { 
+                    name: 'Gran Cassa', 
+                    description: 'The Gran Cassa is the orchestral bass drum, an instrument of immense size and power. It produces a very low, resonant tone of indefinite pitch. Its role is to provide a deep, foundational anchor to the ensemble, marking significant moments with a powerful boom.' 
+                },
+                'cymbals': { 
+                    name: 'Cymbals', 
+                    description: 'Orchestral cymbals provide high-frequency shimmer and dramatic accents. They are most often used as crash cymbals, played in pairs and struck together for an explosive sound at musical climaxes. A single cymbal can also be suspended and played with mallets for a sustained, shimmering roll.' 
+                },
+                'tabla': { 
+                    name: 'Tabla', 
+                    description: 'The tabla is the iconic percussion instrument of North Indian classical music. It consists of a pair of small hand drums: the smaller, higher-pitched dayan, and the larger bayan bass drum. A master player uses complex finger and palm strokes to create intricate rhythmic cycles (talas).' 
+                },
+                'taiko': { 
+                    name: 'Taiko', 
+                    description: 'Taiko refers both to a range of Japanese drums and to the art of ensemble drumming. It is a deeply physical and visually stunning art form. The drums themselves range from the small shime-daiko to the massive o-daiko, whose thunderous sound is capable of shaking the ground.' 
+                },
+                'turkish-darbuka': { 
+                    name: 'Turkish Darbuka', 
+                    description: 'While similar to the Egyptian darbuka, the Turkish style has key differences. It is often made of lightweight metal and its head is attached with an exposed rim. This edge allows players to use advanced finger-snapping techniques, enabling incredibly fast and intricate rhythmic patterns.' 
+                },
+                'daf': { 
+                    name: 'Daf', 
+                    description: 'The daf is a large frame drum with ancient origins in the Middle East. It is composed of a wooden hoop with a skin membrane. A distinctive feature is the presence of interlocking metal rings on the inside, which produce a loud, jingling, and buzzing sound when the drum is played.' 
+                }
+            };
 
             const instrumentModal = document.getElementById('instrument-modal');
             const modalImg = document.getElementById('instrument-modal-img');
@@ -3035,13 +3231,17 @@
             const closeModalBtn = document.getElementById('instrument-modal-close');
             let currentAudio = null;
 
+            modalImg.addEventListener('load', () => {
+                modalImg.style.visibility = 'visible';
+            });
+
             document.querySelectorAll('.instrument-list').forEach(list => {
                 list.addEventListener('click', (e) => {
                     if (e.target.matches('.instrument-list-item')) {
                         const instrumentId = e.target.dataset.instrument;
                         const data = instrumentData[instrumentId];
                         if (data) {
-                            modalImg.src = 'about:blank'; 
+                            modalImg.style.visibility = 'hidden'; 
 
                             const audioSrc = `assets/audio/${instrumentId}.mp3`;
                             const imgSrc = `assets/img/instruments/${instrumentId}.jpg`;
@@ -3052,6 +3252,7 @@
                             modalImg.alt = data.name;
                             modalImg.onerror = () => {
                                 modalImg.src = `https://placehold.co/200x200/073B38/FFFFFF?text=${data.name.replace(/ /g, '+')}`;
+                                modalImg.style.visibility = 'visible';
                             };
                             soundBtn.dataset.audioSrc = audioSrc;
                             instrumentModal.classList.add('is-visible');

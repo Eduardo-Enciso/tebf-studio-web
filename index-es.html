@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEBF STUDIO - La Fábrica de Beats de Enciso</title>
     
+    <!-- Favicon Links -->
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    
     <!-- Preload critical assets for faster initial rendering -->
     <link rel="preload" href="assets/img/logo.png" as="image">
     <link rel="preload" href="assets/logo-animado.webm" as="video" type="video/webm">
@@ -484,11 +490,8 @@
             padding-right: 0;
         }
         .portfolio-filters-container {
-            background-color: rgba(7, 59, 56, 0.3);
             padding: 30px 0;
             margin-bottom: 40px;
-            border-top: 1px solid rgba(238, 143, 0, 0.2);
-            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
         }
         .portfolio-filters {
             display: flex;
@@ -1428,7 +1431,123 @@
             color: var(--color-accent);
         }
 
+        /* --- FILTROS MÓVILES --- */
+        .mobile-filter-trigger {
+            display: none;
+        }
+
+        .filter-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .filter-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--color-bg-1);
+            border-top: 1px solid var(--color-secondary);
+            border-radius: 16px 16px 0 0;
+            z-index: 2000;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .filter-panel-overlay.is-open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .filter-panel-overlay.is-open .filter-panel {
+            transform: translateY(0);
+        }
+
+        .filter-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(238, 143, 0, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .filter-panel-header h3 {
+            font-family: var(--font-headings);
+            font-size: 20px;
+        }
+        .filter-panel-close-btn {
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .filter-panel-body .filter-group {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .filter-panel-body .filter-group-label {
+            margin-bottom: 10px;
+        }
+        .filter-panel-body .button-grid {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 10px;
+        }
+        .filter-panel-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .filter-panel-footer .button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+        }
+        .clear-filters-btn {
+            background-color: transparent;
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+        }
+
         @media (max-width: 768px) {
+            .portfolio-filters-container {
+                 background: none;
+                 border: none;
+                 padding: 0;
+            }
+            .portfolio-filters {
+                display: none;
+            }
+            .mobile-filter-trigger {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: var(--color-bg-2);
+                border: 1px solid var(--color-primary);
+                color: var(--color-primary);
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                margin: 0 auto 40px;
+            }
+            .mobile-filter-trigger i {
+                font-size: 20px;
+            }
+
             .hero-section {
                 min-height: 85vh;
                 height: auto;
@@ -1591,35 +1710,49 @@
             <div class="container">
                 <h2 class="section-title">Nuestro Trabajo</h2>
                 <p class="section-subtitle">Explora una selección de nuestras producciones. Usa los filtros para navegar entre distintos estilos y aplicaciones.</p>
-                <div class="portfolio-filters">
-                    <div class="filter-group">
-                        <span class="filter-group-label">Aplicación:</span>
-                        <button class="filter-btn active" data-filter="all" data-group="app">Todos</button>
-                        <button class="filter-btn" data-filter="produccion-musical" data-group="app">Producción Musical</button>
-                        <button class="filter-btn" data-filter="audio-para-medios" data-group="app">Audio para Medios</button>
-                        <button class="filter-btn" data-filter="audio-corporativo" data-group="app">Audio Corporativo</button>
-                    </div>
-                    <div class="filter-group">
-                        <span class="filter-group-label">Estilo:</span>
-                        <button class="filter-btn active" data-filter="all" data-group="style">Todos</button>
-                        <button class="filter-btn" data-filter="africa" data-group="style">África</button>
-                        <button class="filter-btn" data-filter="colombiano" data-group="style">Colombiano</button>
-                        <button class="filter-btn" data-filter="mexicano" data-group="style">Mexicano</button>
-                        <button class="filter-btn" data-filter="brasileno" data-group="style">Brasileño</button>
-                        <button class="filter-btn" data-filter="andino" data-group="style">Andino</button>
-                        <button class="filter-btn" data-filter="latino" data-group="style">Latino</button>
-                        <button class="filter-btn" data-filter="caribeno" data-group="style">Caribeño</button>
-                        <button class="filter-btn" data-filter="urbano" data-group="style">Urbano</button>
-                        <button class="filter-btn" data-filter="electronico" data-group="style">Electrónico</button>
-                        <button class="filter-btn" data-filter="medio-oriente-africa-norte" data-group="style">Medio Oriente/Norte de África</button>
-                        <button class="filter-btn" data-filter="europa-mediterraneo" data-group="style">Europa/Mediterráneo</button>
-                        <button class="filter-btn" data-filter="asia" data-group="style">Asia</button> 
-                        <button class="filter-btn" data-filter="rock,pop" data-group="style">Rock/Pop</button>
-                        <button class="filter-btn" data-filter="jazz,blues" data-group="style">Jazz/Blues</button>
-                        <button class="filter-btn" data-filter="funk,soul,r-and-b" data-group="style">Funk/Soul/R&B</button>
-                        <button class="filter-btn" data-filter="punk" data-group="style">Punk</button>
-                        <button class="filter-btn" data-filter="metal" data-group="style">Metal</button>
-                        <button class="filter-btn" data-filter="orquestal" data-group="style">Orquestal</button>
+                
+                <div class="portfolio-filters-container">
+                    <!-- Botón para abrir filtros en móvil -->
+                    <button class="mobile-filter-trigger" id="mobile-filter-trigger">
+                        <i class="ri-filter-3-line"></i>
+                        <span>Filtrar Proyectos</span>
+                    </button>
+                    
+                    <!-- Filtros para Desktop -->
+                    <div class="portfolio-filters">
+                        <div class="filter-group">
+                            <span class="filter-group-label">Aplicación:</span>
+                            <div class="button-grid">
+                                <button class="filter-btn active" data-filter="all" data-group="app">Todos</button>
+                                <button class="filter-btn" data-filter="produccion-musical" data-group="app">Producción Musical</button>
+                                <button class="filter-btn" data-filter="audio-para-medios" data-group="app">Audio para Medios</button>
+                                <button class="filter-btn" data-filter="audio-corporativo" data-group="app">Audio Corporativo</button>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <span class="filter-group-label">Estilo:</span>
+                            <div class="button-grid">
+                                <button class="filter-btn active" data-filter="all" data-group="style">Todos</button>
+                                <button class="filter-btn" data-filter="africa" data-group="style">África</button>
+                                <button class="filter-btn" data-filter="colombiano" data-group="style">Colombiano</button>
+                                <button class="filter-btn" data-filter="mexicano" data-group="style">Mexicano</button>
+                                <button class="filter-btn" data-filter="brasileno" data-group="style">Brasileño</button>
+                                <button class="filter-btn" data-filter="andino" data-group="style">Andino</button>
+                                <button class="filter-btn" data-filter="latino" data-group="style">Latino</button>
+                                <button class="filter-btn" data-filter="caribeno" data-group="style">Caribeño</button>
+                                <button class="filter-btn" data-filter="urbano" data-group="style">Urbano</button>
+                                <button class="filter-btn" data-filter="electronico" data-group="style">Electrónico</button>
+                                <button class="filter-btn" data-filter="medio-oriente-africa-norte" data-group="style">Medio Oriente/Norte de África</button>
+                                <button class="filter-btn" data-filter="europa-mediterraneo" data-group="style">Europa/Mediterráneo</button>
+                                <button class="filter-btn" data-filter="asia" data-group="style">Asia</button> 
+                                <button class="filter-btn" data-filter="rock,pop" data-group="style">Rock/Pop</button>
+                                <button class="filter-btn" data-filter="jazz,blues" data-group="style">Jazz/Blues</button>
+                                <button class="filter-btn" data-filter="funk,soul,r-and-b" data-group="style">Funk/Soul/R&B</button>
+                                <button class="filter-btn" data-filter="punk" data-group="style">Punk</button>
+                                <button class="filter-btn" data-filter="metal" data-group="style">Metal</button>
+                                <button class="filter-btn" data-filter="orquestal" data-group="style">Orquestal</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1921,6 +2054,24 @@
         </div>
     </div>
     <!-- ========= MODAL PARA INSTRUMENTOS END ========= -->
+
+    <!-- ========= PANEL DE FILTROS MÓVIL START ========= -->
+    <div class="filter-panel-overlay" id="filter-panel-overlay">
+        <div class="filter-panel" id="filter-panel">
+            <div class="filter-panel-header">
+                <h3>Filtrar Proyectos</h3>
+                <button class="filter-panel-close-btn" id="filter-panel-close-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="filter-panel-body">
+                <!-- Los grupos de filtros se insertarán aquí con JS -->
+            </div>
+            <div class="filter-panel-footer">
+                <button class="button clear-filters-btn" id="clear-filters-btn">Limpiar</button>
+                <button class="button" id="apply-filters-btn">Aplicar Filtros</button>
+            </div>
+        </div>
+    </div>
+    <!-- ========= PANEL DE FILTROS MÓVIL END ========= -->
 
     <!-- ========= MODAL PARA APPS DE CONTACTO START ========= -->
     <div class="modal-overlay" id="contact-apps-modal">
@@ -2555,8 +2706,8 @@
 
             let swiperInstance;
             const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
-            const filterButtons = document.querySelectorAll('.filter-btn');
-
+            const desktopFilterContainer = document.querySelector('.portfolio-filters');
+            
             function initializeSwiper(slidesHTML) {
                 if (swiperInstance) {
                     swiperInstance.destroy(true, true);
@@ -2625,8 +2776,17 @@
                 }
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
-            
-            function applyFilters() {
+
+            function applyFilters(source = 'desktop') {
+                let activeAppFilters, activeStyleFilters;
+                let container = source === 'mobile' ? document.querySelector('.filter-panel-body') : desktopFilterContainer;
+                
+                activeAppFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="app"].active')).map(btn => btn.dataset.filter);
+                activeStyleFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="style"].active')).map(btn => btn.dataset.filter);
+
+                if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
+                if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
+                
                 let noResultsContainer = document.getElementById('no-results-container');
                 if (!noResultsContainer) {
                     noResultsContainer = document.createElement('div');
@@ -2634,12 +2794,6 @@
                     noResultsContainer.className = 'no-results-message is-hidden';
                     portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
                 }
-
-                let activeAppFilters = Array.from(document.querySelectorAll('.filter-btn[data-group="app"].active')).map(btn => btn.dataset.filter);
-                let activeStyleFilters = Array.from(document.querySelectorAll('.filter-btn[data-group="style"].active')).map(btn => btn.dataset.filter);
-
-                if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
-                if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
 
                 const filteredData = portfolioItemsData.filter(item => {
                     const tags = item.tags.split(' ');
@@ -2666,31 +2820,75 @@
                     noResultsContainer.classList.remove('is-hidden');
                     noResultsContainer.innerHTML = `<h3>No se Encontraron Coincidencias</h3><p>Intenta ajustar tus filtros o reinícialos para ver todos los proyectos.</p><button class="reset-filters-btn">Reiniciar Filtros</button>`;
                     noResultsContainer.querySelector('.reset-filters-btn').addEventListener('click', () => {
-                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                         document.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
-                        applyFilters();
+                        applyFilters(source);
                     });
                 }
             }
+            
+            // --- Mobile Filter Panel Logic ---
+            const mobileFilterTrigger = document.getElementById('mobile-filter-trigger');
+            const filterPanelOverlay = document.getElementById('filter-panel-overlay');
+            const filterPanel = document.getElementById('filter-panel');
+            const closePanelBtn = document.getElementById('filter-panel-close-btn');
+            const applyFiltersBtn = document.getElementById('apply-filters-btn');
+            const clearFiltersBtn = document.getElementById('clear-filters-btn');
+            const filterPanelBody = document.querySelector('.filter-panel-body');
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const group = button.dataset.group;
-                    const filter = button.dataset.filter;
-                    if (filter === 'all') {
-                        document.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                    } else {
-                        document.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
-                        button.classList.toggle('active');
-                        if (!document.querySelector(`.filter-btn[data-group="${group}"].active`)) {
-                            document.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
-                        }
-                    }
-                    applyFilters();
-                });
+            // Populate mobile filter panel
+            filterPanelBody.innerHTML = desktopFilterContainer.innerHTML;
+
+            const openFilterPanel = () => filterPanelOverlay.classList.add('is-open');
+            const closeFilterPanel = () => filterPanelOverlay.classList.remove('is-open');
+
+            mobileFilterTrigger.addEventListener('click', openFilterPanel);
+            closePanelBtn.addEventListener('click', closeFilterPanel);
+            filterPanelOverlay.addEventListener('click', (e) => {
+                if(e.target === filterPanelOverlay) {
+                    closeFilterPanel();
+                }
             });
-            applyFilters();
+
+            applyFiltersBtn.addEventListener('click', () => {
+                applyFilters('mobile');
+                closeFilterPanel();
+            });
+
+            clearFiltersBtn.addEventListener('click', () => {
+                 filterPanelBody.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                 filterPanelBody.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
+            });
+
+            function setupFilterButtons(container, source) {
+                container.querySelectorAll('.filter-btn').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const group = button.dataset.group;
+                        const filter = button.dataset.filter;
+
+                        if (filter === 'all') {
+                            container.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+                            button.classList.add('active');
+                        } else {
+                            container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
+                            button.classList.toggle('active');
+                            if (!container.querySelector(`.filter-btn[data-group="${group}"].active`)) {
+                                container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
+                            }
+                        }
+
+                        if (source === 'desktop') {
+                            applyFilters('desktop');
+                        }
+                    });
+                });
+            }
+
+            setupFilterButtons(desktopFilterContainer, 'desktop');
+            setupFilterButtons(filterPanelBody, 'mobile');
+            
+            // Initial load
+            applyFilters('desktop');
 
             // --- INICIO: LÓGICA DEL MODAL DE INSTRUMENTOS ---
             const instrumentData = {
@@ -2896,13 +3094,17 @@
             const closeModalBtn = document.getElementById('instrument-modal-close');
             let currentAudio = null;
 
+            modalImg.addEventListener('load', () => {
+                modalImg.style.visibility = 'visible';
+            });
+
             document.querySelectorAll('.instrument-list').forEach(list => {
                 list.addEventListener('click', (e) => {
                     if (e.target.matches('.instrument-list-item')) {
                         const instrumentId = e.target.dataset.instrument;
                         const data = instrumentData[instrumentId];
                         if (data) {
-                            modalImg.src = 'about:blank'; 
+                            modalImg.style.visibility = 'hidden'; 
 
                             const audioSrc = `assets/audio/${instrumentId}.mp3`;
                             const imgSrc = `assets/img/instruments/${instrumentId}.jpg`;
@@ -2913,6 +3115,7 @@
                             modalImg.alt = data.name;
                             modalImg.onerror = () => {
                                 modalImg.src = `https://placehold.co/200x200/073B38/FFFFFF?text=${data.name.replace(/ /g, '+')}`;
+                                modalImg.style.visibility = 'visible';
                             };
                             soundBtn.dataset.audioSrc = audioSrc;
                             instrumentModal.classList.add('is-visible');
