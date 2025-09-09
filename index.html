@@ -275,7 +275,7 @@
         }
 
         .is-hidden {
-            display: none;
+            display: none !important;
         }
         
         .scroll-indicator {
@@ -311,6 +311,7 @@
         /* --- SECCIONES DE CONTENIDO GENERAL --- */
         main {
             padding-top: 80px; 
+            padding-bottom: 80px; /* Añadido para dar espacio de scroll al final */
         }
 
         .content-section {
@@ -500,7 +501,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 20px;
+            gap: 20px; /* Espacio entre filas de filtros */
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 5%;
@@ -511,6 +512,9 @@
             gap: 15px;
             flex-wrap: wrap;
             align-items: center;
+        }
+        .filter-group[data-group-name="style"] .filter-btn {
+            margin-bottom: 10px; /* Espacio vertical extra SOLO para filtros de estilo */
         }
         .filter-group-label {
             font-family: var(--font-headings);
@@ -539,10 +543,29 @@
             color: var(--color-bg-1);
             border-color: var(--color-accent);
         }
+        .desktop-clear-filters-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .clear-filters-btn-desktop {
+            background-color: transparent;
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+            padding: 8px 22px;
+            border-radius: 20px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .clear-filters-btn-desktop:hover {
+            background-color: var(--color-accent);
+            color: var(--color-bg-1);
+        }
 
         .portfolio-slider-wrapper {
             position: relative;
-            min-height: 300px; /* Para dar espacio al mensaje de no resultados */
+            min-height: 300px;
         }
         .swiper-container {
             width: 100%;
@@ -554,23 +577,17 @@
             display: flex;
         }
         
-        /* --- INICIO: Ajustes de ancho para recuadros del portafolio --- */
         .portfolio-swiper .swiper-slide {
-            width: 480px; /* Ancho para pantallas de escritorio */
+            width: 480px;
         }
 
         @media (max-width: 1024px) {
-            .portfolio-swiper .swiper-slide {
-                width: 60%; /* Ancho para tablets */
-            }
+            .portfolio-swiper .swiper-slide { width: 60%; }
         }
 
         @media (max-width: 768px) {
-            .portfolio-swiper .swiper-slide {
-                width: 85%; /* Ancho para móviles */
-            }
+            .portfolio-swiper .swiper-slide { width: 85%; }
         }
-        /* --- FIN: Ajustes de ancho --- */
 
         .swiper-slide:not(.swiper-slide-active) {
             opacity: 0.5;
@@ -594,7 +611,6 @@
             height: 200px;
             object-fit: cover;
         }
-        /* Estilos para el reproductor de SoundCloud */
         .portfolio-embed-wrapper {
             background-color: #051a19;
             line-height: 0;
@@ -685,7 +701,6 @@
             color: var(--color-bg-1);
         }
 
-        /* --- INICIO: ESTILOS PARA MENSAJE DE NO RESULTADOS --- */
         .no-results-message {
             text-align: center;
             padding: 60px 20px;
@@ -713,8 +728,6 @@
             background-color: var(--color-accent);
             color: var(--color-bg-1);
         }
-        /* --- FIN: ESTILOS PARA MENSAJE DE NO RESULTADOS --- */
-
 
         /* --- NUEVOS ESTILOS PARA SECCIÓN DE GEAR --- */
         .gear-intro {
@@ -836,7 +849,6 @@
         .instrument-panel li {
             margin-bottom: 10px;
         }
-        /* Estilos para hacer los instrumentos clickeables */
         .instrument-list-item {
             background: none;
             border: none;
@@ -1177,15 +1189,45 @@
         .socials-cta-arrow svg {
             width: 100%;
             height: auto;
+            overflow: visible; /* Para que no se corte el brillo */
         }
-        .socials-cta-arrow .desktop-arrow .arrow-path {
+
+        @keyframes neon-arrow-glow {
+            from {
+                filter: drop-shadow(0 0 3px var(--color-secondary)) drop-shadow(0 0 6px var(--color-secondary));
+                stroke: var(--color-secondary);
+            }
+            to {
+                filter: drop-shadow(0 0 5px var(--color-accent)) drop-shadow(0 0 10px var(--color-accent));
+                stroke: var(--color-accent);
+            }
+        }
+        @keyframes arrow-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .socials-cta-arrow .desktop-arrow {
+            animation: arrow-bounce 2s infinite ease-in-out;
+        }
+
+        .socials-cta-arrow .arrow-path {
             stroke: var(--color-secondary);
             stroke-width: 2;
             fill: none;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: draw-arrow 2s ease-out forwards;
+            animation: 
+                draw-arrow 2s ease-out forwards,
+                neon-arrow-glow 1s infinite alternate 2s; /* 60bpm */
         }
+        .socials-cta-arrow .desktop-arrow .arrow-path {
+             filter: drop-shadow(0 0 4px var(--color-secondary));
+        }
+        .socials-cta-arrow .mobile-arrow .arrow-path {
+             filter: drop-shadow(0 0 5px var(--color-secondary));
+        }
+
         .socials-cta-arrow .desktop-arrow .arrow-text {
             font-family: var(--font-body);
             font-size: 14px;
@@ -1325,7 +1367,6 @@
             color: rgba(255,255,255,0.9);
         }
         
-        /* Modal de contacto */
         #contact-apps-modal .modal-content {
             max-width: 400px;
             text-align: center;
@@ -1366,13 +1407,8 @@
 
         /* --- RESPONSIVE STYLES --- */
         @media (max-width: 820px) {
-            .nav-wrapper {
-                display: none; 
-            }
-
-            .mobile-nav-toggle {
-                display: block; 
-            }
+            .nav-wrapper { display: none; }
+            .mobile-nav-toggle { display: block; }
         }
         
         .mobile-nav {
@@ -1420,9 +1456,61 @@
             color: var(--color-accent);
         }
 
-        /* --- FILTROS MÓVILES --- */
         .mobile-filter-trigger {
             display: none;
+        }
+        
+        .active-filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 0 5%;
+            margin: -20px auto 30px;
+            max-width: 1200px;
+        }
+        .active-filters-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        .filter-pill {
+            background-color: var(--color-accent);
+            color: var(--color-bg-1);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: capitalize;
+        }
+        .remove-pill-btn {
+            background: none;
+            border: none;
+            color: var(--color-bg-1);
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            padding: 0;
+            margin-left: 2px;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+        .remove-pill-btn:hover {
+            opacity: 1;
+        }
+        .clear-all-pills-btn {
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            text-decoration: underline;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         .filter-panel-overlay {
@@ -1504,10 +1592,16 @@
             padding: 15px;
             font-size: 16px;
         }
-        .clear-filters-btn {
+        .filter-panel .clear-filters-btn { /* Estilo específico para panel móvil */
             background-color: transparent;
             border: 1px solid var(--color-accent);
             color: var(--color-accent);
+        }
+
+        @media (min-width: 769px) {
+            .active-filters-container {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1515,8 +1609,9 @@
                  background: none;
                  border: none;
                  padding: 0;
+                 margin-bottom: 0;
             }
-            .portfolio-filters {
+            .portfolio-filters, .desktop-clear-filters-container {
                 display: none;
             }
             .mobile-filter-trigger {
@@ -1531,13 +1626,12 @@
                 font-size: 16px;
                 font-weight: 600;
                 cursor: pointer;
-                margin: 0 auto 40px;
+                margin: 0 auto 30px;
             }
             .mobile-filter-trigger i {
                 font-size: 20px;
             }
             
-            /* Punto de quiebre para apilar en móvil - CTA redes sociales */
             .socials-cta-container {
                 flex-direction: column;
                 text-align: center;
@@ -1556,9 +1650,11 @@
             }
             .mobile-arrow-container {
                 display: flex;
+                flex-direction: column; /* Cambiado para alinear texto y flecha */
                 justify-content: center;
                 align-items: center;
-                gap: 20px;
+                gap: 15px; /* Ajustado */
+                animation: arrow-bounce 2s infinite ease-in-out;
             }
             .mobile-arrow-container .arrow-text {
                 font-family: var(--font-body);
@@ -1567,7 +1663,9 @@
                 letter-spacing: 2px;
                 opacity: 0;
                 animation: fade-in-text 1s ease-out 1s forwards;
-                white-space: nowrap;
+                white-space: normal;
+                text-align: center;
+                line-height: 1.3;
             }
             .mobile-arrow-container .mobile-arrow {
                 width: 20px;
@@ -1579,7 +1677,8 @@
                 fill: none;
                 stroke-dasharray: 1000;
                 stroke-dashoffset: 1000;
-                animation: draw-arrow 2s ease-out forwards;
+                animation: draw-arrow 2s ease-out forwards,
+                           neon-arrow-glow 1s infinite alternate 2s;
             }
 
             .hero-section {
@@ -1625,8 +1724,8 @@
                 grid-template-columns: 1fr;
             }
             .footer-container {
-                flex-direction: column;
-                gap: 15px;
+                flex-direction: column-reverse; /* Íconos primero */
+                gap: 20px;
             }
             .instrument-modal-body {
                 grid-template-columns: 1fr;
@@ -1750,12 +1849,17 @@
                     <!-- Botón para abrir filtros en móvil -->
                     <button class="mobile-filter-trigger" id="mobile-filter-trigger">
                         <i class="ri-filter-3-line"></i>
-                        <span>Filter Projects</span>
+                        <span id="mobile-filter-trigger-text">Filter Projects</span>
                     </button>
+
+                    <div id="active-filters-container" class="active-filters-container is-hidden">
+                        <div id="active-filters-pills" class="active-filters-pills"></div>
+                        <button id="clear-all-pills-btn" class="clear-all-pills-btn">Clear All</button>
+                    </div>
                     
                     <!-- Filtros para Desktop -->
                     <div class="portfolio-filters">
-                        <div class="filter-group">
+                        <div class="filter-group" data-group-name="app">
                             <span class="filter-group-label">Application:</span>
                             <div class="button-grid">
                                 <button class="filter-btn active" data-filter="all" data-group="app">All</button>
@@ -1764,7 +1868,7 @@
                                 <button class="filter-btn" data-filter="corporate-audio" data-group="app">Corporate Audio</button>
                             </div>
                         </div>
-                        <div class="filter-group">
+                        <div class="filter-group" data-group-name="style">
                             <span class="filter-group-label">Style:</span>
                             <div class="button-grid">
                                 <button class="filter-btn active" data-filter="all" data-group="style">All</button>
@@ -1789,6 +1893,9 @@
                             </div>
                         </div>
                     </div>
+                     <div class="desktop-clear-filters-container is-hidden" id="desktop-clear-filters-container">
+                        <button id="desktop-clear-filters-btn" class="clear-filters-btn-desktop">Clear Filters</button>
+                    </div>
                 </div>
             </div>
             <div class="portfolio-slider-wrapper">
@@ -1811,7 +1918,7 @@
                 <h2 class="section-title">The Factory Floor: Our Instruments & Tools</h2>
                 
                 <div class="gear-intro">
-                    <img src="assets/img/enciso-gear.jpg" alt="A photo of the studio founder, Enciso" class="gear-intro-img" loading="lazy">
+                    <img src="assets/img/enciso-gear.jpg" alt="A photo of the studio founder, Enciso" class="gear-intro-img">
                     <div class="gear-intro-text">
                         <h3>The Heartbeat of the Factory</h3>
                         <p>"My collection is more than just instruments; it's a palette of global sounds, each with a story. Here is the arsenal we use to build your beat."</p>
@@ -1820,7 +1927,7 @@
 
                 <h3 class="gear-subsection-title">The Heartbeat: A World of Percussion</h3>
                 <div class="percussion-map-container">
-                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=Mapa+Mundi';" loading="lazy">
+                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=Mapa+Mundi';">
                     <!-- Puntos Interactivos -->
                     <div class="map-dot" id="dot-colombia" data-region="colombia" title="Colombia"></div>
                     <div class="map-dot" id="dot-peru" data-region="peru" title="Peru"></div>
@@ -1854,12 +1961,12 @@
                 <h3 class="gear-subsection-title">The Engine Room: Sonic Blueprints</h3>
                 <div class="drum-kits-container">
                     <div class="drum-kit-card">
-                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Yamaha';" loading="lazy">
+                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Yamaha';">
                         <h3>The "Big Rig" Configuration</h3>
                         <p>This is our workhorse for a sound that is both massive and explosive. We configure the Yamaha Maple Custom Absolute with a thunderous 22" kick and a full set of toms (10" to 16") to deliver a deep, fat tone with a commanding punch. It's the definitive choice for creating a powerful, resonant foundation in Rock, Pop, Funk, Latin and Metal.</p>
                     </div>
                     <div class="drum-kit-card">
-                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Gretsch';" loading="lazy">
+                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Gretsch';">
                         <h3>The "Finesse" Configuration</h3>
                         <p>When precision is paramount, we re-tool the kit for its "Finesse" setup. Centered on a tight, melodic 18" kick and smaller, responsive toms, this configuration produces a crisp, articulate sound that sings with warmth and nuance. It’s the perfect choice for capturing every ghost note and subtle detail in Jazz, Fusion, Folkloric, Urban, R&B, and Singer-Songwriter sessions.</p>
                     </div>
@@ -1868,8 +1975,8 @@
                     <h3>The Final Touch: Your Sonic Fingerprint</h3>
                     <p>The kit configuration sets the foundation, but the snares and cymbals define its unique voice. This is the final calibration. We offer a full palette of options—different sizes and materials for snare drums; and a wide range of hi-hats, rides, crashes, chinas, splashes, and stacks—to find the unique combination that will become your beat's sonic fingerprint.</p>
                     <div class="drum-palette-images">
-                        <img src="assets/img/snares-collection.jpg" alt="Collection of various snare drums" loading="lazy">
-                        <img src="assets/img/cymbals-selection.jpg" alt="Selection of various cymbals" loading="lazy">
+                        <img src="assets/img/snares-collection.jpg" alt="Collection of various snare drums">
+                        <img src="assets/img/cymbals-selection.jpg" alt="Selection of various cymbals">
                     </div>
                 </div>
 
@@ -1883,7 +1990,7 @@
                             <p>The piano of the Colombian jungle... its wooden keys hold the secrets of the Pacific rainforest. We use it to add organic warmth, hypnotic textures, and a deeply ancestral flavor to your tracks, bringing a unique and soulful character to your music.</p>
                         </div>
                         <div class="mallet-image">
-                            <img src="assets/img/marimba-de-chonta.jpg" alt="Marimba de Chonta" loading="lazy">
+                            <img src="assets/img/marimba-de-chonta.jpg" alt="Marimba de Chonta">
                         </div>
                     </div>
                     <div class="mallet-card">
@@ -1892,7 +1999,7 @@
                             <p>Ethereal, metallic, and full of soul. The vibraphone adds a layer of sophisticated harmony and a dreamy, shimmering sustain that is perfect for jazz, lo-fi, and cinematic soundscapes. Its unique vibrato creates a captivating and unforgettable atmosphere.</p>
                         </div>
                         <div class="mallet-image">
-                            <img src="assets/img/vibraphone.jpg" alt="Vibraphone" loading="lazy">
+                            <img src="assets/img/vibraphone.jpg" alt="Vibraphone">
                         </div>
                     </div>
                 </div>
@@ -1906,7 +2013,7 @@
                             <p>While our soul is analog, our brain is digital. This is where the physical world is deconstructed and rebuilt without limits. Our electronic setup is not just a drum machine with a collection of sounds; it's a powerful tool capable of capturing any texture, loop it for creating hypnotic patterns, and surgically chopping and re-imagining any audio source. Combined with our vast libraries of unique sounds, we can design hybrid beats, forge futuristic textures, or build entire rhythmic universes from a single spark of inspiration. It's the perfect complement to our acoustic arsenal, offering boundless creativity and sonic precision.</p>
                         </div>
                         <div class="mallet-image">
-                            <img src="assets/img/digital-set.jpg" alt="Electronic drum kit and sampler setup" onerror="this.onerror=null;this.src='https://placehold.co/600x450/073B38/FFFFFF?text=Digital+Set';" loading="lazy">
+                            <img src="assets/img/digital-set.jpg" alt="Electronic drum kit and sampler setup" onerror="this.onerror=null;this.src='https://placehold.co/600x450/073B38/FFFFFF?text=Digital+Set';">
                         </div>
                     </div>
                 </div>
@@ -1971,7 +2078,7 @@
                 <h2 class="section-title">About The Beat Factory</h2>
                 <div class="about-wrapper">
                     <div class="about-image">
-                        <img src="assets/img/enciso-about.jpg" alt="Enciso, founder of TEBF Studio, in the recording room." loading="lazy">
+                        <img src="assets/img/enciso-about.jpg" alt="Enciso, founder of TEBF Studio, in the recording room.">
                     </div>
                     <div class="about-text">
                         <h3>Our Philosophy: Analog Soul, Digital Precision</h3>
@@ -2029,7 +2136,7 @@
                             </div>
                         </div>
                         <div class="map-placeholder">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.6683134333134!2d-76.53022949100837!3d3.4306718513463967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30a7faf769bdd1%3A0x8a593eb258c4ea9f!2sThe%20Enciso's%20Beat%20Factory%20(TEBF%20Studio)!5e0!3m2!1sen!2sco!4v1753419022987!5m2!1sen!2sco" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.6683134333134!2d-76.53022949100837!3d3.4306718513463967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30a7faf769bdd1%3A0x8a593eb258c4ea9f!2sThe%20Enciso's%20Beat%20Factory%20(TEBF%20Studio)!5e0!3m2!1sen!2sco!4v1753419022987!5m2!1sen!2sco" width="100%" height="100%" style="border:0;" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
                 </div>
@@ -2046,23 +2153,23 @@
             </div>
             <div class="socials-cta-arrow">
                 <!-- Desktop Arrow -->
-                <svg class="desktop-arrow" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+                <svg class="desktop-arrow" viewBox="-20 -20 360 140" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <marker id="arrowhead-desktop" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
                         </marker>
-                        <path id="arrow-curve-desktop" d="M 20 20 L 130 20 Q 180 20 230 80" />
+                        <path id="arrow-curve-desktop" d="M 20 45 L 170 45 Q 230 45 280 95" />
                     </defs>
                     <use href="#arrow-curve-desktop" class="arrow-path" marker-end="url(#arrowhead-desktop)" />
                     <text class="arrow-text">
-                        <textPath href="#arrow-curve-desktop" startOffset="45%" text-anchor="middle">
+                        <textPath href="#arrow-curve-desktop" startOffset="50%" text-anchor="middle">
                             CHECK OUR SOCIALS
                         </textPath>
                     </text>
                 </svg>
                 <!-- Mobile Arrow and Text -->
                 <div class="mobile-arrow-container">
-                    <span class="arrow-text">CHECK OUR SOCIALS</span>
+                    <span class="arrow-text">CHECK<br>OUR<br>SOCIALS</span>
                     <svg class="mobile-arrow" viewBox="0 0 20 120" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <marker id="arrowhead-mobile" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
@@ -2342,7 +2449,6 @@
 
             const serviceSelector = document.getElementById('service-selector');
             const accordionContainer = document.getElementById('services-accordion');
-            const quoteBtn = document.querySelector('.quote-btn');
             const root = document.documentElement;
 
             function createAccordionItem(item) {
@@ -2377,18 +2483,11 @@
                 const clientData = servicesData[clientType];
                 if (!clientData) return;
 
-                // 1. Update theme color
                 root.style.setProperty('--current-service-color', clientData.themeColor);
-
-                // 2. Update buttons
                 document.querySelectorAll('.service-selector-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.client === clientType);
                 });
-
-                // 3. Render accordion
                 accordionContainer.innerHTML = clientData.accordion.map(createAccordionItem).join('');
-                
-                // 4. Re-assign events to the new accordion
                 assignAccordionEvents();
             }
 
@@ -2399,16 +2498,12 @@
                     header.addEventListener('click', () => {
                         const content = item.querySelector('.accordion-content');
                         const wasActive = item.classList.contains('active');
-
-                        // Close all others
                         accordionItems.forEach(otherItem => {
                             if (otherItem !== item) {
                                 otherItem.classList.remove('active');
                                 otherItem.querySelector('.accordion-content').style.maxHeight = null;
                             }
                         });
-
-                        // Open or close the current one
                         if (!wasActive) {
                             item.classList.add('active');
                             content.style.maxHeight = content.scrollHeight + "px";
@@ -2430,14 +2525,9 @@
                 }
             });
 
-            // Initial load
             updateServices('artist');
-            // --- FIN: LÓGICA DE SERVICIOS DINÁMICOS ---
-
 
             // --- SCRIPT FOR ALL OTHER PAGE FUNCTIONALITY ---
-
-            // Sound Button Logic
             const video = document.getElementById('heroVideo');
             const soundButton = document.getElementById('sound-toggle');
             const iconMute = document.getElementById('icon-mute');
@@ -2446,38 +2536,27 @@
 
             if (soundButton && video && iconMute && iconUnmute && heroOverlay) {
                 soundButton.addEventListener('click', () => {
-                    if (video.muted) {
-                        video.muted = false;
+                    video.muted = !video.muted;
+                    iconMute.classList.toggle('is-hidden', !video.muted);
+                    iconUnmute.classList.toggle('is-hidden', video.muted);
+                    heroOverlay.classList.toggle('sound-is-active', !video.muted);
+                    soundButton.classList.toggle('is-blinking', video.muted);
+                    if (!video.muted) {
                         video.currentTime = 0;
                         video.play();
-                        
-                        iconMute.classList.add('is-hidden');
-                        iconUnmute.classList.remove('is-hidden');
-                        heroOverlay.classList.add('sound-is-active');
-                        soundButton.classList.remove('is-blinking');
-                    } else {
-                        video.muted = true;
-                        
-                        iconMute.classList.remove('is-hidden');
-                        iconUnmute.classList.add('is-hidden');
-                        heroOverlay.classList.remove('sound-is-active');
-                        soundButton.classList.add('is-blinking');
                     }
                 });
             }
 
-            // Custom Loop Logic
             if (video) {
                 video.addEventListener('timeupdate', function() {
-                    const loopThreshold = 0.18; 
-                    if (this.duration && (this.currentTime > this.duration - loopThreshold)) {
+                    if (this.duration && (this.currentTime > this.duration - 0.18)) {
                         this.currentTime = 0;
                         this.play();
                     }
                 });
             }
 
-            // Mobile Navigation Logic
             const mobileNavToggle = document.getElementById('mobile-nav-toggle');
             const mobileNav = document.getElementById('mobile-nav');
             const mobileNavIcon = document.getElementById('mobile-nav-icon');
@@ -2497,7 +2576,6 @@
                 });
             }
 
-            // Interactive Map Logic
             const mapDots = document.querySelectorAll('.map-dot');
             const instrumentPanels = document.querySelectorAll('.instrument-panel');
             const closePanelButtons = document.querySelectorAll('.close-panel-btn');
@@ -2507,7 +2585,6 @@
                 dot.addEventListener('click', () => {
                     const region = dot.dataset.region;
                     const targetPanel = document.getElementById(`panel-${region}`);
-
                     if (dot.classList.contains('active')) {
                         dot.classList.remove('active');
                         if (targetPanel) targetPanel.style.display = 'none';
@@ -2531,360 +2608,44 @@
                     
                     panelToClose.style.display = 'none';
                     if (dotToDeactivate) dotToDeactivate.classList.remove('active');
-                    
-                    if (mapContainer) {
-                        mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                    if (mapContainer) mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 });
             });
 
-            // Portfolio Carousel & Filter Logic
+            // --- PORTFOLIO LOGIC START ---
             const portfolioSliderEl = document.getElementById('portfolio-slider');
             const portfolioItemsData = [
-                { 
-                    title: 'Desde Cero - David Sierra & La Ple-B', 
-                    desc: 'Drums & Percussion Recording', 
-                    tags: 'music-production mexican', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6',
-                        instagram: 'https://www.instagram.com/davidsierramusica',
-                        youtube: 'https://www.youtube.com/davidsierramusica',
-                        facebook: 'https://www.facebook.com/davidsierramusica'
-                    }
-                },
-                                { 
-                    title: 'Andarele - Isabel Deverell', 
-                    desc: 'Marimba & Ethnic Percussion Recording', 
-                    tags: 'music-production colombian africa latin', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/andarele-fragment',
-                    artistLinks: {
-                        spotify: 'https://www.deezer.com/en/artist/186445987',
-                        instagram: 'https://www.instagram.com/isabeldeverell/',
-                        youtube: 'https://www.youtube.com/channel/UCYVDJeWBjuxvP5BxQCc-VXg',
-                        facebook: 'https://www.facebook.com/isabel.deverellvallarino/'
-                    }
-                },
-                { 
-                    title: 'Que Bello - Mer Jack', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production pop', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/que-bello-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/merjack3/',
-                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
-                        facebook: 'https://www.facebook.com/lacovidparranda'
-                    }
-                },
-                { 
-                    title: 'Ontabas - Dame El Panuelo (Fundación Nuna Kallpa)', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'audio-for-media colombian andean', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ontabas-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
-                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
-                    }
-                },
-                { 
-                    title: 'Somos Parte - Ioel', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production Latin Pop', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/somos-parte-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
-                        instagram: 'https://www.instagram.com/ioel_cantautor/',
-                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
-                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
-                    }
-                },
-                { 
-                    title: 'Maldito sea tu nombre - Alter Ego Band', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production metal rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/maldito-sea-tu-nombre-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/3OP33dSoBD8AFkgmUcyZqa',
-                        instagram: 'https://www.instagram.com/alter.ego_band/',
-                        youtube: 'https://www.youtube.com/@alteregooficcial7149',
-                        facebook: 'https://www.facebook.com/profile.php?id=61551394173133'
-                    }
-                },
-                { 
-                    title: 'Cóncavo y Convexo - Jonji Camacho', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production pop rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/concavo-y-convexo-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/jonathan_camacho_oficial/',
-                        youtube: 'https://www.youtube.com/@jonjicamach',
-                        facebook: 'https://www.facebook.com/jonathan.camacho.1789'
-                    }
-                },
-                { 
-                    title: 'Voy a Vivir - Mer Jack', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production funk', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/voy-a-vivir-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/merjack3/',
-                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
-                        facebook: 'https://www.facebook.com/lacovidparranda'
-                    }
-                },
-                { 
-                    title: 'Elena - Dame El Panuelo (Fundación Nuna Kallpa)', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'audio-for-media colombian africa', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/elena-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
-                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
-                    }
-                },
-                { 
-                    title: 'Corporative Audio & Locution', 
-                    desc: 'Composing & Full Production', 
-                    tags: 'corporate-audio electronic', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/corporative-music-locution',
-                    artistLinks: {
-                        website: 'https://www.cognosiaai.com',
-                        linkedin: 'https://www.linkedin.com/company/cognosia-ai/'
-                    }
-                },
-                { 
-                    title: 'Bye - Jane Riascos', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production urban electronic caribbean', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/bye-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b',
-                        instagram: 'https://www.instagram.com/janeriascos/',
-                        youtube: 'https://www.youtube.com/@janeriascosmusic',
-                        facebook: 'https://www.facebook.com/janeriascos/'
-                    }
-                },
-                { 
-                    title: 'Shadow Love - Jon Wolff', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production latin rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/shadow-love-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz',
-                        youtube: 'https://www.youtube.com/@jonwolff_',
-                    }
-                },
-                { 
-                    title: 'Como yo la quise - Alain Elcubano', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production latin urban', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/como-yo-la-quise-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/alainelcuban0/',
-                        facebook: 'https://www.facebook.com/alainelcuban0'
-                    }
-                },
-                { 
-                    title: 'Si tú no estás aquí - Alter Ego Band', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production metal rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/si-tu-no-estas-aqui-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/3OP33dSoBD8AFkgmUcyZqa',
-                        instagram: 'https://www.instagram.com/alter.ego_band/',
-                        youtube: 'https://www.youtube.com/@alteregooficcial7149',
-                        facebook: 'https://www.facebook.com/profile.php?id=61551394173133'
-                    }
-                },
-                { 
-                    title: 'Al final - Mer Jack', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production rock pop', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/al-final-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/merjack3/',
-                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
-                        facebook: 'https://www.facebook.com/lacovidparranda'
-                    }
-                },
-                { 
-                    title: 'Las Mayoras - Ioel', 
-                    desc: 'Marimba & Ethnic Percussion Recording', 
-                    tags: 'music-production urban colombian africa', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/las-mayoras-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
-                        instagram: 'https://www.instagram.com/ioel_cantautor/',
-                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
-                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
-                    }
-                },
-                { 
-                    title: 'El Trompo Sarandengue - David Sierra & La Ple-B', 
-                    desc: 'Drums & Percussion Recording', 
-                    tags: 'music-production mexican colombian', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/el-trompo-sarandengue-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6',
-                        instagram: 'https://www.instagram.com/davidsierramusica',
-                        youtube: 'https://www.youtube.com/davidsierramusica',
-                        facebook: 'https://www.facebook.com/davidsierramusica'
-                    }
-                },
-                { 
-                    title: 'Tantu Pa´lante- Jane Riascos FT Qritiqal', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production urban electronic caribbean', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tantu-palante-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b',
-                        instagram: 'https://www.instagram.com/janeriascos/',
-                        youtube: 'https://www.youtube.com/@janeriascosmusic',
-                        facebook: 'https://www.facebook.com/janeriascos/'
-                    }
-                },
-                { 
-                    title: 'Cariñito - Alain Elcubano', 
-                    desc: 'Ethnic percussion recording', 
-                    tags: 'music-production latin urban colombian', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/carinito-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/alainelcuban0/',
-                        facebook: 'https://www.facebook.com/alainelcuban0'
-                    }
-                },
-                { 
-                    title: 'Y si tal vez es nunca - Mer Jack', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/y-si-tal-vez-es-nunca-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/merjack3/',
-                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
-                        facebook: 'https://www.facebook.com/lacovidparranda'
-                    }
-                },
-                { 
-                    title: 'Migrante - Ioel', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production latin urban', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/migrante-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
-                        instagram: 'https://www.instagram.com/ioel_cantautor/',
-                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
-                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
-                    }
-                },
-                { 
-                    title: 'Ruge - Jon Wolff', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ruge-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz',
-                        youtube: 'https://www.youtube.com/@jonwolff_',
-                    }
-                },
-                { 
-                    title: 'Maldigo el amor - David Sierra & La Ple-B', 
-                    desc: 'Drums & Percussion Recording', 
-                    tags: 'music-production mexican', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/maldigo-el-amor-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6',
-                        instagram: 'https://www.instagram.com/davidsierramusica',
-                        youtube: 'https://www.youtube.com/davidsierramusica',
-                        facebook: 'https://www.facebook.com/davidsierramusica'
-                    }
-                },                
-                { 
-                    title: 'Contrabandista - Dame El Panuelo (Fundación Nuna Kallpa)', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'audio-for-media colombian andean', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/contrabandista-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
-                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
-                    }
-                },
-                { 
-                    title: 'Te Amaré - Jonji Camacho', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production pop', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/te-amare-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/jonathan_camacho_oficial/',
-                        youtube: 'https://www.youtube.com/@jonjicamach',
-                        facebook: 'https://www.facebook.com/jonathan.camacho.1789'
-                    }
-                },
-                { 
-                    title: 'Dioses de Papel - Ioel', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production mexican urban', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/dioses-de-papel-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
-                        instagram: 'https://www.instagram.com/ioel_cantautor/',
-                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
-                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
-                    }
-                },
-                { 
-                    title: 'No me amas - Mer Jack', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production rock pop', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/no-me-amas-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/merjack3/',
-                        youtube: 'https://www.youtube.com/@merjack-fernandocruz',
-                        facebook: 'https://www.facebook.com/lacovidparranda'
-                    }
-                },
-                { 
-                    title: 'Monsters - Jon Wolff', 
-                    desc: 'Drums & Remaster', 
-                    tags: 'music-production rock', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/monsters-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz',
-                        youtube: 'https://www.youtube.com/@jonwolff_',
-                    }
-                },
-                { 
-                    title: 'Tascualeña - Dame El Panuelo (Fundación Nuna Kallpa)', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'audio-for-media colombian andean', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tascualena-dame-el-panuelo-fundacion-nuna-kallpa-fragment',
-                    artistLinks: {
-                        instagram: 'https://www.instagram.com/fundacion_nunakallpa/',
-                        facebook: 'https://www.facebook.com/profile.php?id=100063674015860'
-                    }
-                },
-                { 
-                    title: 'Relajao - Ioel FT Rob Castellanos', 
-                    desc: 'Percussion & Remaster', 
-                    tags: 'music-production mexican urban', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/relajao-fragment',
-                    artistLinks: {
-                        spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm',
-                        instagram: 'https://www.instagram.com/ioel_cantautor/',
-                        youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A',
-                        facebook: 'https://www.facebook.com/Ioel.cantautor/'
-                    }
-                },
-                { 
-                    title: 'Viernes y el cuerpo lo sabe - Fercho Son', 
-                    desc: 'Percussion Recording', 
-                    tags: 'music-production latin', 
-                    soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/viernes-y-el-cuerpo-lo-sabe-fragment',
-                    artistLinks: {
-                        facebook: 'https://www.facebook.com/hernando.velasquez.9847',
-                        instagram: 'https://www.instagram.com/fercho_son/',
-                        youtube: 'https://www.youtube.com/@ferchoson'
-                    }
-                },
+                { title: 'Desde Cero - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
+                { title: 'Andarele - Isabel Deverell', desc: 'Marimba & Ethnic Percussion Recording', tags: 'music-production colombian africa latin', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/andarele-fragment', artistLinks: { spotify: 'https://www.deezer.com/en/artist/186445987', instagram: 'https://www.instagram.com/isabeldeverell/', youtube: 'https://www.youtube.com/channel/UCYVDJeWBjuxvP5BxQCc-VXg', facebook: 'https://www.facebook.com/isabel.deverellvallarino/' }},
+                { title: 'Que Bello - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production pop', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/que-bello-fragment', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
+                { title: 'Ontabas - Dame El Panuelo (Fundación Nuna Kallpa)', desc: 'Percussion & Remaster', tags: 'audio-for-media colombian andean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ontabas-dame-el-panuelo-fundacion-nuna-kallpa-fragment', artistLinks: { instagram: 'https://www.instagram.com/fundacion_nunakallpa/', facebook: 'https://www.facebook.com/profile.php?id=100063674015860' }},
+                { title: 'Somos Parte - Ioel', desc: 'Percussion & Remaster', tags: 'music-production Latin Pop', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/somos-parte-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
+                { title: 'Maldito sea tu nombre - Alter Ego Band', desc: 'Drums & Remaster', tags: 'music-production metal rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/maldito-sea-tu-nombre-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/3OP33dSoBD8AFkgmUcyZqa', instagram: 'https://www.instagram.com/alter.ego_band/', youtube: 'https://www.youtube.com/@alteregooficcial7149', facebook: 'https://www.facebook.com/profile.php?id=61551394173133' }},
+                { title: 'Cóncavo y Convexo - Jonji Camacho', desc: 'Drums & Remaster', tags: 'music-production pop rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/concavo-y-convexo-fragment', artistLinks: { instagram: 'https://www.instagram.com/jonathan_camacho_oficial/', youtube: 'https://www.youtube.com/@jonjicamach', facebook: 'https://www.facebook.com/jonathan.camacho.1789' }},
+                { title: 'Voy a Vivir - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production funk', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/voy-a-vivir-fragment', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
+                { title: 'Elena - Dame El Panuelo (Fundación Nuna Kallpa)', desc: 'Percussion & Remaster', tags: 'audio-for-media colombian africa', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/elena-dame-el-panuelo-fundacion-nuna-kallpa-fragment', artistLinks: { instagram: 'https://www.instagram.com/fundacion_nunakallpa/', facebook: 'https://www.facebook.com/profile.php?id=100063674015860' }},
+                { title: 'Corporative Audio & Locution', desc: 'Composing & Full Production', tags: 'corporate-audio electronic', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/corporative-music-locution', artistLinks: { website: 'https://www.cognosiaai.com', linkedin: 'https://www.linkedin.com/company/cognosia-ai/' }},
+                { title: 'Bye - Jane Riascos', desc: 'Percussion & Remaster', tags: 'music-production urban electronic caribbean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/bye-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b', instagram: 'https://www.instagram.com/janeriascos/', youtube: 'https://www.youtube.com/@janeriascosmusic', facebook: 'https://www.facebook.com/janeriascos/' }},
+                { title: 'Shadow Love - Jon Wolff', desc: 'Percussion & Remaster', tags: 'music-production latin rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/shadow-love-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz', youtube: 'https://www.youtube.com/@jonwolff_' }},
+                { title: 'Como yo la quise - Alain Elcubano', desc: 'Percussion & Remaster', tags: 'music-production latin urban', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/como-yo-la-quise-fragment', artistLinks: { instagram: 'https://www.instagram.com/alainelcuban0/', facebook: 'https://www.facebook.com/alainelcuban0' }},
+                { title: 'Si tú no estás aquí - Alter Ego Band', desc: 'Drums & Remaster', tags: 'music-production metal rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/si-tu-no-estas-aqui-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/3OP33dSoBD8AFkgmUcyZqa', instagram: 'https://www.instagram.com/alter.ego_band/', youtube: 'https://www.youtube.com/@alteregooficcial7149', facebook: 'https://www.facebook.com/profile.php?id=61551394173133' }},
+                { title: 'Al final - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production rock pop', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/al-final-fragment', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
+                { title: 'Las Mayoras - Ioel', desc: 'Marimba & Ethnic Percussion Recording', tags: 'music-production urban colombian africa', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/las-mayoras-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
+                { title: 'El Trompo Sarandengue - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican colombian', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/el-trompo-sarandengue-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
+                { title: 'Tantu Pa´lante- Jane Riascos FT Qritiqal', desc: 'Percussion & Remaster', tags: 'music-production urban electronic caribbean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tantu-palante-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b', instagram: 'https://www.instagram.com/janeriascos/', youtube: 'https://www.youtube.com/@janeriascosmusic', facebook: 'https://www.facebook.com/janeriascos/' }},
+                { title: 'Cariñito - Alain Elcubano', desc: 'Ethnic percussion recording', tags: 'music-production latin urban colombian', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/carinito-fragment', artistLinks: { instagram: 'https://www.instagram.com/alainelcuban0/', facebook: 'https://www.facebook.com/alainelcuban0' }},
+                { title: 'Y si tal vez es nunca - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/y-si-tal-vez-es-nunca-fragment', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
+                { title: 'Migrante - Ioel', desc: 'Percussion & Remaster', tags: 'music-production latin urban', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/migrante-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
+                { title: 'Ruge - Jon Wolff', desc: 'Drums & Remaster', tags: 'music-production rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ruge-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz', youtube: 'https://www.youtube.com/@jonwolff_' }},
+                { title: 'Maldigo el amor - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/maldigo-el-amor-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},                
+                { title: 'Contrabandista - Dame El Panuelo (Fundación Nuna Kallpa)', desc: 'Percussion & Remaster', tags: 'audio-for-media colombian andean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/contrabandista-dame-el-panuelo-fundacion-nuna-kallpa-fragment', artistLinks: { instagram: 'https://www.instagram.com/fundacion_nunakallpa/', facebook: 'https://www.facebook.com/profile.php?id=100063674015860' }},
+                { title: 'Te Amaré - Jonji Camacho', desc: 'Drums & Remaster', tags: 'music-production pop', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/te-amare-fragment', artistLinks: { instagram: 'https://www.instagram.com/jonathan_camacho_oficial/', youtube: 'https://www.youtube.com/@jonjicamach', facebook: 'https://www.facebook.com/jonathan.camacho.1789' }},
+                { title: 'Dioses de Papel - Ioel', desc: 'Percussion & Remaster', tags: 'music-production mexican urban', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/dioses-de-papel-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
+                { title: 'No me amas - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production rock pop', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/no-me-amas-fragment', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
+                { title: 'Monsters - Jon Wolff', desc: 'Drums & Remaster', tags: 'music-production rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/monsters-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz', youtube: 'https://www.youtube.com/@jonwolff_' }},
+                { title: 'Tascualeña - Dame El Panuelo (Fundación Nuna Kallpa)', desc: 'Percussion & Remaster', tags: 'audio-for-media colombian andean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tascualena-dame-el-panuelo-fundacion-nuna-kallpa-fragment', artistLinks: { instagram: 'https://www.instagram.com/fundacion_nunakallpa/', facebook: 'https://www.facebook.com/profile.php?id=100063674015860' }},
+                { title: 'Relajao - Ioel FT Rob Castellanos', desc: 'Percussion & Remaster', tags: 'music-production mexican urban', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/relajao-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
+                { title: 'Viernes y el cuerpo lo sabe - Fercho Son', desc: 'Percussion Recording', tags: 'music-production latin', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/viernes-y-el-cuerpo-lo-sabe-fragment', artistLinks: { facebook: 'https://www.facebook.com/hernando.velasquez.9847', instagram: 'https://www.instagram.com/fercho_son/', youtube: 'https://www.youtube.com/@ferchoson' }},
             ];
 
             let swiperInstance;
@@ -2892,50 +2653,21 @@
             const desktopFilterContainer = document.querySelector('.portfolio-filters');
             
             function initializeSwiper(slidesHTML) {
-                if (swiperInstance) {
-                    swiperInstance.destroy(true, true);
-                }
-                
+                if (swiperInstance) swiperInstance.destroy(true, true);
                 portfolioSliderEl.innerHTML = slidesHTML;
-
                 swiperInstance = new Swiper('.portfolio-swiper', {
                     loop: portfolioSliderEl.children.length > 2,
                     slidesPerView: 'auto',
                     centeredSlides: true,
                     spaceBetween: 30,
                     grabCursor: true,
-                    navigation: {
-                        nextEl: '.portfolio-next',
-                        prevEl: '.portfolio-prev',
-                    },
-                    breakpoints: {
-                        320: { slidesPerView: 'auto', spaceBetween: 15 },
-                        768: { slidesPerView: 'auto', spaceBetween: 20 },
-                        1024: { slidesPerView: 'auto', spaceBetween: 30 },
-                    }
+                    navigation: { nextEl: '.portfolio-next', prevEl: '.portfolio-prev' },
+                    breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
                 });
-
-                const portfolioSection = document.getElementById('portfolio');
-                const scrollToPortfolio = () => {
-                    if (portfolioSection) {
-                        portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                };
-
-                const handleCarouselInteraction = (event) => {
-                    if (window.innerWidth <= 820) return;
-                    if (event && event.target && event.target.closest('a')) return;
-                    scrollToPortfolio();
-                };
-                
-                swiperInstance.on('navigationNext', handleCarouselInteraction);
-                swiperInstance.on('navigationPrev', handleCarouselInteraction);
-                swiperInstance.on('touchStart', (swiper, event) => handleCarouselInteraction(event));
             }
             
             function createPortfolioItem(item) {
                 const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
-                let mediaHTML;
                 const iconMap = { 
                     spotify: { class: 'ri-spotify-fill', title: 'Listen on Spotify' }, 
                     instagram: { class: 'ri-instagram-line', title: 'Follow on Instagram' }, 
@@ -2949,53 +2681,38 @@
                     const linksArray = Object.keys(item.artistLinks).map(key => iconMap[key] && item.artistLinks[key] ? `<a href="${item.artistLinks[key]}" target="_blank" title="${iconMap[key].title}"><i class="${iconMap[key].class}"></i></a>` : '').join('');
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
-                if (item.soundcloudUrl) {
-                    const isMobile = window.innerWidth <= 768;
-                    const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                    const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${isMobile}`;
-                    mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
-                } else {
-                    mediaHTML = `<img src="assets/img/placeholder.jpg" alt="Cover art for ${item.title}" class="portfolio-image" loading="lazy">`;
-                }
+                const encodedUrl = encodeURIComponent(item.soundcloudUrl);
+                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${window.innerWidth <= 768}`;
+                const mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
-
+            
             function applyFilters(source = 'desktop') {
-                let activeAppFilters, activeStyleFilters;
-                let container = source === 'mobile' ? document.querySelector('.filter-panel-body') : desktopFilterContainer;
+                const container = source === 'mobile' ? filterPanelBody : desktopFilterContainer;
                 
-                activeAppFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="app"].active')).map(btn => btn.dataset.filter);
-                activeStyleFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="style"].active')).map(btn => btn.dataset.filter);
+                const activeAppFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="app"].active:not([data-filter="all"])')).map(btn => btn.dataset.filter);
+                const activeStyleFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="style"].active:not([data-filter="all"])')).map(btn => btn.dataset.filter.split(',')).flat();
 
-                if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
-                if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
+                const filteredData = portfolioItemsData.filter(item => {
+                    const tags = item.tags.split(' ');
+
+                    const appMatch = activeAppFilters.length === 0 || activeAppFilters.some(filter => tags.includes(filter));
+                    const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => tags.includes(filter));
+
+                    return appMatch && styleMatch;
+                });
                 
-                let noResultsContainer = document.getElementById('no-results-container');
-                if (!noResultsContainer) {
-                    noResultsContainer = document.createElement('div');
+                const noResultsContainer = document.getElementById('no-results-container') || document.createElement('div');
+                if (!noResultsContainer.id) {
                     noResultsContainer.id = 'no-results-container';
                     noResultsContainer.className = 'no-results-message is-hidden';
                     portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
                 }
 
-                const filteredData = portfolioItemsData.filter(item => {
-                    const tags = item.tags.split(' ');
-                    const appMatch = activeAppFilters.length === 0 || activeAppFilters.some(filter => {
-                        const subFilters = filter.split(',');
-                        return subFilters.some(subFilter => tags.includes(subFilter.trim()));
-                    });
-                    const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => {
-                        const subFilters = filter.split(',');
-                        return subFilters.some(subFilter => tags.includes(subFilter.trim()));
-                    });
-                    return appMatch && styleMatch;
-                });
-
                 if (filteredData.length > 0) {
                     portfolioSliderWrapper.classList.remove('is-hidden');
                     noResultsContainer.classList.add('is-hidden');
-                    const filteredSlidesHTML = filteredData.map(createPortfolioItem).join('');
-                    initializeSwiper(filteredSlidesHTML);
+                    initializeSwiper(filteredData.map(createPortfolioItem).join(''));
                 } else {
                     if (swiperInstance) swiperInstance.destroy(true, true);
                     swiperInstance = null;
@@ -3003,270 +2720,155 @@
                     noResultsContainer.classList.remove('is-hidden');
                     noResultsContainer.innerHTML = `<h3>No Matches Found</h3><p>Try adjusting your filters or reset them to see all projects.</p><button class="reset-filters-btn">Reset Filters</button>`;
                     noResultsContainer.querySelector('.reset-filters-btn').addEventListener('click', () => {
-                        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                        document.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
+                        const filterContainer = source === 'mobile' ? filterPanelBody : desktopFilterContainer;
+                        filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                        filterContainer.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
                         applyFilters(source);
                     });
                 }
+                if (source === 'mobile') updateActiveFilterDisplay();
+                updateDesktopClearButtonVisibility();
             }
-            
-            // --- Mobile Filter Panel Logic ---
+
             const mobileFilterTrigger = document.getElementById('mobile-filter-trigger');
+            const mobileFilterTriggerText = document.getElementById('mobile-filter-trigger-text');
             const filterPanelOverlay = document.getElementById('filter-panel-overlay');
-            const filterPanel = document.getElementById('filter-panel');
             const closePanelBtn = document.getElementById('filter-panel-close-btn');
             const applyFiltersBtn = document.getElementById('apply-filters-btn');
             const clearFiltersBtn = document.getElementById('clear-filters-btn');
             const filterPanelBody = document.querySelector('.filter-panel-body');
+            const activeFiltersContainer = document.getElementById('active-filters-container');
+            const activeFiltersPills = document.getElementById('active-filters-pills');
+            const clearAllPillsBtn = document.getElementById('clear-all-pills-btn');
+            const desktopClearBtnContainer = document.getElementById('desktop-clear-filters-container');
+            const desktopClearBtn = document.getElementById('desktop-clear-filters-btn');
 
-            // Populate mobile filter panel
-            filterPanelBody.innerHTML = desktopFilterContainer.innerHTML;
-
-            const openFilterPanel = () => filterPanelOverlay.classList.add('is-open');
-            const closeFilterPanel = () => filterPanelOverlay.classList.remove('is-open');
-
-            mobileFilterTrigger.addEventListener('click', openFilterPanel);
-            closePanelBtn.addEventListener('click', closeFilterPanel);
-            filterPanelOverlay.addEventListener('click', (e) => {
-                if(e.target === filterPanelOverlay) {
-                    closeFilterPanel();
+            function updateActiveFilterDisplay() {
+                const activeFilterButtons = Array.from(filterPanelBody.querySelectorAll('.filter-btn.active:not([data-filter="all"])'));
+                const filterCount = activeFilterButtons.length;
+                activeFiltersPills.innerHTML = '';
+                if (filterCount > 0) {
+                    activeFiltersContainer.classList.remove('is-hidden');
+                    mobileFilterTriggerText.textContent = `Filter Projects (${filterCount})`;
+                    activeFilterButtons.forEach(btn => {
+                        const pill = document.createElement('div');
+                        pill.className = 'filter-pill';
+                        pill.textContent = btn.textContent;
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-pill-btn';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = () => {
+                            btn.classList.remove('active');
+                            if (!filterPanelBody.querySelector(`.filter-btn[data-group="${btn.dataset.group}"].active:not([data-filter="all"])`)) {
+                                filterPanelBody.querySelector(`.filter-btn[data-group="${btn.dataset.group}"][data-filter="all"]`).classList.add('active');
+                            }
+                            applyFilters('mobile');
+                        };
+                        pill.appendChild(removeBtn);
+                        activeFiltersPills.appendChild(pill);
+                    });
+                } else {
+                    activeFiltersContainer.classList.add('is-hidden');
+                    mobileFilterTriggerText.textContent = 'Filter Projects';
                 }
-            });
+            }
+            
+            function updateDesktopClearButtonVisibility() {
+                const hasActiveFilters = desktopFilterContainer.querySelector('.filter-btn.active:not([data-filter="all"])');
+                desktopClearBtnContainer.classList.toggle('is-hidden', !hasActiveFilters);
+            }
 
-            applyFiltersBtn.addEventListener('click', () => {
-                applyFilters('mobile');
-                closeFilterPanel();
-            });
+            function clearAllFilters(source) {
+                const container = source === 'desktop' ? desktopFilterContainer : filterPanelBody;
+                container.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                container.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
+                applyFilters(source);
+            }
 
-            clearFiltersBtn.addEventListener('click', () => {
-                 filterPanelBody.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                 filterPanelBody.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
-            });
+            clearAllPillsBtn.addEventListener('click', () => clearAllFilters('mobile'));
+            desktopClearBtn.addEventListener('click', () => clearAllFilters('desktop'));
+
+            filterPanelBody.innerHTML = desktopFilterContainer.innerHTML;
+            mobileFilterTrigger.addEventListener('click', () => filterPanelOverlay.classList.add('is-open'));
+            closePanelBtn.addEventListener('click', () => filterPanelOverlay.classList.remove('is-open'));
+            filterPanelOverlay.addEventListener('click', (e) => { if (e.target === filterPanelOverlay) filterPanelOverlay.classList.remove('is-open'); });
+            applyFiltersBtn.addEventListener('click', () => { applyFilters('mobile'); filterPanelOverlay.classList.remove('is-open'); });
+            clearFiltersBtn.addEventListener('click', () => clearAllFilters('mobile'));
 
             function setupFilterButtons(container, source) {
-                container.querySelectorAll('.filter-btn').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const group = button.dataset.group;
-                        const filter = button.dataset.filter;
-
-                        if (filter === 'all') {
-                            container.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
-                            button.classList.add('active');
-                        } else {
-                            container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
-                            button.classList.toggle('active');
-                            if (!container.querySelector(`.filter-btn[data-group="${group}"].active`)) {
-                                container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
-                            }
+                container.addEventListener('click', (e) => {
+                    if (!e.target.matches('.filter-btn')) return;
+                    const button = e.target;
+                    const group = button.dataset.group;
+                    const filter = button.dataset.filter;
+                    if (filter === 'all') {
+                        container.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                    } else {
+                        container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.remove('active');
+                        button.classList.toggle('active');
+                        if (!container.querySelector(`.filter-btn[data-group="${group}"].active:not([data-filter="all"])`)) {
+                            container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
                         }
-
-                        if (source === 'desktop') {
-                            applyFilters('desktop');
-                        }
-                    });
+                    }
+                    if (source === 'desktop') applyFilters('desktop');
                 });
             }
 
             setupFilterButtons(desktopFilterContainer, 'desktop');
             setupFilterButtons(filterPanelBody, 'mobile');
-            
-            // Initial load
             applyFilters('desktop');
 
-            // --- INICIO: LÓGICA DEL MODAL DE INSTRUMENTOS ---
+            // --- INSTRUMENT MODAL LOGIC ---
             const instrumentData = {
-                'vallenato-box': { 
-                    name: 'Vallenato Box', 
-                    description: 'The "caja vallenata" is the rhythmic soul of Vallenato music. This small drum is held between the knees and played with bare hands. Its goatskin head produces a wide range of sounds, from a deep bass tone in the center to a sharp, cracking slap on the rim, creating a dynamic percussive line that drives the music and complements the accordion.' 
-                },
-                'guacharaca': { 
-                    name: 'Guacharaca', 
-                    description: 'Indispensable in Vallenato and Cumbia, the guacharaca is a wooden tube with ridges, scraped with a wire fork. Named after a native Colombian bird, it provides a constant, high-frequency "ch-ch-ch" sound. This textured rhythmic base interlocks perfectly with the caja (vallenato box) and accordion, driving the rhythm forward.' 
-                },
-                'cununo': { 
-                    name: 'Cununo', 
-                    description: 'From Colombia\'s Afro-Colombian Pacific coast, the cununo is a tall, conical hand drum with a single animal-hide head. Pitched as male (macho) and female (hembra), it serves as the improvising, conversational voice in marimba music, playing sharp, intricate patterns that respond to the melody and dancers.' 
-                },
-                'pacific-bombo': { 
-                    name: 'Pacific Bombo', 
-                    description: 'The heartbeat of Colombia\'s Pacific coast music, the bombo is a large, two-headed drum providing a deep, foundational pulse. In the southern Pacific, it is played in male-female pairs in marimba music. In the northern Pacific, a single bombo is used in chirimía ensembles. Played with a mallet and stick, its powerful, booming rhythm is essential to genres like Currulao.' 
-                },
-                'guasa': { 
-                    name: 'Guasá', 
-                    description: 'A key textural instrument from Colombia\'s Pacific coast, the guasá is a cylindrical bamboo shaker filled with seeds. Unlike a maraca, it creates a continuous, flowing, river-like sound that fills the sonic space. It\'s shaken with a consistent motion to provide a smooth, shimmering rhythmic carpet for other instruments.' 
-                },
-                'atlantic-tambora': { 
-                    name: 'Atlantic Tambora', 
-                    description: 'Central to traditional Cumbia, this two-headed drum is laid on the lap. A unique playing style—using a stick on the head and wooden shell ("cáscara") while the other hand plays the opposite head—allows a single player to create the complex polyrhythm that defines the Cumbia groove.' 
-                },
-                'alegre-drum': { 
-                    name: 'Alegre Drum', 
-                    description: 'The "tambor alegre" ("happy drum") is the lead, improvising voice in a traditional Cumbia percussion trio. A skilled player uses this single-headed drum to produce a variety of sounds, including deep bass, crisp open tones, and sharp slaps, allowing for joyful and spontaneous rhythmic conversations.' 
-                },
-                'guacho': { 
-                    name: 'Guacho', 
-                    description: 'The guacho is a metal tube shaker from Colombia\'s Atlantic region, serving a similar function to the guacharaca in Cumbia ensembles. Its metallic construction gives it a sharper and brighter sound, providing a persistent, high-frequency sizzle that drives the rhythm and adds a distinct layer of energy.' 
-                },
-                'maracon': { 
-                    name: 'Maracón', 
-                    description: 'The maracón is a large, single maraca used in the traditional music of the Colombian plains (Llanos). Its size gives it a lower pitch and a more powerful, resonant sound than its paired cousins. It is used to mark a strong, steady pulse that grounds the swirling melodies of the harp and cuatro.' 
-                },
-                'capachos': { 
-                    name: 'Capachos', 
-                    description: 'Capachos are small maracas essential to the fast-paced Joropo music from the plains (Llanos). Traditionally made from the capacho plant, they are played in pairs. The player produces incredibly fast and complex rhythmic patterns that interlock with the harp and cuatro, creating a dense percussive drive.' 
-                },
-                'congas': { 
-                    name: 'Congas', 
-                    description: 'Originating from Afro-Cuban traditions, congas are tall, single-headed drums that form the core of the rhythm section in Salsa. Played in sets of two or three, they produce a range of tones from deep bass notes to sharp slaps. The foundational "tumbao" pattern provides a constant, syncopated groove.' 
-                },
-                'bongo': { 
-                    name: 'Bongó', 
-                    description: 'The bongó is a pair of small, connected Afro-Cuban drums: the smaller "macho" and larger "hembra." Held between the knees and played with the fingertips, they produce high-pitched, conversational rhythms. In salsa, the bongosero plays a steady "martillo" (hammer) pattern and improvises freely.' 
-                },
-                'timbales': { 
-                    name: 'Timbales', 
-                    description: 'Timbales are a pair of shallow, metal-cased drums, a staple in salsa and Latin jazz. Played with thin sticks, they produce sharp, cutting tones. The setup often includes cowbells and a cymbal, and the timbalero plays rhythmic patterns on the shells ("cáscara") as well as taking fiery solos.' 
-                },
-                'guiro': { 
-                    name: 'Güiro', 
-                    description: 'The güiro is traditionally a hollowed-out gourd with parallel notches cut into one side. It is played by rubbing a stick along these ridges, which produces a characteristic scraping, rhythmic sound. This provides a driving texture in genres like salsa, son, and bolero.' 
-                },
-                'maracas': { 
-                    name: 'Maracas', 
-                    description: 'Maracas are rattles, played in pairs, that appear in a vast array of Caribbean and Latin American music. Traditionally made from dried gourds filled with seeds, they are shaken to add a high-frequency rhythmic layer, creating either a steady pulse or complex, syncopated patterns.' 
-                },
-                'cowbells': { 
-                    name: 'Cowbells', 
-                    description: 'In Latin music, the cowbell, or "cencerro," is a crucial rhythmic instrument struck with a stick. In a salsa band, the bongosero switches to a hand-held cowbell during the high-energy "montuno" sections, playing a driving pattern that anchors the rhythm section.' 
-                },
-                'jam-blocks': { 
-                    name: 'Jam Blocks', 
-                    description: 'Jam Blocks are the modern, durable evolution of the traditional wood block. Made from high-impact plastic, they are designed to replicate the sharp, piercing "clack" of their wooden counterparts. They are often integrated into drum kits in various pitches for accents and rhythmic patterns.' 
-                },
-                'claves': { 
-                    name: 'Claves', 
-                    description: 'Despite their simplicity—just two short, thick dowels of wood—claves are the rhythmic key to Afro-Cuban music. One is held to create a resonant chamber and is struck by the other. They are used to play the "clave," a five-note pattern that is the structural core for Son, Rumba, and Salsa.' 
-                },
-                'peruvian-cajon': { 
-                    name: 'Peruvian Cajon', 
-                    description: 'A masterpiece of ingenuity, the Peruvian cajón ("box") is a six-sided box drum with Afro-Peruvian roots. The musician sits on top and plays the front face with their hands, producing a range of sounds from a deep bass tone to a sharp slap, effectively creating the sound of a full drum kit.' 
-                },
-                'quijada': { 
-                    name: 'Quijada (Vibra-slap)', 
-                    description: 'The quijada is a traditional Afro-Peruvian instrument made from the jawbone of a donkey, horse, or mule, whose loose molars produce a distinctive rattling sound when struck. The Vibra-slap is the modern, durable version that faithfully recreates this unique sound.' 
-                },
-                'pandeiro': { 
-                    name: 'Pandeiro', 
-                    description: 'Often called the "Brazilian tambourine," the pandeiro is a highly versatile hand frame drum with a tunable head and drier-sounding jingles ("platinelas"). A master player can mimic the rhythms of an entire drum kit, making it a cornerstone of Samba, Choro, and Capoeira.' 
-                },
-                'samba-whistle': { 
-                    name: 'Samba Whistle', 
-                    description: 'The samba whistle, or "apito," is the conductor\'s baton of the Brazilian "bateria" (percussion ensemble). This high-pitched whistle is used by the leader to communicate with hundreds of drummers, cueing rhythmic breaks, call-and-response sections, and endings with clear signals.' 
-                },
-                'agogo-bells': { 
-                    name: 'Agogô Bells', 
-                    description: 'The agogô is a set of two or more conical bells of different sizes, with origins in Yoruba music. It is a key melodic and rhythmic instrument in Brazilian styles like Samba. Played with a stick, the agogô typically plays a repeating, syncopated pattern that serves as a guidepost for the ensemble.' 
-                },
-                'caixa': { 
-                    name: 'Caixa', 
-                    description: 'The caixa, or "caixa de guerra," is the Brazilian equivalent of the snare drum and the engine of a samba bateria. Played with two sticks, the caixas provide a constant, driving, and highly syncopated rhythm that creates the characteristic "swing" of samba.' 
-                },
-                'surdo': { 
-                    name: 'Surdo', 
-                    description: 'The surdo is the heart of samba, a large bass drum that provides the powerful, low-end foundation for the music. In a samba bateria, surdos are played in tuned sets of at least three sizes. Their combined boom is the deep, resonant pulse that can be felt in your chest.' 
-                },
-                'timbau': { 
-                    name: 'Timbau', 
-                    description: 'The timbau is a tall, cone-shaped Brazilian hand drum, popularized in movements like Samba-Reggae. Played with the hands, it is known for its incredible dynamic range, capable of producing very high, cutting slaps and deep, resonant bass tones.' 
-                },
-                'cabasa': { 
-                    name: 'Afuche / Cabasa', 
-                    description: 'The afuche-cabasa is a modern instrument constructed with loops of steel ball chain wrapped around a wide, textured cylinder. The sound is produced by shaking it or by twisting the cylinder against the palm, creating a precise, rhythmic, and metallic scraping sound.' 
-                },
-                'triangle': { 
-                    name: 'Triangle', 
-                    description: 'In Brazilian Forró music, the triangle plays a vital role. It is not just used for occasional accents, but plays a constant, driving, and highly syncopated pattern that interlocks with the zabumba (bass drum) and accordion, creating a bright, metallic, and dance-inducing texture.' 
-                },
-                'shaker': { 
-                    name: 'Shaker', 
-                    description: 'A broad category of instrument, a shaker creates its sound through the movement of small particles within a container. Their primary function is to provide a high-frequency rhythmic layer, adding energy and filling the sonic space with a continuous shimmer or a precisely articulated pattern.' 
-                },
-                'guira': { 
-                    name: 'Güira', 
-                    description: 'The güira is a metal scraper essential to Dominican music like Merengue and Bachata. It consists of a sheet of metal with a rough texture, played by scraping it with a metal fork. The resulting sound is much brighter and sharper than the güiro, providing a driving, high-frequency pulse.' 
-                },
-                'merengue-tambora': { 
-                    name: 'Merengue Tambora', 
-                    description: 'The Dominican tambora is a two-headed drum that provides the rhythmic backbone for Merengue. It is held on the lap and played with a unique technique: one hand plays the head, while a stick in the other hand strikes the opposite head and the wooden shell of the drum.' 
-                },
-                'djembe': { 
-                    name: 'Djembé', 
-                    description: 'The djembé is a goblet-shaped drum from West Africa, tuned with a system of ropes that allows for high tension. Played with bare hands, it is known for its wide tonal range, centered around three fundamental sounds: the deep "bass," the full "tone," and the sharp, cutting "slap."' 
-                },
-                'talking-drum': { 
-                    name: 'Talking Drum', 
-                    description: 'This remarkable instrument from West Africa is named for its ability to mimic the pitch and tone of human speech. Its hourglass shape allows the player to squeeze ropes connecting the two drumheads, altering the pitch to create melodic, speech-like phrases.' 
-                },
-                'asalato': { 
-                    name: 'Asalato', 
-                    description: 'Also known as the kashaka, the asalato consists of two small gourds, filled with seeds, connected by a short string. A player holds one gourd and swings the other, creating intricate polyrhythms as the gourds click together and the seeds provide a continuous shake.' 
-                },
-                'darbuka': { 
-                    name: 'Egyptian Darbuka', 
-                    description: 'Also known as the Tabla in Egypt, this goblet-shaped drum is a cornerstone of Middle Eastern music. Its high-tension head produces the instrument\'s signature sounds: a deep, resonant bass tone called the "doum" (from the center) and a high-pitched, crisp crack called the "tek" (from the rim).' 
-                },
-                'udu-drum': { 
-                    name: 'Udu Drum', 
-                    description: 'The Udu is a clay pot drum from Nigeria. This unique instrument is both an idiophone and an aerophone. In addition to sounds from striking the clay body, the player can produce a distinctive, deep, and watery bass sound by quickly hitting a small hole in the side with their palm.' 
-                },
-                'flamenco-cajon': { 
-                    name: 'Flamenco Cajon', 
-                    description: 'While the cajón originated in Peru, it was adapted for Flamenco music by adding guitar strings or snare wires against the inside of the playing surface. This creates a buzzing, snare-like sizzle which perfectly complements the sharp footwork (zapateado) and hand claps (palmas) of Flamenco.' 
-                },
-                'castanets': { 
-                    name: 'Castanets', 
-                    description: 'A signature sound of Spanish dance, castanets are a pair of concave shells clicked together in the palm. They are used to produce intricate rhythmic patterns and rapid, rippling rolls called "carretillas." They serve as a percussive extension of the dancer’s body, accentuating their movements.' 
-                },
-                'tambourine': { 
-                    name: 'Tambourine', 
-                    description: 'The tambourine is an ancient frame drum with pairs of small metal jingles called "zills." Its versatility is immense; it can be struck, shaken for a continuous shimmer, or have a finger rolled across the head to create a rapid, sustained jingle.' 
-                },
-                'sleigh-bells': { 
-                    name: 'Sleigh Bells', 
-                    description: 'This instrument consists of a collection of "jingle" bells mounted on a handle or strap. Each bell contains a small ball bearing that creates a bright, metallic jingle sound when shaken. They are used to evoke a sense of winter or festivity, adding a high-frequency shimmer.' 
-                },
-                'celesta': { 
-                    name: 'Celesta Bar (Wind/Chime Bells)', 
-                    description: 'Often called a Mark Tree, this instrument consists of numerous small, graduated metal chimes suspended from a wooden frame. When a hand is swept across the chimes, they produce a shimmering, cascading glissando, often used to signify a magical or dream-like transition.' 
-                },
-                'timpani': { 
-                    name: 'Symphonic Timpani', 
-                    description: 'Also known as kettledrums, timpani are the foundation of the orchestral percussion section. These large copper bowls are capable of producing definite, powerful pitches. A foot pedal mechanism allows the timpanist to change the pitch, reinforcing harmonies and building immense drama.' 
-                },
-                'gran-cassa': { 
-                    name: 'Gran Cassa', 
-                    description: 'The Gran Cassa is the orchestral bass drum, an instrument of immense size and power. It produces a very low, resonant tone of indefinite pitch. Its role is to provide a deep, foundational anchor to the ensemble, marking significant moments with a powerful boom.' 
-                },
-                'cymbals': { 
-                    name: 'Cymbals', 
-                    description: 'Orchestral cymbals provide high-frequency shimmer and dramatic accents. They are most often used as crash cymbals, played in pairs and struck together for an explosive sound at musical climaxes. A single cymbal can also be suspended and played with mallets for a sustained, shimmering roll.' 
-                },
-                'tabla': { 
-                    name: 'Tabla', 
-                    description: 'The tabla is the iconic percussion instrument of North Indian classical music. It consists of a pair of small hand drums: the smaller, higher-pitched dayan, and the larger bayan bass drum. A master player uses complex finger and palm strokes to create intricate rhythmic cycles (talas).' 
-                },
-                'taiko': { 
-                    name: 'Taiko', 
-                    description: 'Taiko refers both to a range of Japanese drums and to the art of ensemble drumming. It is a deeply physical and visually stunning art form. The drums themselves range from the small shime-daiko to the massive o-daiko, whose thunderous sound is capable of shaking the ground.' 
-                },
-                'turkish-darbuka': { 
-                    name: 'Turkish Darbuka', 
-                    description: 'While similar to the Egyptian darbuka, the Turkish style has key differences. It is often made of lightweight metal and its head is attached with an exposed rim. This edge allows players to use advanced finger-snapping techniques, enabling incredibly fast and intricate rhythmic patterns.' 
-                },
-                'daf': { 
-                    name: 'Daf', 
-                    description: 'The daf is a large frame drum with ancient origins in the Middle East. It is composed of a wooden hoop with a skin membrane. A distinctive feature is the presence of interlocking metal rings on the inside, which produce a loud, jingling, and buzzing sound when the drum is played.' 
-                }
+                'vallenato-box': { name: 'Vallenato Box', description: 'The "caja vallenata" is the rhythmic soul of Vallenato music. This small drum is held between the knees and played with bare hands. Its goatskin head produces a wide range of sounds, from a deep bass tone in the center to a sharp, cracking slap on the rim, creating a dynamic percussive line that drives the music and complements the accordion.' },
+                'guacharaca': { name: 'Guacharaca', description: 'Indispensable in Vallenato and Cumbia, the guacharaca is a wooden tube with ridges, scraped with a wire fork. Named after a native Colombian bird, it provides a constant, high-frequency "ch-ch-ch" sound. This textured rhythmic base interlocks perfectly with the caja (vallenato box) and accordion, driving the rhythm forward.' },
+                'cununo': { name: 'Cununo', description: 'From Colombia\'s Afro-Colombian Pacific coast, the cununo is a tall, conical hand drum with a single animal-hide head. Pitched as male (macho) and female (hembra), it serves as the improvising, conversational voice in marimba music, playing sharp, intricate patterns that respond to the melody and dancers.' },
+                'pacific-bombo': { name: 'Pacific Bombo', description: 'The heartbeat of Colombia\'s Pacific coast music, the bombo is a large, two-headed drum providing a deep, foundational pulse. In the southern Pacific, it is played in male-female pairs in marimba music. In the northern Pacific, a single bombo is used in chirimía ensembles. Played with a mallet and stick, its powerful, booming rhythm is essential to genres like Currulao.' },
+                'guasa': { name: 'Guasá', description: 'A key textural instrument from Colombia\'s Pacific coast, the guasá is a cylindrical bamboo shaker filled with seeds. Unlike a maraca, it creates a continuous, flowing, river-like sound that fills the sonic space. It\'s shaken with a consistent motion to provide a smooth, shimmering rhythmic carpet for other instruments.' },
+                'atlantic-tambora': { name: 'Atlantic Tambora', description: 'Central to traditional Cumbia, this two-headed drum is laid on the lap. A unique playing style—using a stick on the head and wooden shell ("cáscara") while the other hand plays the opposite head—allows a single player to create the complex polyrhythm that defines the Cumbia groove.' },
+                'alegre-drum': { name: 'Alegre Drum', description: 'The "tambor alegre" ("happy drum") is the lead, improvising voice in a traditional Cumbia percussion trio. A skilled player uses this single-headed drum to produce a variety of sounds, including deep bass, crisp open tones, and sharp slaps, allowing for joyful and spontaneous rhythmic conversations.' },
+                'guacho': { name: 'Guacho', description: 'The guacho is a metal tube shaker from Colombia\'s Atlantic region, serving a similar function to the guacharaca in Cumbia ensembles. Its metallic construction gives it a sharper and brighter sound, providing a persistent, high-frequency sizzle that drives the rhythm and adds a distinct layer of energy.' },
+                'maracon': { name: 'Maracón', description: 'The maracón is a large, single maraca used in the traditional music of the Colombian plains (Llanos). Its size gives it a lower pitch and a more powerful, resonant sound than its paired cousins. It is used to mark a strong, steady pulse that grounds the swirling melodies of the harp and cuatro.' },
+                'capachos': { name: 'Capachos', description: 'Capachos are small maracas essential to the fast-paced Joropo music from the plains (Llanos). Traditionally made from the capacho plant, they are played in pairs. The player produces incredibly fast and complex rhythmic patterns that interlock with the harp and cuatro, creating a dense percussive drive.' },
+                'congas': { name: 'Congas', description: 'Originating from Afro-Cuban traditions, congas are tall, single-headed drums that form the core of the rhythm section in Salsa. Played in sets of two or three, they produce a range of tones from deep bass notes to sharp slaps. The foundational "tumbao" pattern provides a constant, syncopated groove.' },
+                'bongo': { name: 'Bongó', description: 'The bongó is a pair of small, connected Afro-Cuban drums: the smaller "macho" and larger "hembra." Held between the knees and played with the fingertips, they produce high-pitched, conversational rhythms. In salsa, the bongosero plays a steady "martillo" (hammer) pattern and improvises freely.' },
+                'timbales': { name: 'Timbales', description: 'Timbales are a pair of shallow, metal-cased drums, a staple in salsa and Latin jazz. Played with thin sticks, they produce sharp, cutting tones. The setup often includes cowbells and a cymbal, and the timbalero plays rhythmic patterns on the shells ("cáscara") as well as taking fiery solos.' },
+                'guiro': { name: 'Güiro', description: 'The güiro is traditionally a hollowed-out gourd with parallel notches cut into one side. It is played by rubbing a stick along these ridges, which produces a characteristic scraping, rhythmic sound. This provides a driving texture in genres like salsa, son, and bolero.' },
+                'maracas': { name: 'Maracas', description: 'Maracas are rattles, played in pairs, that appear in a vast array of Caribbean and Latin American music. Traditionally made from dried gourds filled with seeds, they are shaken to add a high-frequency rhythmic layer, creating either a steady pulse or complex, syncopated patterns.' },
+                'cowbells': { name: 'Cowbells', description: 'In Latin music, the cowbell, or "cencerro," is a crucial rhythmic instrument struck with a stick. In a salsa band, the bongosero switches to a hand-held cowbell during the high-energy "montuno" sections, playing a driving pattern that anchors the rhythm section.' },
+                'jam-blocks': { name: 'Jam Blocks', description: 'Jam Blocks are the modern, durable evolution of the traditional wood block. Made from high-impact plastic, they are designed to replicate the sharp, piercing "clack" of their wooden counterparts. They are often integrated into drum kits in various pitches for accents and rhythmic patterns.' },
+                'claves': { name: 'Claves', description: 'Despite their simplicity—just two short, thick dowels of wood—claves are the rhythmic key to Afro-Cuban music. One is held to create a resonant chamber and is struck by the other. They are used to play the "clave," a five-note pattern that is the structural core for Son, Rumba, and Salsa.' },
+                'peruvian-cajon': { name: 'Peruvian Cajon', description: 'A masterpiece of ingenuity, the Peruvian cajón ("box") is a six-sided box drum with Afro-Peruvian roots. The musician sits on top and plays the front face with their hands, producing a range of sounds from a deep bass tone to a sharp slap, effectively creating the sound of a full drum kit.' },
+                'quijada': { name: 'Quijada (Vibra-slap)', description: 'The quijada is a traditional Afro-Peruvian instrument made from the jawbone of a donkey, horse, or mule, whose loose molars produce a distinctive rattling sound when struck. The Vibra-slap is the modern, durable version that faithfully recreates this unique sound.' },
+                'pandeiro': { name: 'Pandeiro', description: 'Often called the "Brazilian tambourine," the pandeiro is a highly versatile hand frame drum with a tunable head and drier-sounding jingles ("platinelas"). A master player can mimic the rhythms of an entire drum kit, making it a cornerstone of Samba, Choro, and Capoeira.' },
+                'samba-whistle': { name: 'Samba Whistle', description: 'The samba whistle, or "apito," is the conductor\'s baton of the Brazilian "bateria" (percussion ensemble). This high-pitched whistle is used by the leader to communicate with hundreds of drummers, cueing rhythmic breaks, call-and-response sections, and endings with clear signals.' },
+                'agogo-bells': { name: 'Agogô Bells', description: 'The agogô is a set of two or more conical bells of different sizes, with origins in Yoruba music. It is a key melodic and rhythmic instrument in Brazilian styles like Samba. Played with a stick, the agogô typically plays a repeating, syncopated pattern that serves as a guidepost for the ensemble.' },
+                'caixa': { name: 'Caixa', description: 'The caixa, or "caixa de guerra," is the Brazilian equivalent of the snare drum and the engine of a samba bateria. Played with two sticks, the caixas provide a constant, driving, and highly syncopated rhythm that creates the characteristic "swing" of samba.' },
+                'surdo': { name: 'Surdo', description: 'The surdo is the heart of samba, a large bass drum that provides the powerful, low-end foundation for the music. In a samba bateria, surdos are played in tuned sets of at least three sizes. Their combined boom is the deep, resonant pulse that can be felt in your chest.' },
+                'timbau': { name: 'Timbau', description: 'The timbau is a tall, cone-shaped Brazilian hand drum, popularized in movements like Samba-Reggae. Played with the hands, it is known for its incredible dynamic range, capable of producing very high, cutting slaps and deep, resonant bass tones.' },
+                'cabasa': { name: 'Afuche / Cabasa', description: 'The afuche-cabasa is a modern instrument constructed with loops of steel ball chain wrapped around a wide, textured cylinder. The sound is produced by shaking it or by twisting the cylinder against the palm, creating a precise, rhythmic, and metallic scraping sound.' },
+                'triangle': { name: 'Triangle', description: 'In Brazilian Forró music, the triangle plays a vital role. It is not just used for occasional accents, but plays a constant, driving, and highly syncopated pattern that interlocks with the zabumba (bass drum) and accordion, creating a bright, metallic, and dance-inducing texture.' },
+                'shaker': { name: 'Shaker', description: 'A broad category of instrument, a shaker creates its sound through the movement of small particles within a container. Their primary function is to provide a high-frequency rhythmic layer, adding energy and filling the sonic space with a continuous shimmer or a precisely articulated pattern.' },
+                'guira': { name: 'Güira', description: 'The güira is a metal scraper essential to Dominican music like Merengue and Bachata. It consists of a sheet of metal with a rough texture, played by scraping it with a metal fork. The resulting sound is much brighter and sharper than the güiro, providing a driving, high-frequency pulse.' },
+                'merengue-tambora': { name: 'Merengue Tambora', description: 'The Dominican tambora is a two-headed drum that provides the rhythmic backbone for Merengue. It is held on the lap and played with a unique technique: one hand plays the head, while a stick in the other hand strikes the opposite head and the wooden shell of the drum.' },
+                'djembe': { name: 'Djembé', description: 'The djembé is a goblet-shaped drum from West Africa, tuned with a system of ropes that allows for high tension. Played with bare hands, it is known for its wide tonal range, centered around three fundamental sounds: the deep "bass," the full "tone," and the sharp, cutting "slap."' },
+                'talking-drum': { name: 'Talking Drum', description: 'This remarkable instrument from West Africa is named for its ability to mimic the pitch and tone of human speech. Its hourglass shape allows the player to squeeze ropes connecting the two drumheads, altering the pitch to create melodic, speech-like phrases.' },
+                'asalato': { name: 'Asalato', description: 'Also known as the kashaka, the asalato consists of two small gourds, filled with seeds, connected by a short string. A player holds one gourd and swings the other, creating intricate polyrhythms as the gourds click together and the seeds provide a continuous shake.' },
+                'darbuka': { name: 'Egyptian Darbuka', description: 'Also known as the Tabla in Egypt, this goblet-shaped drum is a cornerstone of Middle Eastern music. Its high-tension head produces the instrument\'s signature sounds: a deep, resonant bass tone called the "doum" (from the center) and a high-pitched, crisp crack called the "tek" (from the rim).' },
+                'udu-drum': { name: 'Udu Drum', description: 'The Udu is a clay pot drum from Nigeria. This unique instrument is both an idiophone and an aerophone. In addition to sounds from striking the clay body, the player can produce a distinctive, deep, and watery bass sound by quickly hitting a small hole in the side with their palm.' },
+                'flamenco-cajon': { name: 'Flamenco Cajon', description: 'While the cajón originated in Peru, it was adapted for Flamenco music by adding guitar strings or snare wires against the inside of the playing surface. This creates a buzzing, snare-like sizzle which perfectly complements the sharp footwork (zapateado) and hand claps (palmas) of Flamenco.' },
+                'castanets': { name: 'Castanets', description: 'A signature sound of Spanish dance, castanets are a pair of concave shells clicked together in the palm. They are used to produce intricate rhythmic patterns and rapid, rippling rolls called "carretillas." They serve as a percussive extension of the dancer’s body, accentuating their movements.' },
+                'tambourine': { name: 'Tambourine', description: 'The tambourine is an ancient frame drum with pairs of small metal jingles called "zills." Its versatility is immense; it can be struck, shaken for a continuous shimmer, or have a finger rolled across the head to create a rapid, sustained jingle.' },
+                'sleigh-bells': { name: 'Sleigh Bells', description: 'This instrument consists of a collection of "jingle" bells mounted on a handle or strap. Each bell contains a small ball bearing that creates a bright, metallic jingle sound when shaken. They are used to evoke a sense of winter or festivity, adding a high-frequency shimmer.' },
+                'celesta': { name: 'Celesta Bar (Wind/Chime Bells)', description: 'Often called a Mark Tree, this instrument consists of numerous small, graduated metal chimes suspended from a wooden frame. When a hand is swept across the chimes, they produce a shimmering, cascading glissando, often used to signify a magical or dream-like transition.' },
+                'timpani': { name: 'Symphonic Timpani', description: 'Also known as kettledrums, timpani are the foundation of the orchestral percussion section. These large copper bowls are capable of producing definite, powerful pitches. A foot pedal mechanism allows the timpanist to change the pitch, reinforcing harmonies and building immense drama.' },
+                'gran-cassa': { name: 'Gran Cassa', description: 'The Gran Cassa is the orchestral bass drum, an instrument of immense size and power. It produces a very low, resonant tone of indefinite pitch. Its role is to provide a deep, foundational anchor to the ensemble, marking significant moments with a powerful boom.' },
+                'cymbals': { name: 'Cymbals', description: 'Orchestral cymbals provide high-frequency shimmer and dramatic accents. They are most often used as crash cymbals, played in pairs and struck together for an explosive sound at musical climaxes. A single cymbal can also be suspended and played with mallets for a sustained, shimmering roll.' },
+                'tabla': { name: 'Tabla', description: 'The tabla is the iconic percussion instrument of North Indian classical music. It consists of a pair of small hand drums: the smaller, higher-pitched dayan, and the larger bayan bass drum. A master player uses complex finger and palm strokes to create intricate rhythmic cycles (talas).' },
+                'taiko': { name: 'Taiko', description: 'Taiko refers both to a range of Japanese drums and to the art of ensemble drumming. It is a deeply physical and visually stunning art form. The drums themselves range from the small shime-daiko to the massive o-daiko, whose thunderous sound is capable of shaking the ground.' },
+                'turkish-darbuka': { name: 'Turkish Darbuka', description: 'While similar to the Egyptian darbuka, the Turkish style has key differences. It is often made of lightweight metal and its head is attached with an exposed rim. This edge allows players to use advanced finger-snapping techniques, enabling incredibly fast and intricate rhythmic patterns.' },
+                'daf': { name: 'Daf', description: 'The daf is a large frame drum with ancient origins in the Middle East. It is composed of a wooden hoop with a skin membrane. A distinctive feature is the presence of interlocking metal rings on the inside, which produce a loud, jingling, and buzzing sound when the drum is played.' }
             };
 
             const instrumentModal = document.getElementById('instrument-modal');
@@ -3277,9 +2879,7 @@
             const closeModalBtn = document.getElementById('instrument-modal-close');
             let currentAudio = null;
 
-            modalImg.addEventListener('load', () => {
-                modalImg.style.visibility = 'visible';
-            });
+            modalImg.addEventListener('load', () => { modalImg.style.visibility = 'visible'; });
 
             document.querySelectorAll('.instrument-list').forEach(list => {
                 list.addEventListener('click', (e) => {
@@ -3288,19 +2888,12 @@
                         const data = instrumentData[instrumentId];
                         if (data) {
                             modalImg.style.visibility = 'hidden'; 
-
-                            const audioSrc = `assets/audio/${instrumentId}.mp3`;
-                            const imgSrc = `assets/img/instruments/${instrumentId}.jpg`;
-
                             modalName.textContent = data.name;
                             modalDesc.textContent = data.description;
-                            modalImg.src = imgSrc;
+                            modalImg.src = `assets/img/instruments/${instrumentId}.jpg`;
                             modalImg.alt = data.name;
-                            modalImg.onerror = () => {
-                                modalImg.src = `https://placehold.co/200x200/073B38/FFFFFF?text=${data.name.replace(/ /g, '+')}`;
-                                modalImg.style.visibility = 'visible';
-                            };
-                            soundBtn.dataset.audioSrc = audioSrc;
+                            modalImg.onerror = () => { modalImg.src = `https://placehold.co/200x200/073B38/FFFFFF?text=${data.name.replace(/ /g, '+')}`; modalImg.style.visibility = 'visible'; };
+                            soundBtn.dataset.audioSrc = `assets/audio/${instrumentId}.mp3`;
                             instrumentModal.classList.add('is-visible');
                         }
                     }
@@ -3308,64 +2901,27 @@
             });
 
             const playSound = (src) => {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio.currentTime = 0;
-                }
+                if (currentAudio) currentAudio.pause();
                 currentAudio = new Audio(src);
-                currentAudio.play().catch(error => {
-                    console.error("Error playing audio:", error);
-                });
+                currentAudio.play().catch(console.error);
             };
 
-            soundBtn.addEventListener('click', () => {
-                const audioSrc = soundBtn.dataset.audioSrc;
-                if (audioSrc) {
-                    playSound(audioSrc);
-                }
-            });
-
-            const closeInstrumentModal = () => {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio.currentTime = 0;
-                }
-                instrumentModal.classList.remove('is-visible');
-            };
-            
+            soundBtn.addEventListener('click', () => { if (soundBtn.dataset.audioSrc) playSound(soundBtn.dataset.audioSrc); });
+            const closeInstrumentModal = () => { if (currentAudio) currentAudio.pause(); instrumentModal.classList.remove('is-visible'); };
             closeModalBtn.addEventListener('click', closeInstrumentModal);
-            instrumentModal.addEventListener('click', (e) => {
-                if (e.target === instrumentModal) {
-                    closeInstrumentModal();
-                }
-            });
-            // --- FIN: LÓGICA DEL MODAL DE INSTRUMENTOS ---
+            instrumentModal.addEventListener('click', (e) => { if (e.target === instrumentModal) closeInstrumentModal(); });
 
-            // --- INICIO: LÓGICA DEL MODAL DE CONTACTO MÓVIL ---
+            // --- MOBILE CONTACT MODAL LOGIC ---
             const contactPhoneLink = document.getElementById('contact-phone-link');
             const contactAppsModal = document.getElementById('contact-apps-modal');
             const contactAppsCloseBtn = document.getElementById('contact-apps-close');
             
-            const isMobile = () => window.innerWidth <= 768;
-
-            contactPhoneLink.addEventListener('click', (e) => {
-                if (isMobile()) {
-                    e.preventDefault(); 
-                    contactAppsModal.classList.add('is-visible');
-                }
-            });
-
+            contactPhoneLink.addEventListener('click', (e) => { if (window.innerWidth <= 768) { e.preventDefault(); contactAppsModal.classList.add('is-visible'); } });
             const closeContactModal = () => contactAppsModal.classList.remove('is-visible');
             contactAppsCloseBtn.addEventListener('click', closeContactModal);
-            contactAppsModal.addEventListener('click', (e) => {
-                if (e.target === contactAppsModal) {
-                    closeContactModal();
-                }
-            });
-            // --- FIN: LÓGICA DEL MODAL DE CONTACTO MÓVIL ---
+            contactAppsModal.addEventListener('click', (e) => { if (e.target === contactAppsModal) closeContactModal(); });
         });
     </script>
 
 </body>
 </html>
-
