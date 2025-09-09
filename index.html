@@ -6,10 +6,13 @@
     <title>TEBF STUDIO - The Enciso's Beat Factory</title>
     
     <!-- Favicon Links -->
-    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/site.webmanifest">
+    <link rel="shortcut icon" href="assets/img/favicon.ico">
+    <meta name="msapplication-TileColor" content="#073B38">
+    <meta name="theme-color" content="#000000">
     
     <!-- Preload critical assets for faster initial rendering -->
     <link rel="preload" href="assets/img/logo.png" as="image">
@@ -1175,7 +1178,7 @@
             width: 100%;
             height: auto;
         }
-        .socials-cta-arrow .arrow-path {
+        .socials-cta-arrow .desktop-arrow .arrow-path {
             stroke: var(--color-secondary);
             stroke-width: 2;
             fill: none;
@@ -1183,7 +1186,7 @@
             stroke-dashoffset: 1000;
             animation: draw-arrow 2s ease-out forwards;
         }
-        .socials-cta-arrow .arrow-text {
+        .socials-cta-arrow .desktop-arrow .arrow-text {
             font-family: var(--font-body);
             font-size: 14px;
             fill: var(--color-primary);
@@ -1191,31 +1194,17 @@
             opacity: 0;
             animation: fade-in-text 1s ease-out 1s forwards;
         }
+        
+        .mobile-arrow-container {
+            display: none;
+        }
+
         @keyframes draw-arrow {
             to { stroke-dashoffset: 0; }
         }
         @keyframes fade-in-text {
             to { opacity: 1; }
         }
-
-        /* Punto de quiebre para apilar en móvil */
-        @media (max-width: 750px) {
-            .socials-cta-container {
-                flex-direction: column;
-                text-align: center;
-                align-items: center;
-                gap: 20px;
-            }
-            .socials-cta-text {
-                flex-basis: auto;
-            }
-            .socials-cta-arrow {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-        /* --- FIN: ESTILOS PARA EL LLAMADO A LA ACCIÓN DE REDES SOCIALES (AJUSTADOS) --- */
-
 
         /* --- FOOTER --- */
         .site-footer-bottom {
@@ -1547,6 +1536,51 @@
             .mobile-filter-trigger i {
                 font-size: 20px;
             }
+            
+            /* Punto de quiebre para apilar en móvil - CTA redes sociales */
+            .socials-cta-container {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+                gap: 30px;
+            }
+            .socials-cta-text {
+                flex-basis: auto;
+            }
+            .socials-cta-arrow {
+                width: 100%;
+                max-width: none;
+            }
+            .socials-cta-arrow .desktop-arrow {
+                display: none;
+            }
+            .mobile-arrow-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+            .mobile-arrow-container .arrow-text {
+                font-family: var(--font-body);
+                font-size: 14px;
+                color: var(--color-primary);
+                letter-spacing: 2px;
+                opacity: 0;
+                animation: fade-in-text 1s ease-out 1s forwards;
+                white-space: nowrap;
+            }
+            .mobile-arrow-container .mobile-arrow {
+                width: 20px;
+                height: 100px;
+            }
+            .mobile-arrow-container .mobile-arrow .arrow-path {
+                stroke: var(--color-secondary);
+                stroke-width: 2;
+                fill: none;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation: draw-arrow 2s ease-out forwards;
+            }
 
             .hero-section {
                 min-height: 85vh;
@@ -1743,12 +1777,12 @@
                                 <button class="filter-btn" data-filter="caribbean" data-group="style">Caribbean</button>
                                 <button class="filter-btn" data-filter="urban" data-group="style">Urban</button>
                                 <button class="filter-btn" data-filter="electronic" data-group="style">Electronic</button>
-                                <button class="filter-btn" data-filter="middle east/north africa" data-group="style">Middle East/North Africa</button>
-                                <button class="filter-btn" data-filter="europe/mediterranean" data-group="style">Europe/Mediterranean</button>
+                                <button class="filter-btn" data-filter="middle-east-north-africa" data-group="style">Middle East/North Africa</button>
+                                <button class="filter-btn" data-filter="europe-mediterranean" data-group="style">Europe/Mediterranean</button>
                                 <button class="filter-btn" data-filter="asia" data-group="style">Asia</button> 
                                 <button class="filter-btn" data-filter="rock,pop" data-group="style">Rock/Pop</button>
-                                <button class="filter-btn" data-filter="jazz/blues" data-group="style">Jazz/Blues</button>
-                                <button class="filter-btn" data-filter="funk/soul/r&b" data-group="style">Funk/Soul/R&B</button>
+                                <button class="filter-btn" data-filter="jazz,blues" data-group="style">Jazz/Blues</button>
+                                <button class="filter-btn" data-filter="funk,soul,r&b" data-group="style">Funk/Soul/R&B</button>
                                 <button class="filter-btn" data-filter="punk" data-group="style">Punk</button>
                                 <button class="filter-btn" data-filter="metal" data-group="style">Metal</button>
                                 <button class="filter-btn" data-filter="orchestral" data-group="style">Orchestral</button>
@@ -1771,7 +1805,7 @@
         </section>
         <!-- ========= PORTFOLIO SECTION END ========= -->
 
-        <!-- ========= GEAR SECTION START (NUEVA VERSIÓN) ========= -->
+        <!-- ========= GEAR SECTION START ========= -->
         <section id="gear" class="content-section">
             <div class="container">
                 <h2 class="section-title">The Factory Floor: Our Instruments & Tools</h2>
@@ -1943,7 +1977,7 @@
                         <h3>Our Philosophy: Analog Soul, Digital Precision</h3>
                         <p>We believe that timeless music is born from the perfect fusion of human emotion and technical excellence. Our philosophy is simple: capture the raw, authentic soul of a performance with the warmth of analog gear, and then polish it with the limitless possibilities of the digital world. We don't just record sounds; we forge sonic identities.</p>
                         <h3>The Architect Behind the Beat</h3>
-                        <p>The blueprint for TEBF Studio was drawn on stages worldwide. There, internationally touring percussionist Eduardo "Eddy" Enciso honed his innate understanding of rhythm, learning to engineer it into infectious hooks and signature sounds.</p>
+                        <p>The blueprint for TEBF Studio was drawn on stages worldwide. There, internationally touring percussionist Eduardo Enciso honed his innate understanding of rhythm, learning to engineer it into infectious hooks and signature sounds.</p>
                         <p>He then assembled his 'partners in crime'—a crew of master musicians and engineers—to forge The Beat Factory. Together, they fuse deep-rooted musical traditions with cutting-edge production, building every project with precision, soul, and a global perspective.</p>
                     </div>
                 </div>
@@ -2011,21 +2045,33 @@
                 <span class="gradient-text">Wanna know more about the factory?</span>
             </div>
             <div class="socials-cta-arrow">
-                <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Desktop Arrow -->
+                <svg class="desktop-arrow" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <marker id="arrowhead" markerWidth="10" markerHeight="7" 
-                        refX="0" refY="3.5" orient="auto">
+                        <marker id="arrowhead-desktop" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
                         </marker>
-                        <path id="arrow-curve" d="M 20 20 L 130 20 Q 180 20 230 80" />
+                        <path id="arrow-curve-desktop" d="M 20 20 L 130 20 Q 180 20 230 80" />
                     </defs>
-                    <use href="#arrow-curve" class="arrow-path" marker-end="url(#arrowhead)" />
+                    <use href="#arrow-curve-desktop" class="arrow-path" marker-end="url(#arrowhead-desktop)" />
                     <text class="arrow-text">
-                        <textPath href="#arrow-curve" startOffset="45%" text-anchor="middle">
+                        <textPath href="#arrow-curve-desktop" startOffset="45%" text-anchor="middle">
                             CHECK OUR SOCIALS
                         </textPath>
                     </text>
                 </svg>
+                <!-- Mobile Arrow and Text -->
+                <div class="mobile-arrow-container">
+                    <span class="arrow-text">CHECK OUR SOCIALS</span>
+                    <svg class="mobile-arrow" viewBox="0 0 20 120" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <marker id="arrowhead-mobile" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
+                            </marker>
+                        </defs>
+                        <path d="M 10 5 V 95" class="arrow-path" marker-end="url(#arrowhead-mobile)"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </section>

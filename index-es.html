@@ -6,10 +6,13 @@
     <title>TEBF STUDIO - La Fábrica de Beats de Enciso</title>
     
     <!-- Favicon Links -->
-    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/site.webmanifest">
+    <link rel="shortcut icon" href="assets/img/favicon.ico">
+    <meta name="msapplication-TileColor" content="#073B38">
+    <meta name="theme-color" content="#000000">
     
     <!-- Preload critical assets for faster initial rendering -->
     <link rel="preload" href="assets/img/logo.png" as="image">
@@ -1175,7 +1178,7 @@
             width: 100%;
             height: auto;
         }
-        .socials-cta-arrow .arrow-path {
+        .socials-cta-arrow .desktop-arrow .arrow-path {
             stroke: var(--color-secondary);
             stroke-width: 2;
             fill: none;
@@ -1183,7 +1186,7 @@
             stroke-dashoffset: 1000;
             animation: draw-arrow 2s ease-out forwards;
         }
-        .socials-cta-arrow .arrow-text {
+        .socials-cta-arrow .desktop-arrow .arrow-text {
             font-family: var(--font-body);
             font-size: 14px;
             fill: var(--color-primary);
@@ -1191,31 +1194,17 @@
             opacity: 0;
             animation: fade-in-text 1s ease-out 1s forwards;
         }
+        
+        .mobile-arrow-container {
+            display: none;
+        }
+
         @keyframes draw-arrow {
             to { stroke-dashoffset: 0; }
         }
         @keyframes fade-in-text {
             to { opacity: 1; }
         }
-
-        /* Punto de quiebre para apilar en móvil */
-        @media (max-width: 750px) {
-            .socials-cta-container {
-                flex-direction: column;
-                text-align: center;
-                align-items: center;
-                gap: 20px;
-            }
-            .socials-cta-text {
-                flex-basis: auto;
-            }
-            .socials-cta-arrow {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-        /* --- FIN: ESTILOS PARA EL LLAMADO A LA ACCIÓN DE REDES SOCIALES (AJUSTADOS) --- */
-
 
         /* --- FOOTER --- */
         .site-footer-bottom {
@@ -1547,6 +1536,51 @@
             .mobile-filter-trigger i {
                 font-size: 20px;
             }
+            
+            /* Punto de quiebre para apilar en móvil - CTA redes sociales */
+            .socials-cta-container {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+                gap: 30px;
+            }
+            .socials-cta-text {
+                flex-basis: auto;
+            }
+            .socials-cta-arrow {
+                width: 100%;
+                max-width: none;
+            }
+            .socials-cta-arrow .desktop-arrow {
+                display: none;
+            }
+            .mobile-arrow-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+            .mobile-arrow-container .arrow-text {
+                font-family: var(--font-body);
+                font-size: 14px;
+                color: var(--color-primary);
+                letter-spacing: 2px;
+                opacity: 0;
+                animation: fade-in-text 1s ease-out 1s forwards;
+                white-space: nowrap;
+            }
+            .mobile-arrow-container .mobile-arrow {
+                width: 20px;
+                height: 100px;
+            }
+            .mobile-arrow-container .mobile-arrow .arrow-path {
+                stroke: var(--color-secondary);
+                stroke-width: 2;
+                fill: none;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation: draw-arrow 2s ease-out forwards;
+            }
 
             .hero-section {
                 min-height: 85vh;
@@ -1616,7 +1650,7 @@
 </head>
 <body>
 
-    <!-- ========= HEADER START (Estructura Definitiva) ========= -->
+    <!-- ========= HEADER START ========= -->
     <header class="site-header">
         <div class="container header-container">
             <a href="index-es.html" class="logo-link">
@@ -1934,7 +1968,7 @@
                         <h3>Nuestra Filosofía: Alma Analógica, Precisión Digital</h3>
                         <p>Creemos que la música atemporal nace de la fusión perfecta entre emoción humana y excelencia técnica. Nuestra filosofía es simple: capturar el alma cruda y auténtica de una interpretación con la calidez del mundo análogo, para luego pulirla con las posibilidades ilimitadas del universo digital. No solo grabamos sonidos; forjamos identidades sonoras.</p>
                         <h3>El Arquitecto de los Beats</h3>
-                        <p>El plano de TEBF Studio se dibujó en tarimas por todo el mundo. Girando como percusionista internacional, Eduardo "Eddy" Enciso fue descifrando el ADN del sonido, descubriendo que su instinto para el ritmo era la clave para crear esos hooks que se te pegan y sonidos que marcan la diferencia.</p>
+                        <p>El plano de TEBF Studio se dibujó en tarimas por todo el mundo. Girando como percusionista internacional, Eduardo Enciso fue descifrando el ADN del sonido, descubriendo que su instinto para el ritmo era la clave para crear esos hooks que se te pegan y sonidos que marcan la diferencia.</p>
                         <p>Luego, reunió a su combo de cómplices —músicos e ingenieros obsesionados por el detalle sonoro— para forjar The Beat Factory. Juntos, fusionan la música de raíz con producción de punta, construyendo cada proyecto con precisión, alma y una visión global.</p>
                     </div>
                 </div>
@@ -1998,24 +2032,36 @@
     <section class="socials-cta">
         <div class="container socials-cta-container">
             <div class="socials-cta-text">
-                <span class="gradient-text">¿Quieres saber más sobre la fábrica?</span>
+                <span class="gradient-text">¿Quieres conocer los secretos de la fábrica?</span>
             </div>
             <div class="socials-cta-arrow">
-                <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+                 <!-- Desktop Arrow -->
+                 <svg class="desktop-arrow" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <marker id="arrowhead-es" markerWidth="10" markerHeight="7" 
-                        refX="0" refY="3.5" orient="auto">
+                        <marker id="arrowhead-es-desktop" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
                         </marker>
-                        <path id="arrow-curve-es" d="M 20 20 L 130 20 Q 180 20 230 80" />
+                        <path id="arrow-curve-es" d="M 20 20 L 170 20 Q 230 20 280 80" />
                     </defs>
-                    <use href="#arrow-curve-es" class="arrow-path" marker-end="url(#arrowhead-es)" />
+                    <use href="#arrow-curve-es" class="arrow-path" marker-end="url(#arrowhead-es-desktop)" />
                     <text class="arrow-text">
-                        <textPath href="#arrow-curve-es" startOffset="45%" text-anchor="middle">
+                        <textPath href="#arrow-curve-es" startOffset="50%" text-anchor="middle">
                             EXPLORA NUESTRAS REDES
                         </textPath>
                     </text>
                 </svg>
+                <!-- Mobile Arrow and Text -->
+                <div class="mobile-arrow-container">
+                    <span class="arrow-text">EXPLORA NUESTRAS REDES</span>
+                    <svg class="mobile-arrow" viewBox="0 0 20 120" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <marker id="arrowhead-es-mobile" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
+                            </marker>
+                        </defs>
+                        <path d="M 10 5 V 95" class="arrow-path" marker-end="url(#arrowhead-es-mobile)"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </section>
@@ -2117,7 +2163,7 @@
                             details: [
                                 {
                                     title: 'Grabación Vocal e Instrumental.',
-                                    text: 'Nuestro estudio es tu santuario. Creamos un ambiente cómodo y estimulante con gear de clase mundial para registrar tu mejor performance, garantizando que cada matiz se capture con calor análogo y claridad digital.'
+                                    text: 'Nuestro estudio es tu santuario. Creamos un ambiente cómodo y estimulante con gear de clase mundial para registrar tu mejor performance, garantizando que cada matiz se capture con la riqueza armónica de lo análogo y claridad digital.'
                                 },
                                 {
                                     title: 'Beatmaking y Pistas a Medida.',
@@ -2776,7 +2822,7 @@
                 }
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
-
+            
             function applyFilters(source = 'desktop') {
                 let activeAppFilters, activeStyleFilters;
                 let container = source === 'mobile' ? document.querySelector('.filter-panel-body') : desktopFilterContainer;
@@ -2786,14 +2832,6 @@
 
                 if (activeAppFilters.includes('all') || activeAppFilters.length === 0) activeAppFilters = [];
                 if (activeStyleFilters.includes('all') || activeStyleFilters.length === 0) activeStyleFilters = [];
-                
-                let noResultsContainer = document.getElementById('no-results-container');
-                if (!noResultsContainer) {
-                    noResultsContainer = document.createElement('div');
-                    noResultsContainer.id = 'no-results-container';
-                    noResultsContainer.className = 'no-results-message is-hidden';
-                    portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
-                }
 
                 const filteredData = portfolioItemsData.filter(item => {
                     const tags = item.tags.split(' ');
@@ -2807,6 +2845,15 @@
                     });
                     return appMatch && styleMatch;
                 });
+                
+                let noResultsContainer = document.getElementById('no-results-container');
+                if (!noResultsContainer) {
+                    noResultsContainer = document.createElement('div');
+                    noResultsContainer.id = 'no-results-container';
+                    noResultsContainer.className = 'no-results-message is-hidden';
+                    portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
+                }
+
 
                 if (filteredData.length > 0) {
                     portfolioSliderWrapper.classList.remove('is-hidden');
@@ -2826,7 +2873,7 @@
                     });
                 }
             }
-            
+
             // --- Mobile Filter Panel Logic ---
             const mobileFilterTrigger = document.getElementById('mobile-filter-trigger');
             const filterPanelOverlay = document.getElementById('filter-panel-overlay');
