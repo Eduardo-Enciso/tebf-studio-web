@@ -30,6 +30,9 @@
     <!-- Swiper.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
+    <!-- SoundCloud Widget API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
     <!-- INICIO DEL CÓDIGO CSS EMBEBIDO -->
     <style>
         /* --- RAÍZ DEL DISEÑO Y VARIABLES DE COLOR --- */
@@ -239,10 +242,17 @@
             color: transparent;
             margin: 0 auto;
         }
-
-        @keyframes neon-pulse {
-            from { box-shadow: 0 0 5px rgba(44, 236, 237, 0.6), 0 0 10px rgba(44, 236, 237, 0.4); }
-            to { box-shadow: 0 0 15px var(--color-primary), 0 0 25px var(--color-primary); }
+        
+        /* OPTIMIZED NEON PULSE ANIMATION */
+        @keyframes neon-pulse-optimized {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
         }
 
         .sound-button {
@@ -265,7 +275,9 @@
         }
         
         .sound-button.is-blinking {
-            animation: neon-pulse 0.25s infinite alternate ease-in-out;
+            /* Using a more performant animation */
+            animation: neon-pulse-optimized 0.5s infinite alternate ease-in-out;
+            box-shadow: 0 0 15px var(--color-primary);
         }
 
         .sound-button:hover {
@@ -311,7 +323,7 @@
         /* --- SECCIONES DE CONTENIDO GENERAL --- */
         main {
             padding-top: 80px; 
-            padding-bottom: 80px; /* Añadido para dar espacio de scroll al final */
+            padding-bottom: 80px; /* Added for final scroll space */
         }
 
         .content-section {
@@ -338,7 +350,7 @@
             font-size: 16px;
         }
 
-        /* --- INICIO: NUEVOS ESTILOS PARA SECCIÓN DE SERVICIOS --- */
+        /* --- START: NEW STYLES FOR SERVICES SECTION --- */
         .service-selector-container {
             display: flex;
             justify-content: center;
@@ -406,9 +418,9 @@
 
         .quote-btn:hover {
             transform: translateY(-3px) scale(1.05);
-            background-color: var(--current-service-color); /* Mantener color en hover */
+            background-color: var(--current-service-color); /* Keep color on hover */
         }
-        /* --- FIN: NUEVOS ESTILOS PARA SECCIÓN DE SERVICIOS --- */
+        /* --- END: NEW STYLES FOR SERVICES SECTION --- */
 
         .accordion-container {
             display: flex;
@@ -488,7 +500,7 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* --- SECCIÓN DE PORTFOLIO (CARRUSEL) --- */
+        /* --- PORTFOLIO SECTION (CAROUSEL) --- */
         #portfolio {
             padding-left: 0;
             padding-right: 0;
@@ -501,7 +513,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 20px; /* Espacio entre filas de filtros */
+            gap: 20px; /* Space between filter rows */
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 5%;
@@ -514,7 +526,7 @@
             align-items: center;
         }
         .filter-group[data-group-name="style"] .filter-btn {
-            margin-bottom: 10px; /* Espacio vertical extra SOLO para filtros de estilo */
+            margin-bottom: 10px; /* Extra vertical space ONLY for style filters */
         }
         .filter-group-label {
             font-family: var(--font-headings);
@@ -729,7 +741,7 @@
             color: var(--color-bg-1);
         }
 
-        /* --- NUEVOS ESTILOS PARA SECCIÓN DE GEAR --- */
+        /* --- NEW STYLES FOR GEAR SECTION --- */
         .gear-intro {
             display: flex;
             gap: 40px;
@@ -1036,7 +1048,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        /* --- NUEVOS ESTILOS PARA SECCIÓN ABOUT US --- */
+        /* --- NEW STYLES FOR ABOUT US SECTION --- */
         .about-wrapper {
             display: grid;
             grid-template-columns: 1fr 1.5fr;
@@ -1059,7 +1071,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        /* --- SECCIÓN DE CONTACTO --- */
+        /* --- CONTACT SECTION --- */
         .contact-wrapper {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1160,7 +1172,7 @@
             font-family: var(--font-headings);
         }
 
-        /* --- INICIO: ESTILOS PARA EL LLAMADO A LA ACCIÓN DE REDES SOCIALES (AJUSTADOS) --- */
+        /* --- START: STYLES FOR SOCIALS CTA (ADJUSTED) --- */
         .socials-cta {
             padding: 80px 0;
             border-bottom: 1px solid rgba(238, 143, 0, 0.2);
@@ -1189,7 +1201,7 @@
         .socials-cta-arrow svg {
             width: 100%;
             height: auto;
-            overflow: visible; /* Para que no se corte el brillo */
+            overflow: visible; /* To prevent glow from being cut */
         }
 
         @keyframes neon-arrow-glow {
@@ -1282,7 +1294,7 @@
             transform: translateY(-3px);
         }
 
-        /* --- ESTILOS PARA MODALES --- */
+        /* --- MODAL STYLES --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1592,7 +1604,7 @@
             padding: 15px;
             font-size: 16px;
         }
-        .filter-panel .clear-filters-btn { /* Estilo específico para panel móvil */
+        .filter-panel .clear-filters-btn { /* Specific style for mobile panel */
             background-color: transparent;
             border: 1px solid var(--color-accent);
             color: var(--color-accent);
@@ -1650,10 +1662,10 @@
             }
             .mobile-arrow-container {
                 display: flex;
-                flex-direction: column; /* Cambiado para alinear texto y flecha */
+                flex-direction: column; /* Changed to align text and arrow */
                 justify-content: center;
                 align-items: center;
-                gap: 15px; /* Ajustado */
+                gap: 15px; /* Adjusted */
                 animation: arrow-bounce 2s infinite ease-in-out;
             }
             .mobile-arrow-container .arrow-text {
@@ -1724,7 +1736,7 @@
                 grid-template-columns: 1fr;
             }
             .footer-container {
-                flex-direction: column-reverse; /* Íconos primero */
+                flex-direction: column-reverse; /* Icons first */
                 gap: 20px;
             }
             .instrument-modal-body {
@@ -1794,7 +1806,7 @@
 
     <!-- ========= HERO SECTION START ========= -->
     <section id="hero" class="hero-section">
-        <video autoplay muted playsinline class="hero-video" id="heroVideo">
+        <video autoplay muted playsinline loop class="hero-video" id="heroVideo">
             <source src="assets/logo-animado.webm" type="video/webm">
             <source src="assets/logo-animado.mp4" type="video/mp4">
             Your browser does not support video tags.
@@ -1829,7 +1841,7 @@
                 </div>
 
                 <div class="accordion-container" id="services-accordion">
-                    <!-- Los items del acordeón se generarán dinámicamente con JS -->
+                    <!-- Accordion items will be generated dynamically with JS -->
                 </div>
 
                 <div class="quote-btn-container" id="quote-btn-container">
@@ -1846,7 +1858,7 @@
                 <p class="section-subtitle">Explore a selection of our diverse productions. Use the filters to navigate through different applications and styles.</p>
                 
                 <div class="portfolio-filters-container">
-                    <!-- Botón para abrir filtros en móvil -->
+                    <!-- Button to open filters on mobile -->
                     <button class="mobile-filter-trigger" id="mobile-filter-trigger">
                         <i class="ri-filter-3-line"></i>
                         <span id="mobile-filter-trigger-text">Filter Projects</span>
@@ -1857,7 +1869,7 @@
                         <button id="clear-all-pills-btn" class="clear-all-pills-btn">Clear All</button>
                     </div>
                     
-                    <!-- Filtros para Desktop -->
+                    <!-- Filters for Desktop -->
                     <div class="portfolio-filters">
                         <div class="filter-group" data-group-name="app">
                             <span class="filter-group-label">Application:</span>
@@ -1901,8 +1913,11 @@
             <div class="portfolio-slider-wrapper">
                 <div class="swiper portfolio-swiper">
                     <div class="swiper-wrapper" id="portfolio-slider">
-                        <!-- Proyectos se insertan aquí con JS -->
+                        <!-- Projects are inserted here by JS -->
                     </div>
+                </div>
+                <div id="no-results-container" class="no-results-message is-hidden">
+                    <!-- No results message will be populated by JS -->
                 </div>
                 <div class="slider-navigation">
                     <button class="slider-btn portfolio-prev"><i class="ri-arrow-left-s-line"></i></button>
@@ -1927,8 +1942,8 @@
 
                 <h3 class="gear-subsection-title">The Heartbeat: A World of Percussion</h3>
                 <div class="percussion-map-container">
-                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=Mapa+Mundi';">
-                    <!-- Puntos Interactivos -->
+                    <img src="assets/img/mapa-mundi.png" alt="Stylized world map" class="world-map-img" onerror="this.onerror=null;this.src='https://placehold.co/800x400/000000/FFFFFF?text=World+Map';">
+                    <!-- Interactive Points -->
                     <div class="map-dot" id="dot-colombia" data-region="colombia" title="Colombia"></div>
                     <div class="map-dot" id="dot-peru" data-region="peru" title="Peru"></div>
                     <div class="map-dot" id="dot-brazil" data-region="brazil" title="Brazil"></div>
@@ -1943,7 +1958,7 @@
                     <div class="map-dot" id="dot-india" data-region="india" title="India"></div>
                 </div>
                 <p class="map-caption">A world of rhythm awaits. Click a region to explore the drums for your track.</p>
-                <!-- Paneles de Instrumentos (Ocultos por defecto) -->
+                <!-- Instrument Panels (Hidden by default) -->
                 <div id="panel-colombia" class="instrument-panel"><h4>Colombia<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="vallenato-box">Vallenato Box</button></li><li><button class="instrument-list-item" data-instrument="guacharaca">Guacharaca</button></li><li><button class="instrument-list-item" data-instrument="cununo">Cununo (Macho & Hembra)</button></li><li><button class="instrument-list-item" data-instrument="pacific-bombo">Pacific Bombo (Macho & Hembra)</button></li><li><button class="instrument-list-item" data-instrument="guasa">Guasá</button></li><li><button class="instrument-list-item" data-instrument="atlantic-tambora">Atlantic Tambora</button></li><li><button class="instrument-list-item" data-instrument="alegre-drum">Alegre Drum</button></li><li><button class="instrument-list-item" data-instrument="guacho">Guacho</button></li><li><button class="instrument-list-item" data-instrument="maracon">Maracón</button></li><li><button class="instrument-list-item" data-instrument="capachos">Capachos Llaneros</button></li></ul></div>
                 <div id="panel-cuba" class="instrument-panel"><h4>Cuba<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="congas">Congas</button></li><li><button class="instrument-list-item" data-instrument="bongo">Bongó</button></li><li><button class="instrument-list-item" data-instrument="timbales">Timbales</button></li><li><button class="instrument-list-item" data-instrument="guiro">Güiro</button></li><li><button class="instrument-list-item" data-instrument="maracas">Maracas</button></li><li><button class="instrument-list-item" data-instrument="cowbells">Bell Set (Cowbells)</button></li><li><button class="instrument-list-item" data-instrument="jam-blocks">Jam Blocks</button></li><li><button class="instrument-list-item" data-instrument="claves">Claves</button></li></ul></div>
                 <div id="panel-peru" class="instrument-panel"><h4>Peru<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="peruvian-cajon">Peruvian Cajon</button></li><li><button class="instrument-list-item" data-instrument="quijada">Quijada (Vibraslap)</button></li></ul></div>
@@ -1957,16 +1972,16 @@
                 <div id="panel-japan" class="instrument-panel"><h4>Japan<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="taiko">Taiko Set</button></li></ul></div>
                 <div id="panel-turkey" class="instrument-panel"><h4>Turkey<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="turkish-darbuka">Turkish Darbuka</button></li><li><button class="instrument-list-item" data-instrument="daf">Daf</button></li></ul></div>
 
-                <!-- SECCIÓN DE BATERÍAS -->
+                <!-- DRUM KIT SECTION -->
                 <h3 class="gear-subsection-title">The Engine Room: Sonic Blueprints</h3>
                 <div class="drum-kits-container">
                     <div class="drum-kit-card">
-                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Yamaha';">
+                        <img src="assets/img/bateria-big.jpg" alt="Yamaha Maple Custom Absolute Big-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Yamaha+Kit';">
                         <h3>The "Big Rig" Configuration</h3>
                         <p>This is our workhorse for a sound that is both massive and explosive. We configure the Yamaha Maple Custom Absolute with a thunderous 22" kick and a full set of toms (10" to 16") to deliver a deep, fat tone with a commanding punch. It's the definitive choice for creating a powerful, resonant foundation in Rock, Pop, Funk, Latin and Metal.</p>
                     </div>
                     <div class="drum-kit-card">
-                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Batería+Gretsch';">
+                        <img src="assets/img/bateria-small.jpg" alt="Yamaha Maple Custom Absolute Small-Size Configuration kit" class="drum-kit-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/073B38/FFFFFF?text=Gretsch+Kit';">
                         <h3>The "Finesse" Configuration</h3>
                         <p>When precision is paramount, we re-tool the kit for its "Finesse" setup. Centered on a tight, melodic 18" kick and smaller, responsive toms, this configuration produces a crisp, articulate sound that sings with warmth and nuance. It’s the perfect choice for capturing every ghost note and subtle detail in Jazz, Fusion, Folkloric, Urban, R&B, and Singer-Songwriter sessions.</p>
                     </div>
@@ -1980,7 +1995,7 @@
                     </div>
                 </div>
 
-                <!-- NUEVA SECCIÓN DE INSTRUMENTOS MELÓDICOS -->
+                <!-- NEW MELODIC INSTRUMENTS SECTION -->
                 <h3 class="gear-subsection-title">Beyond Rhythm: Melodic & Harmonic Foundations</h3>
                 <p class="section-subtitle">The Beat Factory isn't just about the pulse; it's about building the harmonic and melodic soul that elevates your production. We have a unique range of mallet instruments to add authenticity, color, and convey every emotion.</p>
                 <div class="mallet-instrument-container">
@@ -2004,7 +2019,7 @@
                     </div>
                 </div>
 
-                <!-- INICIO: NUEVA SECCIÓN DIGITAL -->
+                <!-- START: NEW DIGITAL SECTION -->
                 <h3 class="gear-subsection-title">The Modern Forge: Where Bytes Become Beats</h3>
                 <div class="mallet-instrument-container" style="margin-bottom: 60px;">
                     <div class="mallet-card">
@@ -2017,7 +2032,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- FIN: NUEVA SECCIÓN DIGITAL -->
+                <!-- END: NEW DIGITAL SECTION -->
 
                 <h3 class="gear-subsection-title">The Arsenal: Studio & Technical Gear</h3>
                 <div class="tech-gear-grid">
@@ -2145,7 +2160,7 @@
         <!-- ========= CONTACT SECTION END ========= -->
     </main>
 
-    <!-- ========= INICIO: LLAMADO A LA ACCIÓN PARA REDES SOCIALES ========= -->
+    <!-- ========= START: SOCIALS CTA ========= -->
     <section class="socials-cta">
         <div class="container socials-cta-container">
             <div class="socials-cta-text">
@@ -2182,7 +2197,7 @@
             </div>
         </div>
     </section>
-    <!-- ========= FIN: LLAMADO A LA ACCIÓN PARA REDES SOCIALES ========= -->
+    <!-- ========= END: SOCIALS CTA ========= -->
 
     <!-- ========= FOOTER START ========= -->
     <footer class="site-footer-bottom">
@@ -2198,7 +2213,7 @@
     </footer>
     <!-- ========= FOOTER END ========= -->
     
-    <!-- ========= MODAL PARA INSTRUMENTOS START ========= -->
+    <!-- ========= INSTRUMENT MODAL START ========= -->
     <div class="modal-overlay" id="instrument-modal">
         <div class="modal-content">
             <button class="modal-close-btn" id="instrument-modal-close"><i class="ri-close-line"></i></button>
@@ -2216,7 +2231,7 @@
             </div>
         </div>
     </div>
-    <!-- ========= MODAL PARA INSTRUMENTOS END ========= -->
+    <!-- ========= INSTRUMENT MODAL END ========= -->
 
     <!-- ========= MOBILE FILTER PANEL START ========= -->
     <div class="filter-panel-overlay" id="filter-panel-overlay">
@@ -2236,7 +2251,7 @@
     </div>
     <!-- ========= MOBILE FILTER PANEL END ========= -->
 
-    <!-- ========= MODAL PARA APPS DE CONTACTO START ========= -->
+    <!-- ========= CONTACT APPS MODAL START ========= -->
     <div class="modal-overlay" id="contact-apps-modal">
         <div class="modal-content">
              <button class="modal-close-btn" id="contact-apps-close"><i class="ri-close-line"></i></button>
@@ -2248,14 +2263,14 @@
              </div>
         </div>
     </div>
-    <!-- ========= MODAL PARA APPS DE CONTACTO END ========= -->
+    <!-- ========= CONTACT APPS MODAL END ========= -->
 
     <!-- Swiper.js JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // --- INICIO: LÓGICA DE SERVICIOS DINÁMICOS ---
+            // --- START: DYNAMIC SERVICES LOGIC ---
             const servicesData = {
                 artist: {
                     themeColor: 'var(--color-artist)',
@@ -2527,12 +2542,27 @@
 
             updateServices('artist');
 
-            // --- SCRIPT FOR ALL OTHER PAGE FUNCTIONALITY ---
+            // --- HERO VIDEO & SOUND LOGIC ---
             const video = document.getElementById('heroVideo');
             const soundButton = document.getElementById('sound-toggle');
             const iconMute = document.getElementById('icon-mute');
             const iconUnmute = document.getElementById('icon-unmute');
             const heroOverlay = document.querySelector('.hero-overlay');
+
+            // NEW: Intersection Observer for hero video performance
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            if (video) {
+                videoObserver.observe(video);
+            }
 
             if (soundButton && video && iconMute && iconUnmute && heroOverlay) {
                 soundButton.addEventListener('click', () => {
@@ -2548,15 +2578,7 @@
                 });
             }
 
-            if (video) {
-                video.addEventListener('timeupdate', function() {
-                    if (this.duration && (this.currentTime > this.duration - 0.18)) {
-                        this.currentTime = 0;
-                        this.play();
-                    }
-                });
-            }
-
+            // --- MOBILE NAVIGATION ---
             const mobileNavToggle = document.getElementById('mobile-nav-toggle');
             const mobileNav = document.getElementById('mobile-nav');
             const mobileNavIcon = document.getElementById('mobile-nav-icon');
@@ -2576,6 +2598,7 @@
                 });
             }
 
+            // --- GEAR MAP LOGIC ---
             const mapDots = document.querySelectorAll('.map-dot');
             const instrumentPanels = document.querySelectorAll('.instrument-panel');
             const closePanelButtons = document.querySelectorAll('.close-panel-btn');
@@ -2612,8 +2635,11 @@
                 });
             });
 
-            // --- PORTFOLIO LOGIC START ---
+            // --- START: CORRECTED AND OPTIMIZED PORTFOLIO LOGIC ---
             const portfolioSliderEl = document.getElementById('portfolio-slider');
+            let swiperInstance;
+            let soundcloudPlayers = []; // To store SoundCloud widget instances
+
             const portfolioItemsData = [
                 { title: 'Desde Cero - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
                 { title: 'Andarele - Isabel Deverell', desc: 'Marimba & Ethnic Percussion Recording', tags: 'music-production colombian africa latin', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/andarele-fragment', artistLinks: { spotify: 'https://www.deezer.com/en/artist/186445987', instagram: 'https://www.instagram.com/isabeldeverell/', youtube: 'https://www.youtube.com/channel/UCYVDJeWBjuxvP5BxQCc-VXg', facebook: 'https://www.facebook.com/isabel.deverellvallarino/' }},
@@ -2649,25 +2675,10 @@
                 { title: 'Viernes y el cuerpo lo sabe - Fercho Son', desc: 'Percussion Recording', tags: 'music-production latin', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/viernes-y-el-cuerpo-lo-sabe-fragment', artistLinks: { facebook: 'https://www.facebook.com/hernando.velasquez.9847', instagram: 'https://www.instagram.com/fercho_son/', youtube: 'https://www.youtube.com/@ferchoson' }},
             ];
 
-            let swiperInstance;
             const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
             const desktopFilterContainer = document.querySelector('.portfolio-filters');
             
-            function initializeSwiper(slidesHTML) {
-                if (swiperInstance) swiperInstance.destroy(true, true);
-                portfolioSliderEl.innerHTML = slidesHTML;
-                swiperInstance = new Swiper('.portfolio-swiper', {
-                    loop: portfolioSliderEl.children.length > 2,
-                    slidesPerView: 'auto',
-                    centeredSlides: true,
-                    spaceBetween: 30,
-                    grabCursor: true,
-                    navigation: { nextEl: '.portfolio-next', prevEl: '.portfolio-prev' },
-                    breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
-                });
-            }
-            
-            function createPortfolioItem(item) {
+            function createPortfolioItemHTML(item) {
                 const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
                 const iconMap = { 
                     spotify: { class: 'ri-spotify-fill', title: 'Listen on Spotify' }, 
@@ -2683,37 +2694,74 @@
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
                 const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${window.innerWidth <= 768}`;
+                // NEW: visual=false to improve performance
+                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
                 const mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
             
+            function initializeSwiper(slidesHTML) {
+                // Ensure any playing audio is stopped before destroying
+                soundcloudPlayers.forEach(player => player.pause());
+                soundcloudPlayers = []; // Reset the players array
+
+                if (swiperInstance) swiperInstance.destroy(true, true);
+                
+                portfolioSliderEl.innerHTML = slidesHTML;
+
+                if (!portfolioSliderEl.children.length) {
+                     // No slides, no swiper
+                    return;
+                }
+
+                swiperInstance = new Swiper('.portfolio-swiper', {
+                    loop: portfolioSliderEl.children.length > 2,
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    spaceBetween: 30,
+                    grabCursor: true,
+                    navigation: { nextEl: '.portfolio-next', prevEl: '.portfolio-prev' },
+                    breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
+                });
+
+                // Initialize SoundCloud widgets for the new slides
+                const iframes = portfolioSliderEl.querySelectorAll('iframe');
+                iframes.forEach((iframe) => {
+                    const player = SC.Widget(iframe);
+                    soundcloudPlayers.push(player);
+                });
+
+                // Add event listener to pause other players when one starts
+                soundcloudPlayers.forEach((player, index) => {
+                    player.bind(SC.Widget.Events.PLAY, () => {
+                        soundcloudPlayers.forEach((otherPlayer, otherIndex) => {
+                            if (index !== otherIndex) {
+                                otherPlayer.pause();
+                            }
+                        });
+                    });
+                });
+            }
+            
             function applyFilters(source = 'desktop') {
                 const container = source === 'mobile' ? filterPanelBody : desktopFilterContainer;
-                
                 const activeAppFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="app"].active:not([data-filter="all"])')).map(btn => btn.dataset.filter);
                 const activeStyleFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="style"].active:not([data-filter="all"])')).map(btn => btn.dataset.filter.split(',')).flat();
 
                 const filteredData = portfolioItemsData.filter(item => {
                     const tags = item.tags.split(' ');
-
                     const appMatch = activeAppFilters.length === 0 || activeAppFilters.some(filter => tags.includes(filter));
                     const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => tags.includes(filter));
-
                     return appMatch && styleMatch;
                 });
                 
-                const noResultsContainer = document.getElementById('no-results-container') || document.createElement('div');
-                if (!noResultsContainer.id) {
-                    noResultsContainer.id = 'no-results-container';
-                    noResultsContainer.className = 'no-results-message is-hidden';
-                    portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
-                }
+                const noResultsContainer = document.getElementById('no-results-container');
 
                 if (filteredData.length > 0) {
                     portfolioSliderWrapper.classList.remove('is-hidden');
                     noResultsContainer.classList.add('is-hidden');
-                    initializeSwiper(filteredData.map(createPortfolioItem).join(''));
+                    const newSlidesHTML = filteredData.map(createPortfolioItemHTML).join('');
+                    initializeSwiper(newSlidesHTML);
                 } else {
                     if (swiperInstance) swiperInstance.destroy(true, true);
                     swiperInstance = null;
@@ -2721,12 +2769,10 @@
                     noResultsContainer.classList.remove('is-hidden');
                     noResultsContainer.innerHTML = `<h3>No Matches Found</h3><p>Try adjusting your filters or reset them to see all projects.</p><button class="reset-filters-btn">Reset Filters</button>`;
                     noResultsContainer.querySelector('.reset-filters-btn').addEventListener('click', () => {
-                        const filterContainer = source === 'mobile' ? filterPanelBody : desktopFilterContainer;
-                        filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                        filterContainer.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
-                        applyFilters(source);
+                        clearAllFilters(source);
                     });
                 }
+                
                 if (source === 'mobile') updateActiveFilterDisplay();
                 updateDesktopClearButtonVisibility();
             }
@@ -2815,10 +2861,12 @@
                     if (source === 'desktop') applyFilters('desktop');
                 });
             }
-
+            
+            // --- Final setup calls ---
+            applyFilters('desktop'); // Initial load
             setupFilterButtons(desktopFilterContainer, 'desktop');
             setupFilterButtons(filterPanelBody, 'mobile');
-            applyFilters('desktop');
+            // --- END: CORRECTED PORTFOLIO LOGIC ---
 
             // --- INSTRUMENT MODAL LOGIC ---
             const instrumentData = {
@@ -2926,3 +2974,4 @@
 
 </body>
 </html>
+
