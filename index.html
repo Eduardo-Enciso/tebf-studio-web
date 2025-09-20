@@ -723,12 +723,13 @@
         }
 
         /* CORRECTED: Hover state only for devices that support it (prevents sticky hover on mobile) */
-        @media (hover: hover) {
+        @media (hover: hover) and (pointer: fine) {
             .slider-btn:hover {
                 background-color: var(--color-primary);
                 color: var(--color-bg-1);
             }
         }
+
 
         .no-results-message {
             text-align: center;
@@ -2671,7 +2672,7 @@
             let soundcloudPlayers = []; // To store SoundCloud widget instances
 
             const portfolioItemsData = [
-                { title: 'Desde Cero - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-R5x1b6g5t2T4-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
+                 { title: 'Desde Cero - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-R5x1b6g5t2T4-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
                 { title: 'Andarele - Isabel Deverell', desc: 'Marimba & Ethnic Percussion Recording', tags: 'music-production colombian africa latin', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/andarele-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-v33n7BPQvWvG-0-t500x500.jpg', artistLinks: { spotify: 'https://www.deezer.com/en/artist/186445987', instagram: 'https://www.instagram.com/isabeldeverell/', youtube: 'https://www.youtube.com/channel/UCYVDJeWBjuxvP5BxQCc-VXg', facebook: 'https://www.facebook.com/isabel.deverellvallarino/' }},
                 { title: 'Que Bello - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production pop', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/que-bello-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-89f5c228-56bf-4547-b37d-5e26a63574d7-0-t500x500.jpg', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
                 { title: 'Ontabas - Dame El Panuelo (Fundación Nuna Kallpa)', desc: 'Percussion & Remaster', tags: 'audio-for-media colombian andean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ontabas-dame-el-panuelo-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-U7g3v1s9k9fF-0-t500x500.jpg', artistLinks: { instagram: 'https://www.instagram.com/fundacion_nunakallpa/', facebook: 'https://www.facebook.com/profile.php?id=100063674015860' }},
@@ -2689,7 +2690,7 @@
                 { title: 'Las Mayoras - Ioel', desc: 'Marimba & Ethnic Percussion Recording', tags: 'audio-for-media urban colombian africa', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/las-mayoras-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-qV6rY9eJgQnJ-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
                 { title: 'El Trompo Sarandengue - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican colombian', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/el-trompo-sarandengue-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-R5x1b6g5t2T4-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
                 { title: 'Tantu Pa´lante- Jane Riascos FT Qritiqal', desc: 'Percussion & Remaster', tags: 'music-production urban electronic caribbean', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/tantu-palante-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-hV6g6t3x5p6U-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/5JTl6HjmqGYBPMsTzkn7On?si=7EaiOt1bQ9OtsQZ1TYD64w&nd=1&dlsi=4db2786d71f34f2b', instagram: 'https://www.instagram.com/janeriascos/', youtube: 'https://www.youtube.com/@janeriascosmusic', facebook: 'https://www.facebook.com/janeriascos/' }},
-                { title: 'Cariñito - Alain Elcubano', desc: 'Ethnic percussion recording', tags: 'music-production latin urban colombian', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/carinito-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-000481282298-i12q2v-t500x500.jpg', artistLinks: { instagram: 'https://www.instagram.com/alainelcuban0/', facebook: 'https://www.facebook.com/alainelcuban0' }},
+                { title: 'Cariñito - Alain Elcubano', desc: 'Ethnic percussion recording', tags: 'music-production latin urban colombian', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/carinito-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-000481281488-825z5e-t500x500.jpg', artistLinks: { instagram: 'https://www.instagram.com/alainelcuban0/', facebook: 'https://www.facebook.com/alainelcuban0' }},
                 { title: 'Y si tal vez es nunca - Mer Jack', desc: 'Drums & Remaster', tags: 'music-production rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/y-si-tal-vez-es-nunca-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-89f5c228-56bf-4547-b37d-5e26a63574d7-0-t500x500.jpg', artistLinks: { instagram: 'https://www.instagram.com/merjack3/', youtube: 'https://www.youtube.com/@merjack-fernandocruz', facebook: 'https://www.facebook.com/lacovidparranda' }},
                 { title: 'Migrante - Ioel', desc: 'Percussion & Remaster', tags: 'music-production latin urban', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/migrante-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-a335f6bb-7d8b-45e5-911b-ac453531b9d4-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/2ss0kBG8jYBlcq5XORPmFm', instagram: 'https://www.instagram.com/ioel_cantautor/', youtube: 'https://www.youtube.com/channel/UCIRINzez2-2pqTowKNUAu8A', facebook: 'https://www.facebook.com/Ioel.cantautor/' }},
                 { title: 'Ruge - Jon Wolff', desc: 'Drums & Remaster', tags: 'music-production rock', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/ruge-fragment', artworkSrc: 'https://i1.sndcdn.com/artworks-4y7s2g4t7w6I-0-t500x500.jpg', artistLinks: { spotify: 'https://open.spotify.com/artist/1T3HqYX31Zg6MIwZnkSJaz', youtube: 'https://www.youtube.com/@jonwolff_' }},
@@ -3012,5 +3013,4 @@
 
 </body>
 </html>
-
 
