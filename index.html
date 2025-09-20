@@ -638,7 +638,9 @@
             border: none;
             width: 100%;
         }
-
+        
+        /* CORRECTED: Mobile layout for portfolio items no longer needed */
+        
         .portfolio-info {
             padding: 20px;
             display: flex;
@@ -1635,19 +1637,6 @@
         }
 
         @media (max-width: 768px) {
-            /* NEW: Styles for mobile portfolio item layout */
-            .portfolio-media-container {
-                flex-direction: column;
-            }
-            .portfolio-artwork-img {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 1 / 1;
-            }
-            .portfolio-embed-wrapper iframe {
-                height: 100px; /* Reduced height for the simple player */
-            }
-
             .portfolio-filters-container {
                  background: none;
                  border: none;
@@ -2725,16 +2714,29 @@
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
                 const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                // NEW: visual=false for performance, artwork is now handled by a separate <img> tag
-                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
                 
-                const mediaHTML = `
-                    <div class="portfolio-media-container">
-                        <img src="${item.artworkSrc}" class="portfolio-artwork-img" alt="Artwork for ${item.title}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/166x166/073B38/FFFFFF?text=Artwork';">
-                        <div class="portfolio-embed-wrapper">
-                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe>
+                // FINAL STRATEGY: Determine player type based on screen width *once*
+                const useVisualPlayer = window.innerWidth > 768;
+                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${useVisualPlayer}`;
+                
+                // Conditionally render the artwork image
+                let mediaHTML = '';
+                if (useVisualPlayer) {
+                    // PC view: SoundCloud player with built-in visual
+                    mediaHTML = `<div class="portfolio-embed-wrapper" style="height: 166px;">
+                                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe>
+                                 </div>`;
+                } else {
+                    // Mobile view: Static image + simple player
+                    mediaHTML = `
+                        <div class="portfolio-media-container">
+                            <img src="${item.artworkSrc}" class="portfolio-artwork-img" alt="Artwork for ${item.title}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/166x166/073B38/FFFFFF?text=Artwork';">
                         </div>
-                    </div>`;
+                        <div class="portfolio-embed-wrapper" style="height: 100px;">
+                           <iframe width="100%" height="100" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe>
+                        </div>`;
+                }
+
 
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
@@ -3013,4 +3015,5 @@
 
 </body>
 </html>
+
 
