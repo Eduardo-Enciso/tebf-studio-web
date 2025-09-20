@@ -708,9 +708,19 @@
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .slider-btn:hover {
+        
+        /* NEW: Active state for tap feedback on all devices */
+        .slider-btn:active {
             background-color: var(--color-primary);
             color: var(--color-bg-1);
+        }
+
+        /* MODIFIED: Hover state only for devices that support it (prevents sticky hover on mobile) */
+        @media (hover: hover) {
+            .slider-btn:hover {
+                background-color: var(--color-primary);
+                color: var(--color-bg-1);
+            }
         }
 
         .no-results-message {
@@ -2694,8 +2704,8 @@
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
                 const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                // NEW: visual=false to improve performance
-                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
+                // NEW: visual=true to show artwork on all devices, as requested.
+                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`;
                 const mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
@@ -2974,4 +2984,5 @@
 
 </body>
 </html>
+
 
