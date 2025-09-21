@@ -30,6 +30,9 @@
     <!-- Swiper.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
+    <!-- SoundCloud Widget API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
     <!-- INICIO DEL CÓDIGO CSS EMBEBIDO -->
     <style>
         /* --- RAÍZ DEL DISEÑO Y VARIABLES DE COLOR --- */
@@ -239,10 +242,17 @@
             color: transparent;
             margin: 0 auto;
         }
-
-        @keyframes neon-pulse {
-            from { box-shadow: 0 0 5px rgba(44, 236, 237, 0.6), 0 0 10px rgba(44, 236, 237, 0.4); }
-            to { box-shadow: 0 0 15px var(--color-primary), 0 0 25px var(--color-primary); }
+        
+        /* OPTIMIZED NEON PULSE ANIMATION */
+        @keyframes neon-pulse-optimized {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
         }
 
         .sound-button {
@@ -265,7 +275,8 @@
         }
         
         .sound-button.is-blinking {
-            animation: neon-pulse 0.25s infinite alternate ease-in-out;
+            animation: neon-pulse-optimized 0.5s infinite alternate ease-in-out;
+            box-shadow: 0 0 15px var(--color-primary);
         }
 
         .sound-button:hover {
@@ -311,7 +322,7 @@
         /* --- SECCIONES DE CONTENIDO GENERAL --- */
         main {
             padding-top: 80px; 
-            padding-bottom: 80px; /* Añadido para dar espacio de scroll al final */
+            padding-bottom: 80px; /* Added for final scroll space */
         }
 
         .content-section {
@@ -338,7 +349,7 @@
             font-size: 16px;
         }
 
-        /* --- INICIO: NUEVOS ESTILOS PARA SECCIÓN DE SERVICIOS --- */
+        /* --- START: NEW STYLES FOR SERVICES SECTION --- */
         .service-selector-container {
             display: flex;
             justify-content: center;
@@ -406,9 +417,9 @@
 
         .quote-btn:hover {
             transform: translateY(-3px) scale(1.05);
-            background-color: var(--current-service-color); /* Mantener color en hover */
+            background-color: var(--current-service-color); /* Keep color on hover */
         }
-        /* --- FIN: NUEVOS ESTILOS PARA SECCIÓN DE SERVICIOS --- */
+        /* --- END: NEW STYLES FOR SERVICES SECTION --- */
 
         .accordion-container {
             display: flex;
@@ -488,7 +499,7 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* --- SECCIÓN DE PORTFOLIO (CARRUSEL) --- */
+        /* --- PORTFOLIO SECTION (CAROUSEL) --- */
         #portfolio {
             padding-left: 0;
             padding-right: 0;
@@ -501,7 +512,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 20px; /* Espacio entre filas de filtros */
+            gap: 20px; /* Space between filter rows */
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 5%;
@@ -514,7 +525,7 @@
             align-items: center;
         }
         .filter-group[data-group-name="style"] .filter-btn {
-            margin-bottom: 10px; /* Espacio vertical extra SOLO para filtros de estilo */
+            margin-bottom: 10px; /* Extra vertical space ONLY for style filters */
         }
         .filter-group-label {
             font-family: var(--font-headings);
@@ -606,19 +617,30 @@
             display: flex;
             flex-direction: column;
         }
-        .portfolio-image {
+
+        /* --- START: SoundCloud Classic Player Scaling Styles --- */
+        .soundcloud-classic-wrapper {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .portfolio-embed-wrapper {
+            aspect-ratio: 480 / 166; /* Maintain aspect ratio */
+            overflow: hidden;
+            position: relative;
             background-color: #051a19;
-            line-height: 0;
         }
-        .portfolio-embed-wrapper iframe {
-            border: none;
+        .soundcloud-classic-viewport {
+            position: absolute;
+            width: 480px; /* Force desktop width */
+            height: 166px; /* Classic player height */
+            top: 0;
+            left: 0;
+            transform-origin: 0 0;
+            /* transform: scale() is applied by JavaScript */
+        }
+        .soundcloud-classic-viewport iframe {
             width: 100%;
+            height: 100%;
+            border: none;
         }
+        /* --- END: SoundCloud Classic Player Scaling Styles --- */
 
         .portfolio-info {
             padding: 20px;
@@ -696,9 +718,19 @@
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .slider-btn:hover {
+
+        /* New class for touch feedback */
+        .slider-btn.btn-active-touch {
             background-color: var(--color-primary);
             color: var(--color-bg-1);
+        }
+
+        /* Restrict hover effect to devices that can truly hover */
+        @media (hover: hover) {
+            .slider-btn:hover {
+                background-color: var(--color-primary);
+                color: var(--color-bg-1);
+            }
         }
 
         .no-results-message {
@@ -1794,7 +1826,7 @@
 
     <!-- ========= HERO SECTION START ========= -->
     <section id="hero" class="hero-section">
-        <video autoplay muted playsinline class="hero-video" id="heroVideo">
+        <video autoplay muted playsinline loop class="hero-video" id="heroVideo">
             <source src="assets/logo-animado.webm" type="video/webm">
             <source src="assets/logo-animado.mp4" type="video/mp4">
             Tu navegador no soporta la etiqueta de video.
@@ -1902,6 +1934,8 @@
                     <div class="swiper-wrapper" id="portfolio-slider">
                     </div>
                 </div>
+                <div id="no-results-container" class="no-results-message is-hidden">
+                </div>
                 <div class="slider-navigation">
                     <button class="slider-btn portfolio-prev"><i class="ri-arrow-left-s-line"></i></button>
                     <button class="slider-btn portfolio-next"><i class="ri-arrow-right-s-line"></i></button>
@@ -1953,6 +1987,7 @@
                 <div id="panel-japan" class="instrument-panel"><h4>Japón<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="taiko">Set de Taiko</button></li></ul></div>
                 <div id="panel-turkey" class="instrument-panel"><h4>Turquía<button class="close-panel-btn"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="turkish-darbuka">Darbuka Turca</button></li><li><button class="instrument-list-item" data-instrument="daf">Daf</button></li></ul></div>
 
+                <!-- DRUM KIT SECTION -->
                 <h3 class="gear-subsection-title">La Sala de Máquinas: Configurando Tu Sonido</h3>
                 <div class="drum-kits-container">
                     <div class="drum-kit-card">
@@ -1975,6 +2010,7 @@
                     </div>
                 </div>
 
+                <!-- NEW MELODIC INSTRUMENTS SECTION -->
                 <h3 class="gear-subsection-title">Más Allá del Ritmo: Cimientos Melódicos y Armónicos</h3>
                 <p class="section-subtitle">La Fábrica de Beats no solo forja ritmos exquisitos; también puede forjar el alma armónica y melódica que elevará tu producción. Tenemos una gama única de teclados percutidos para añadir autenticidad, color y transmitir cada emoción.</p>
                 <div class="mallet-instrument-container">
@@ -1998,6 +2034,7 @@
                     </div>
                 </div>
 
+                <!-- START: NEW DIGITAL SECTION -->
                 <h3 class="gear-subsection-title">La Fragua Moderna: Donde los Bytes se Convierten en Beats</h3>
                 <div class="mallet-instrument-container" style="margin-bottom: 60px;">
                     <div class="mallet-card">
@@ -2010,6 +2047,8 @@
                         </div>
                     </div>
                 </div>
+                <!-- END: NEW DIGITAL SECTION -->
+
                 <h3 class="gear-subsection-title">El Arsenal: Equipo Técnico y de Estudio</h3>
                 <div class="tech-gear-grid">
                     <div class="gear-category">
@@ -2517,13 +2556,27 @@
 
             updateServices('artist');
 
-            // --- SCRIPT FOR ALL OTHER PAGE FUNCTIONALITY ---
+            // --- HERO VIDEO & SOUND LOGIC ---
             const video = document.getElementById('heroVideo');
             const soundButton = document.getElementById('sound-toggle');
             const iconMute = document.getElementById('icon-mute');
             const iconUnmute = document.getElementById('icon-unmute');
             const heroOverlay = document.querySelector('.hero-overlay');
+            
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.1 });
 
+            if (video) {
+                videoObserver.observe(video);
+            }
+            
             if (soundButton && video && iconMute && iconUnmute && heroOverlay) {
                 soundButton.addEventListener('click', () => {
                     video.muted = !video.muted;
@@ -2538,15 +2591,7 @@
                 });
             }
 
-            if (video) {
-                video.addEventListener('timeupdate', function() {
-                    if (this.duration && (this.currentTime > this.duration - 0.18)) {
-                        this.currentTime = 0;
-                        this.play();
-                    }
-                });
-            }
-
+            // --- MOBILE NAVIGATION ---
             const mobileNavToggle = document.getElementById('mobile-nav-toggle');
             const mobileNav = document.getElementById('mobile-nav');
             const mobileNavIcon = document.getElementById('mobile-nav-icon');
@@ -2566,6 +2611,7 @@
                 });
             }
 
+            // --- GEAR MAP LOGIC ---
             const mapDots = document.querySelectorAll('.map-dot');
             const instrumentPanels = document.querySelectorAll('.instrument-panel');
             const closePanelButtons = document.querySelectorAll('.close-panel-btn');
@@ -2602,8 +2648,23 @@
                 });
             });
 
-            // --- PORTFOLIO LOGIC START ---
+            // --- START: UNIFIED SOUNDCLOUD PLAYER LOGIC ---
             const portfolioSliderEl = document.getElementById('portfolio-slider');
+            let swiperInstance;
+            let soundcloudPlayers = [];
+
+            // Function to scale the classic SoundCloud players
+            function scaleClassicPlayers() {
+                const wrappers = document.querySelectorAll('.soundcloud-classic-wrapper');
+                wrappers.forEach(wrapper => {
+                    const viewport = wrapper.querySelector('.soundcloud-classic-viewport');
+                    if (viewport) {
+                        const scale = wrapper.offsetWidth / 480;
+                        viewport.style.transform = `scale(${scale})`;
+                    }
+                });
+            }
+
             const portfolioItemsData = [
                 { title: 'Desde Cero - David Sierra & La Ple-B', desc: 'Grabación de Batería y Percusión', tags: 'produccion-musical mexicano', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
                 { title: 'Andarele - Isabel Deverell', desc: 'Grabación de Marimba y Percusiones del Mundo', tags: 'produccion-musical colombiano africa latino', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/andarele-fragment', artistLinks: { spotify: 'https://www.deezer.com/en/artist/186445987', instagram: 'https://www.instagram.com/isabeldeverell/', youtube: 'https://www.youtube.com/channel/UCYVDJeWBjuxvP5BxQCc-VXg', facebook: 'https://www.facebook.com/isabel.deverellvallarino/' }},
@@ -2639,25 +2700,10 @@
                 { title: 'Viernes y el cuerpo lo sabe - Fercho Son', desc: 'Grabación de Percusión', tags: 'produccion-musical latino', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/viernes-y-el-cuerpo-lo-sabe-fragment', artistLinks: { facebook: 'https://www.facebook.com/hernando.velasquez.9847', instagram: 'https://www.instagram.com/fercho_son/', youtube: 'https://www.youtube.com/@ferchoson' }},
             ];
 
-            let swiperInstance;
             const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
             const desktopFilterContainer = document.querySelector('.portfolio-filters');
             
-            function initializeSwiper(slidesHTML) {
-                if (swiperInstance) swiperInstance.destroy(true, true);
-                portfolioSliderEl.innerHTML = slidesHTML;
-                swiperInstance = new Swiper('.portfolio-swiper', {
-                    loop: portfolioSliderEl.children.length > 2,
-                    slidesPerView: 'auto',
-                    centeredSlides: true,
-                    spaceBetween: 30,
-                    grabCursor: true,
-                    navigation: { nextEl: '.portfolio-next', prevEl: '.portfolio-prev' },
-                    breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
-                });
-            }
-            
-            function createPortfolioItem(item) {
+            function createPortfolioItemHTML(item) {
                 const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
                 const iconMap = { 
                     spotify: { class: 'ri-spotify-fill', title: 'Escuchar en Spotify' }, 
@@ -2672,38 +2718,77 @@
                     const linksArray = Object.keys(item.artistLinks).map(key => iconMap[key] && item.artistLinks[key] ? `<a href="${item.artistLinks[key]}" target="_blank" title="${iconMap[key].title}"><i class="${iconMap[key].class}"></i></a>` : '').join('');
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
+
                 const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=${window.innerWidth <= 768}`;
-                const mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
+                const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
+                const mediaHTML = `
+                    <div class="soundcloud-classic-wrapper">
+                        <div class="soundcloud-classic-viewport">
+                            <iframe width="480" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe>
+                        </div>
+                    </div>`;
+
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
+            }
+            
+            function initializeSwiper(slidesHTML) {
+                soundcloudPlayers.forEach(player => player.pause());
+                soundcloudPlayers = [];
+
+                if (swiperInstance) swiperInstance.destroy(true, true);
+                
+                portfolioSliderEl.innerHTML = slidesHTML;
+
+                if (!portfolioSliderEl.children.length) {
+                    return;
+                }
+
+                swiperInstance = new Swiper('.portfolio-swiper', {
+                    loop: portfolioSliderEl.children.length > 2,
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    spaceBetween: 30,
+                    grabCursor: true,
+                    navigation: { nextEl: '.portfolio-next', prevEl: '.portfolio-prev' },
+                    breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
+                });
+
+                swiperInstance.on('transitionEnd', scaleClassicPlayers);
+                swiperInstance.on('resize', scaleClassicPlayers);
+
+                const iframes = portfolioSliderEl.querySelectorAll('iframe');
+                iframes.forEach((iframe) => {
+                    const player = SC.Widget(iframe);
+                    soundcloudPlayers.push(player);
+                    player.bind(SC.Widget.Events.PLAY, () => {
+                        soundcloudPlayers.forEach((otherPlayer) => {
+                            if (player !== otherPlayer) otherPlayer.pause();
+                        });
+                    });
+                });
+
+                scaleClassicPlayers();
             }
             
             function applyFilters(source = 'desktop') {
                 const container = source === 'mobile' ? filterPanelBody : desktopFilterContainer;
-                
                 const activeAppFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="app"].active:not([data-filter="all"])')).map(btn => btn.dataset.filter);
                 const activeStyleFilters = Array.from(container.querySelectorAll('.filter-btn[data-group="style"].active:not([data-filter="all"])')).map(btn => btn.dataset.filter.split(',')).flat();
 
                 const filteredData = portfolioItemsData.filter(item => {
                     const tags = item.tags.split(' ');
-
                     const appMatch = activeAppFilters.length === 0 || activeAppFilters.some(filter => tags.includes(filter));
                     const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => tags.includes(filter));
-
                     return appMatch && styleMatch;
                 });
                 
-                const noResultsContainer = document.getElementById('no-results-container') || document.createElement('div');
-                if (!noResultsContainer.id) {
-                    noResultsContainer.id = 'no-results-container';
-                    noResultsContainer.className = 'no-results-message is-hidden';
-                    portfolioSliderWrapper.insertAdjacentElement('afterend', noResultsContainer);
-                }
+                const noResultsContainer = document.getElementById('no-results-container');
 
                 if (filteredData.length > 0) {
                     portfolioSliderWrapper.classList.remove('is-hidden');
                     noResultsContainer.classList.add('is-hidden');
-                    initializeSwiper(filteredData.map(createPortfolioItem).join(''));
+                    const newSlidesHTML = filteredData.map(createPortfolioItemHTML).join('');
+                    initializeSwiper(newSlidesHTML);
                 } else {
                     if (swiperInstance) swiperInstance.destroy(true, true);
                     swiperInstance = null;
@@ -2711,12 +2796,10 @@
                     noResultsContainer.classList.remove('is-hidden');
                     noResultsContainer.innerHTML = `<h3>No se Encontraron Coincidencias</h3><p>Intenta ajustar tus filtros o reinícialos para ver todos los proyectos.</p><button class="reset-filters-btn">Reiniciar Filtros</button>`;
                     noResultsContainer.querySelector('.reset-filters-btn').addEventListener('click', () => {
-                        const filterContainer = source === 'mobile' ? filterPanelBody : desktopFilterContainer;
-                        filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                        filterContainer.querySelectorAll('.filter-btn[data-filter="all"]').forEach(btn => btn.classList.add('active'));
-                        applyFilters(source);
+                        clearAllFilters(source);
                     });
                 }
+                
                 if (source === 'mobile') updateActiveFilterDisplay();
                 updateDesktopClearButtonVisibility();
             }
@@ -2805,10 +2888,21 @@
                     if (source === 'desktop') applyFilters('desktop');
                 });
             }
-
+            
+            applyFilters('desktop');
             setupFilterButtons(desktopFilterContainer, 'desktop');
             setupFilterButtons(filterPanelBody, 'mobile');
-            applyFilters('desktop');
+            window.addEventListener('resize', scaleClassicPlayers);
+
+            const sliderButtons = document.querySelectorAll('.slider-btn');
+            sliderButtons.forEach(button => {
+                const handleTouchStart = () => button.classList.add('btn-active-touch');
+                const handleTouchEnd = () => button.classList.remove('btn-active-touch');
+
+                button.addEventListener('touchstart', handleTouchStart, { passive: true });
+                button.addEventListener('touchend', handleTouchEnd);
+                button.addEventListener('touchcancel', handleTouchEnd);
+            });
 
             // --- INSTRUMENT MODAL LOGIC ---
             const instrumentData = {
@@ -2916,4 +3010,3 @@
 
 </body>
 </html>
-

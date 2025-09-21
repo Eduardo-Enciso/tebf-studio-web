@@ -618,19 +618,30 @@
             display: flex;
             flex-direction: column;
         }
-        .portfolio-image {
+
+        /* --- START: SoundCloud Classic Player Scaling Styles --- */
+        .soundcloud-classic-wrapper {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .portfolio-embed-wrapper {
+            aspect-ratio: 480 / 166; /* Maintain aspect ratio */
+            overflow: hidden;
+            position: relative;
             background-color: #051a19;
-            line-height: 0;
         }
-        .portfolio-embed-wrapper iframe {
-            border: none;
+        .soundcloud-classic-viewport {
+            position: absolute;
+            width: 480px; /* Force desktop width */
+            height: 166px; /* Classic player height */
+            top: 0;
+            left: 0;
+            transform-origin: 0 0;
+            /* transform: scale() is applied by JavaScript */
+        }
+        .soundcloud-classic-viewport iframe {
             width: 100%;
+            height: 100%;
+            border: none;
         }
+        /* --- END: SoundCloud Classic Player Scaling Styles --- */
 
         .portfolio-info {
             padding: 20px;
@@ -708,9 +719,19 @@
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .slider-btn:hover {
+
+        /* New class for touch feedback */
+        .slider-btn.btn-active-touch {
             background-color: var(--color-primary);
             color: var(--color-bg-1);
+        }
+
+        /* Restrict hover effect to devices that can truly hover */
+        @media (hover: hover) {
+            .slider-btn:hover {
+                background-color: var(--color-primary);
+                color: var(--color-bg-1);
+            }
         }
 
         .no-results-message {
@@ -2549,7 +2570,6 @@
             const iconUnmute = document.getElementById('icon-unmute');
             const heroOverlay = document.querySelector('.hero-overlay');
 
-            // NEW: Intersection Observer for hero video performance
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2635,10 +2655,22 @@
                 });
             });
 
-            // --- START: CORRECTED AND OPTIMIZED PORTFOLIO LOGIC ---
+            // --- START: UNIFIED SOUNDCLOUD PLAYER LOGIC ---
             const portfolioSliderEl = document.getElementById('portfolio-slider');
             let swiperInstance;
-            let soundcloudPlayers = []; // To store SoundCloud widget instances
+            let soundcloudPlayers = [];
+
+            // Function to scale the classic SoundCloud players
+            function scaleClassicPlayers() {
+                const wrappers = document.querySelectorAll('.soundcloud-classic-wrapper');
+                wrappers.forEach(wrapper => {
+                    const viewport = wrapper.querySelector('.soundcloud-classic-viewport');
+                    if (viewport) {
+                        const scale = wrapper.offsetWidth / 480;
+                        viewport.style.transform = `scale(${scale})`;
+                    }
+                });
+            }
 
             const portfolioItemsData = [
                 { title: 'Desde Cero - David Sierra & La Ple-B', desc: 'Drums & Percussion Recording', tags: 'music-production mexican', soundcloudUrl: 'https://soundcloud.com/the-encisos-beat-factory/desde-cero-fragment', artistLinks: { spotify: 'https://open.spotify.com/artist/4Axb5PjNHcJ4J5ktTVoWyd?si=D0ay8tgwTIKQUM2Jlt-evw&nd=1&dlsi=e85d3ca035fa44b6', instagram: 'https://www.instagram.com/davidsierramusica', youtube: 'https://www.youtube.com/davidsierramusica', facebook: 'https://www.facebook.com/davidsierramusica' }},
@@ -2693,24 +2725,29 @@
                     const linksArray = Object.keys(item.artistLinks).map(key => iconMap[key] && item.artistLinks[key] ? `<a href="${item.artistLinks[key]}" target="_blank" title="${iconMap[key].title}"><i class="${iconMap[key].class}"></i></a>` : '').join('');
                     if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
                 }
+
                 const encodedUrl = encodeURIComponent(item.soundcloudUrl);
-                // NEW: visual=false to improve performance
+                // REVERTED to visual=false and implemented scaling solution
                 const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
-                const mediaHTML = `<div class="portfolio-embed-wrapper"><iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div>`;
+                const mediaHTML = `
+                    <div class="soundcloud-classic-wrapper">
+                        <div class="soundcloud-classic-viewport">
+                            <iframe width="480" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe>
+                        </div>
+                    </div>`;
+
                 return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
             }
             
             function initializeSwiper(slidesHTML) {
-                // Ensure any playing audio is stopped before destroying
                 soundcloudPlayers.forEach(player => player.pause());
-                soundcloudPlayers = []; // Reset the players array
+                soundcloudPlayers = [];
 
                 if (swiperInstance) swiperInstance.destroy(true, true);
                 
                 portfolioSliderEl.innerHTML = slidesHTML;
 
                 if (!portfolioSliderEl.children.length) {
-                     // No slides, no swiper
                     return;
                 }
 
@@ -2724,23 +2761,22 @@
                     breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
                 });
 
-                // Initialize SoundCloud widgets for the new slides
+                // Scale players after swiper is initialized and on slide change
+                swiperInstance.on('transitionEnd', scaleClassicPlayers);
+                swiperInstance.on('resize', scaleClassicPlayers);
+
                 const iframes = portfolioSliderEl.querySelectorAll('iframe');
                 iframes.forEach((iframe) => {
                     const player = SC.Widget(iframe);
                     soundcloudPlayers.push(player);
-                });
-
-                // Add event listener to pause other players when one starts
-                soundcloudPlayers.forEach((player, index) => {
                     player.bind(SC.Widget.Events.PLAY, () => {
-                        soundcloudPlayers.forEach((otherPlayer, otherIndex) => {
-                            if (index !== otherIndex) {
-                                otherPlayer.pause();
-                            }
+                        soundcloudPlayers.forEach((otherPlayer) => {
+                            if (player !== otherPlayer) otherPlayer.pause();
                         });
                     });
                 });
+
+                scaleClassicPlayers(); // Initial scale
             }
             
             function applyFilters(source = 'desktop') {
@@ -2862,11 +2898,26 @@
                 });
             }
             
-            // --- Final setup calls ---
-            applyFilters('desktop'); // Initial load
+            applyFilters('desktop');
             setupFilterButtons(desktopFilterContainer, 'desktop');
             setupFilterButtons(filterPanelBody, 'mobile');
-            // --- END: CORRECTED PORTFOLIO LOGIC ---
+            window.addEventListener('resize', scaleClassicPlayers);
+
+            // --- START: Mobile Touch Feedback for Slider Buttons ---
+            const sliderButtons = document.querySelectorAll('.slider-btn');
+            sliderButtons.forEach(button => {
+                const handleTouchStart = () => {
+                    button.classList.add('btn-active-touch');
+                };
+                const handleTouchEnd = () => {
+                    button.classList.remove('btn-active-touch');
+                };
+
+                button.addEventListener('touchstart', handleTouchStart, { passive: true });
+                button.addEventListener('touchend', handleTouchEnd);
+                button.addEventListener('touchcancel', handleTouchEnd);
+            });
+            // --- END: Mobile Touch Feedback for Slider Buttons ---
 
             // --- INSTRUMENT MODAL LOGIC ---
             const instrumentData = {
@@ -2974,4 +3025,5 @@
 
 </body>
 </html>
+
 
