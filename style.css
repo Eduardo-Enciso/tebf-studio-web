@@ -27,11 +27,8 @@
     box-sizing: border-box;
 }
 
-/* CORRECCIÓN 1.4: Respetar Preferencias de Movimiento */
-@media (prefers-reduced-motion: no-preference) {
-    html {
-        scroll-behavior: smooth;
-    }
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -47,7 +44,6 @@ body {
     margin: 0 auto;
 }
 
-/* CORRECCIÓN 1.1: Clase para Accesibilidad (Ocultar visualmente) */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -59,6 +55,39 @@ body {
     white-space: nowrap;
     border-width: 0;
 }
+
+/* --- ACCESIBILIDAD: ESTILOS DE FOCO VISIBLE --- */
+*:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+/* Ajuste específico para botones redondos usando box-shadow para respetar el border-radius */
+.accordion-toggle:focus-visible,
+.slider-btn:focus-visible,
+.sound-button:focus-visible,
+.map-dot:focus-visible {
+    outline: none;
+    /* Crea un anillo de foco doble (color de fondo + color primario) */
+    box-shadow: 0 0 0 3px var(--color-bg-1), 0 0 0 6px var(--color-primary);
+}
+
+/* --- ACCESIBILIDAD: RESPETAR MOVIMIENTO REDUCIDO --- */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    /* Detiene todas las animaciones y transiciones no esenciales */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Asegura que la flecha CTA esté dibujada si se detiene la animación de trazado */
+  .socials-cta-arrow .arrow-path {
+      stroke-dashoffset: 0 !important;
+  }
+}
+
 
 /* --- HEADER Y NAVEGACIÓN --- */
 .site-header {
@@ -783,7 +812,6 @@ main {
     opacity: 0.8; 
 }
 
-/* CORRECCIÓN 1.2: Estilos para .map-dot como botón */
 .map-dot {
     position: absolute;
     width: 14px; 
@@ -1614,6 +1642,11 @@ main {
 }
 
 @media (max-width: 768px) {
+    .map-dot {
+        width: 7px;
+        height: 7px;
+    }
+
     .portfolio-filters-container {
          background: none;
          border: none;

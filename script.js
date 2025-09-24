@@ -175,16 +175,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- GEAR MAP LOGIC ---
     document.querySelectorAll('.map-dot').forEach(dot => {
+        dot.setAttribute('aria-pressed', 'false');
+
         dot.addEventListener('click', () => {
             const region = dot.dataset.region;
             const targetPanel = document.getElementById(`panel-${region}`);
             if (dot.classList.contains('active')) {
                 dot.classList.remove('active');
+                dot.setAttribute('aria-pressed', 'false');
                 if (targetPanel) targetPanel.style.display = 'none';
             } else {
-                document.querySelectorAll('.map-dot').forEach(d => d.classList.remove('active'));
+                document.querySelectorAll('.map-dot').forEach(d => {
+                    d.classList.remove('active');
+                    d.setAttribute('aria-pressed', 'false');
+                });
                 document.querySelectorAll('.instrument-panel').forEach(p => p.style.display = 'none');
                 dot.classList.add('active');
+                dot.setAttribute('aria-pressed', 'true');
                 if (targetPanel) {
                     targetPanel.style.display = 'block';
                     targetPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -200,7 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const dotToDeactivate = document.getElementById(`dot-${region}`);
             
             panelToClose.style.display = 'none';
-            if (dotToDeactivate) dotToDeactivate.classList.remove('active');
+            if (dotToDeactivate) {
+                dotToDeactivate.classList.remove('active');
+                dotToDeactivate.setAttribute('aria-pressed', 'false');
+            }
             const mapContainer = document.querySelector('.percussion-map-container');
             if (mapContainer) mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
@@ -477,4 +487,3 @@ document.addEventListener('DOMContentLoaded', function () {
         contactAppsModal.addEventListener('click', (e) => { if (e.target === contactAppsModal) closeContactModal(); });
     }
 });
-
