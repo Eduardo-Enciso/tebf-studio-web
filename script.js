@@ -1,16 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // --- DYNAMIC SERVICES LOGIC ---
+    // This section remains unchanged as it controls the services accordion.
     const servicesData = {};
     const servicesDataContainer = document.getElementById('services-data');
     
-    // Read services data from the HTML data attributes
     if (servicesDataContainer) {
         servicesDataContainer.querySelectorAll('[data-client-profile]').forEach(profileDiv => {
             const clientType = profileDiv.dataset.clientProfile;
             servicesData[clientType] = {
-                // The theme color is now handled purely by CSS variables in the style.css file.
-                // We'll grab it from the root style if needed, but the core logic is CSS-based.
                 accordion: Array.from(profileDiv.querySelectorAll('.service-item')).map(itemDiv => {
                     return {
                         title: itemDiv.dataset.title,
@@ -117,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateServices(clientType);
             }
         });
-        updateServices('artist'); // Initial load
+        updateServices('artist');
     }
 
 
@@ -215,8 +213,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     
-    // --- PORTFOLIO LOGIC ---
+    // --- PORTFOLIO LAZY LOAD LOGIC (DEFINITIVE VERSION) ---
     const portfolioItemsData = Array.from(document.querySelectorAll('#portfolio-slider-data .portfolio-data-item')).map(el => ({
+        // This is our single source of truth.
+        isLoaded: false, // Our persistent memory flag.
         title: el.dataset.title,
         desc: el.dataset.desc,
         tags: el.dataset.tags,
@@ -233,7 +233,83 @@ document.addEventListener('DOMContentLoaded', function () {
     
     const portfolioSliderEl = document.getElementById('portfolio-slider');
     let swiperInstance;
-    let soundcloudPlayers = [];
+    let initialLoadTriggered = false;
+    let fullLoadTriggered = false;
+
+    function findDataObject(slideElement) {
+        if (!slideElement) return null;
+        const url = slideElement.dataset.soundcloudUrl;
+        return portfolioItemsData.find(item => item.soundcloudUrl === url);
+    }
+
+    function loadIframeForSlide(slideElement) {
+        const dataObject = findDataObject(slideElement);
+        if (!dataObject || dataObject.isLoaded) return;
+
+        const placeholder = slideElement.querySelector('.soundcloud-placeholder');
+        if (!placeholder) return;
+        
+        dataObject.isLoaded = true; // Update the master data object
+        slideElement.classList.add('is-loaded');
+
+        const soundcloudUrl = placeholder.dataset.src;
+        const title = placeholder.dataset.title;
+
+        const viewport = document.createElement('div');
+        viewport.className = 'soundcloud-classic-viewport';
+        
+        const iframe = document.createElement('iframe');
+        iframe.title = `SoundCloud player for ${title}`;
+        iframe.width = '480';
+        iframe.height = '166';
+        iframe.scrolling = 'no';
+        iframe.frameBorder = 'no';
+        iframe.allow = 'autoplay';
+        iframe.src = soundcloudUrl;
+        
+        viewport.appendChild(iframe);
+        placeholder.parentNode.replaceChild(viewport, placeholder);
+        
+        scaleClassicPlayers();
+    }
+    
+    function triggerFullLoadWithPriority() {
+        if (fullLoadTriggered) return;
+        fullLoadTriggered = true;
+        console.log("User interaction detected. Loading all remaining players with priority.");
+
+        // Priority Load: Load the currently active slide first.
+        if (swiperInstance && swiperInstance.slides[swiperInstance.activeIndex]) {
+            loadIframeForSlide(swiperInstance.slides[swiperInstance.activeIndex]);
+        }
+        
+        // Load the rest in the background.
+        requestAnimationFrame(() => {
+            document.querySelectorAll('#portfolio-slider .swiper-slide:not(.is-loaded)').forEach(loadIframeForSlide);
+        });
+    }
+    
+    function triggerInitialSmartLoad() {
+        if (initialLoadTriggered) return;
+        initialLoadTriggered = true;
+        console.log("Portfolio in view. Performing initial smart load.");
+
+        if (portfolioItemsData.length === 0) return;
+
+        const findSlideByUrl = (url) => document.querySelector(`.swiper-slide[data-soundcloud-url="${url}"]`);
+
+        if (window.innerWidth > 768) {
+            console.log("Desktop detected. Loading 3 players.");
+            loadIframeForSlide(findSlideByUrl(portfolioItemsData[portfolioItemsData.length - 1].soundcloudUrl));
+            loadIframeForSlide(findSlideByUrl(portfolioItemsData[0].soundcloudUrl));
+            if (portfolioItemsData.length > 1) {
+                loadIframeForSlide(findSlideByUrl(portfolioItemsData[1].soundcloudUrl));
+            }
+        } else {
+            console.log("Mobile detected. Loading 1 player.");
+            loadIframeForSlide(findSlideByUrl(portfolioItemsData[0].soundcloudUrl));
+        }
+    }
 
     function scaleClassicPlayers() {
         document.querySelectorAll('.soundcloud-classic-wrapper').forEach(wrapper => {
@@ -244,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
+    
     function createPortfolioItemHTML(item) {
         const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
         const iconMap = { 
@@ -262,21 +338,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 .join('');
             if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
         }
+        
         const encodedUrl = encodeURIComponent(item.soundcloudUrl);
         const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
-        const mediaHTML = `<div class="soundcloud-classic-wrapper"><div class="soundcloud-classic-viewport"><iframe title="SoundCloud player for ${item.title}" width="480" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe></div></div>`;
-        return `<div class="swiper-slide portfolio-item" data-tags="${item.tags}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
+        
+        let mediaHTML;
+        // The check now happens against the master data object.
+        if (item.isLoaded) {
+            mediaHTML = `<div class="soundcloud-classic-wrapper">
+                <div class="soundcloud-classic-viewport">
+                    <iframe title="SoundCloud player for ${item.title}" width="480" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${soundcloudSrc}"></iframe>
+                </div>
+            </div>`;
+        } else {
+            mediaHTML = `<div class="soundcloud-classic-wrapper"><div class="soundcloud-placeholder" data-src="${soundcloudSrc}" data-title="${item.title}"></div></div>`;
+        }
+        
+        return `<div class="swiper-slide portfolio-item ${item.isLoaded ? 'is-loaded' : ''}" data-tags="${item.tags}" data-soundcloud-url="${item.soundcloudUrl}">${mediaHTML}<div class="portfolio-info"><h3 class="portfolio-title">${item.title}</h3><p class="portfolio-desc">${item.desc}</p><div class="portfolio-tags">${tagsHTML}</div>${linksHTML}</div></div>`;
     }
     
-    function initializeSwiper(slidesHTML) {
-        soundcloudPlayers.forEach(player => player.pause());
-        soundcloudPlayers = [];
+    function initializeSwiper(dataToRender) {
         if (swiperInstance) swiperInstance.destroy(true, true);
-        if (portfolioSliderEl) portfolioSliderEl.innerHTML = slidesHTML;
+        
+        const slidesHTML = dataToRender.map(createPortfolioItemHTML).join('');
+        portfolioSliderEl.innerHTML = slidesHTML;
+        
         if (!portfolioSliderEl || !portfolioSliderEl.children.length) return;
 
         swiperInstance = new Swiper('.portfolio-swiper', {
-            loop: portfolioSliderEl.children.length > 2,
+            loop: dataToRender.length > 2,
             slidesPerView: 'auto',
             centeredSlides: true,
             spaceBetween: 30,
@@ -285,22 +375,12 @@ document.addEventListener('DOMContentLoaded', function () {
             breakpoints: { 320: { spaceBetween: 15 }, 768: { spaceBetween: 20 }, 1024: { spaceBetween: 30 }}
         });
 
+        swiperInstance.on('navigationNext', triggerFullLoadWithPriority);
+        swiperInstance.on('navigationPrev', triggerFullLoadWithPriority);
+        swiperInstance.el.addEventListener('pointerdown', triggerFullLoadWithPriority, { once: true });
         swiperInstance.on('transitionEnd', scaleClassicPlayers);
         swiperInstance.on('resize', scaleClassicPlayers);
-
-        portfolioSliderEl.querySelectorAll('iframe').forEach((iframe) => {
-            try {
-                const player = SC.Widget(iframe);
-                soundcloudPlayers.push(player);
-                player.bind(SC.Widget.Events.PLAY, () => {
-                    soundcloudPlayers.forEach((otherPlayer) => {
-                        if (player !== otherPlayer) otherPlayer.pause();
-                    });
-                });
-            } catch (e) {
-                console.error("SoundCloud Widget Error:", e);
-            }
-        });
+        
         scaleClassicPlayers();
     }
     
@@ -315,15 +395,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => tags.includes(filter));
             return appMatch && styleMatch;
         });
-        
+
+        // Trigger full load BEFORE rebuilding, ensuring all potentially visible items are ready.
+        triggerFullLoadWithPriority();
+
         const noResultsContainer = document.getElementById('no-results-container');
         const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
-
+        
         if (filteredData.length > 0) {
             portfolioSliderWrapper.classList.remove('is-hidden');
             noResultsContainer.classList.add('is-hidden');
-            const newSlidesHTML = filteredData.map(createPortfolioItemHTML).join('');
-            initializeSwiper(newSlidesHTML);
+            initializeSwiper(filteredData);
         } else {
             if (swiperInstance) swiperInstance.destroy(true, true);
             swiperInstance = null;
@@ -337,9 +419,12 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDesktopClearButtonVisibility();
     }
     
+    // --- Setup for Filters and Lazy Load Trigger ---
     const desktopFilterContainer = document.querySelector('.portfolio-filters');
     const filterPanelBody = document.querySelector('.filter-panel-body');
-    if (desktopFilterContainer && filterPanelBody) {
+    const portfolioSection = document.getElementById('portfolio');
+
+    if (desktopFilterContainer && filterPanelBody && portfolioSection) {
         filterPanelBody.innerHTML = desktopFilterContainer.innerHTML;
 
         const mobileFilterTrigger = document.getElementById('mobile-filter-trigger');
@@ -357,9 +442,23 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('clear-all-pills-btn').addEventListener('click', () => clearAllFilters('mobile'));
         desktopClearBtn.addEventListener('click', () => clearAllFilters('desktop'));
         
+        initializeSwiper(portfolioItemsData);
+        
         setupFilterButtons(desktopFilterContainer, 'desktop');
         setupFilterButtons(filterPanelBody, 'mobile');
-        applyFilters('desktop');
+        
+        const portfolioObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    triggerInitialSmartLoad();
+                    observer.unobserve(portfolioSection);
+                }
+            });
+        }, { rootMargin: '0px 0px 100px 0px' });
+
+        portfolioObserver.observe(portfolioSection);
+
+        updateDesktopClearButtonVisibility();
     }
     
     function updateActiveFilterDisplay() {
@@ -421,7 +520,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     container.querySelector(`.filter-btn[data-group="${group}"][data-filter="all"]`).classList.add('active');
                 }
             }
-            if (source === 'desktop') applyFilters('desktop');
+            if (source === 'desktop') {
+                applyFilters('desktop');
+            }
         });
     }
 
