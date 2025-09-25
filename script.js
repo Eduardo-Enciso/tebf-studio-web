@@ -176,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- GEAR MAP LOGIC ---
     document.querySelectorAll('.map-dot').forEach(dot => {
         dot.setAttribute('aria-pressed', 'false');
-
         dot.addEventListener('click', () => {
             const region = dot.dataset.region;
             const targetPanel = document.getElementById(`panel-${region}`);
@@ -455,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     modalImg.style.visibility = 'hidden'; 
                     modalName.textContent = button.dataset.name;
                     modalDesc.textContent = button.dataset.description;
-                    modalImg.src = `assets/img/instruments/${button.dataset.instrument}.jpg`;
+                    modalImg.src = `assets/img/instruments/${button.dataset.instrument}.webp`;
                     modalImg.alt = button.dataset.name;
                     modalImg.onerror = () => { modalImg.src = `https://placehold.co/200x200/073B38/FFFFFF?text=${button.dataset.name.replace(/ /g, '+')}`; modalImg.style.visibility = 'visible'; };
                     soundBtn.dataset.audioSrc = `assets/audio/${button.dataset.instrument}.mp3`;
@@ -487,3 +486,4 @@ document.addEventListener('DOMContentLoaded', function () {
         contactAppsModal.addEventListener('click', (e) => { if (e.target === contactAppsModal) closeContactModal(); });
     }
 });
+
