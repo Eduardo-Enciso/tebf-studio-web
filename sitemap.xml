@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Página principal en Inglés y su alternativa en Español -->
+  <url>
+    <loc>https://tebfstudio.com/</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link 
+               rel="alternate"
+               hreflang="es"
+               href="https://tebfstudio.com/index-es.html"/>
+    <xhtml:link 
+               rel="alternate"
+               hreflang="en"
+               href="https://tebfstudio.com/"/>
+  </url>
+  
+  <!-- Página principal en Español y su alternativa en Inglés -->
+  <url>
+    <loc>https://tebfstudio.com/index-es.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link 
+               rel="alternate"
+               hreflang="en"
+               href="https://tebfstudio.com/"/>
+    <xhtml:link 
+               rel="alternate"
+               hreflang="es"
+               href="https://tebfstudio.com/index-es.html"/>
+  </url>
+
+</urlset>
