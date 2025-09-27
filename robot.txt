@@ -1,10 +1,6 @@
 Allow all friendly web crawlers full access to the site.
 User-agent: *
-Disallow:
-
-Google's recommendation is to allow access to all resources
-so it can better understand the website structure.
 Allow: /
 
 Location of the sitemap.
-Sitemap: https://www.google.com/url?sa=E&source=gmail&q=https://tebfstudio.com/sitemap.xml
+Sitemap: https://tebfstudio.com/sitemap.xml

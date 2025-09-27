@@ -764,7 +764,7 @@ main {
      border-radius: 4px;
 }
 
-.gear-category h3 {
+.gear-category h4 {
     font-family: var(--font-headings);
     font-size: 22px;
     margin-bottom: 20px;
@@ -1430,4 +1430,3 @@ main {
         padding: 8px 18px;
     }
 }
-

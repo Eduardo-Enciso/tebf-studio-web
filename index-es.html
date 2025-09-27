@@ -25,16 +25,21 @@
     <link rel="shortcut icon" href="assets/img/favicon.ico">
     <meta name="msapplication-TileColor" content="#073B38">
     <meta name="theme-color" content="#000000">
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- Preload critical assets -->
+    <link rel="preload" href="assets/img/video-poster.webp" as="image" fetchpriority="high">
     <link rel="preload" href="assets/img/logo.webp" as="image">
     <link rel="preload" href="assets/logo-animado.webm" as="video" type="video/webm">
     <link rel="preload" href="assets/logo-animado.mp4" as="video" type="video/mp4">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Asynchronous Google Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap"></noscript>
     
     <!-- External CSS Libraries (non-blocking) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" media="print" onload="this.media='all'">
@@ -318,10 +323,26 @@
         <section id="gear" class="content-section">
             <div class="container">
                 <h2 class="section-title">La Fábrica de Beats: Nuestro Arsenal</h2>
-                <div class="gear-intro"><img src="assets/img/enciso-gear.webp" alt="Foto del fundador del estudio, Enciso" class="gear-intro-img" loading="lazy" width="600" height="600"><div class="gear-intro-text"><h3>El Corazón de la Fábrica</h3><p>"Mi colección es más que un simple conjunto de instrumentos; es una paleta de sonidos globales, cada uno con su propia historia. Este es el arsenal que usamos para forjar tu beat."</p></div></div>
+                <div class="gear-intro">
+                    <img src="assets/img/enciso-gear-400w.webp" 
+                         alt="Foto del fundador del estudio, Enciso" 
+                         class="gear-intro-img" 
+                         loading="lazy" width="200" height="200"
+                         srcset="assets/img/enciso-gear-200w.webp 200w, assets/img/enciso-gear-400w.webp 400w"
+                         sizes="200px">
+                    <div class="gear-intro-text">
+                        <h3>El Corazón de la Fábrica</h3>
+                        <p>"Mi colección es más que un simple conjunto de instrumentos; es una paleta de sonidos globales, cada uno con su propia historia. Este es el arsenal que usamos para forjar tu beat."</p>
+                    </div>
+                </div>
                 <h3 class="gear-subsection-title">El Latido: Un Mundo de Percusión</h3>
                 <div class="percussion-map-container">
-                    <img src="assets/img/mapa-mundi.webp" alt="Mapa del mundo estilizado" class="world-map-img" loading="lazy" width="800" height="400">
+                    <img src="assets/img/mapa-mundi-700w.webp" 
+                         alt="Mapa del mundo estilizado" 
+                         class="world-map-img" 
+                         loading="lazy" width="800" height="400"
+                         srcset="assets/img/mapa-mundi-400w.webp 400w, assets/img/mapa-mundi-700w.webp 700w"
+                         sizes="(max-width: 768px) 90vw, 700px">
                     <button class="map-dot" id="dot-colombia" data-region="colombia" title="Colombia" aria-label="Explorar instrumentos de Colombia"></button>
                     <button class="map-dot" id="dot-peru" data-region="peru" title="Perú" aria-label="Explorar instrumentos de Perú"></button>
                     <button class="map-dot" id="dot-brazil" data-region="brazil" title="Brasil" aria-label="Explorar instrumentos de Brasil"></button>
@@ -349,21 +370,147 @@
                 <div id="panel-japan" class="instrument-panel"><h4>Japón<button class="close-panel-btn" aria-label="Cerrar Panel"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="taiko" data-name="Taiko" data-description="Taiko se refiere tanto a una gama de tambores japoneses como al arte de la percusión en conjunto. Es una forma de arte profundamente física y visual. Los tambores varían desde el pequeño shime-daiko hasta el masivo o-daiko, cuyo sonido atronador puede hacer temblar el suelo.">Set de Taiko</button></li></ul></div>
                 <div id="panel-turkey" class="instrument-panel"><h4>Turquía<button class="close-panel-btn" aria-label="Cerrar Panel"><i class="ri-close-line"></i></button></h4><ul class="instrument-list"><li><button class="instrument-list-item" data-instrument="turkish-darbuka" data-name="Darbuka Turca" data-description="Similar a la darbuka egipcia, pero con un borde expuesto que permite a los músicos usar técnicas avanzadas de chasquido de dedos, habilitando patrones rítmicos increíblemente rápidos e intrincados.">Darbuka Turca</button></li><li><button class="instrument-list-item" data-instrument="daf" data-name="Daf" data-description="Un gran tambor de marco del Medio Oriente. Su característica distintiva son los anillos metálicos entrelazados en el interior, que producen un sonido fuerte, tintineante y zumbante cuando el tambor es tocado.">Daf</button></li></ul></div>
                 <h3 class="gear-subsection-title">La Sala de Máquinas: Configurando Tu Sonido</h3>
-                <div class="drum-kits-container"><div class="drum-kit-card"><img src="assets/img/bateria-big.webp" alt="Kit Yamaha Maple Custom Absolute en configuración grande" class="drum-kit-image" loading="lazy" width="1100" height="733"><h3>La Configuración "Gigante"</h3><p>Nuestro caballo de batalla para un sonido masivo y explosivo. Configuramos nuestra Yamaha Maple Custom Absolute con un bombo atronador de 22" y un set completo de toms (de 10" a 16") para ofrecer un tono gordo y profundo con un punch imponente. La elección definitiva para una base potente en Rock, Pop, Funk, Latin y Metal.</p></div><div class="drum-kit-card"><img src="assets/img/bateria-small.webp" alt="Kit Yamaha Maple Custom Absolute en configuración pequeña" class="drum-kit-image" loading="lazy" width="1100" height="733"><h3>La Configuración "Refinada"</h3><p>Cuando la sutileza es clave, rearmamos nuestra Yamaha Maple Custom Absolute a su configuración "Refinada". Centrada en un bombo melódico y definido de 18" y toms más pequeños con afinación más responsiva, esta configuración produce un sonido nítido y articulado, lleno de calidez y matices. Es la elección perfecta para capturar cada detalle en sesiones de Jazz, Fusión, Folclor, R&B, Urbano y Acústicos.</p></div></div>
-                <div class="drum-palette-container"><h3>El Toque Final: Tu Huella Sonora</h3><p>La configuración del kit sienta las bases, pero los redoblantes y platillos definen su voz. Esta es la calibración final. Ofrecemos una paleta completa de opciones —distintos tamaños y materiales para redoblantes; y una amplia gama de hi-hats, rides, crashes, chinas y stacks— para encontrar esa combinación única que se convertirá en la huella sonora de tu beat.</p><div class="drum-palette-images"><img src="assets/img/snares-collection.webp" alt="Colección de varios redoblantes" loading="lazy" width="1100" height="733"><img src="assets/img/cymbals-selection.webp" alt="Selección de varios platillos" loading="lazy" width="1100" height="733"></div></div>
+                <div class="drum-kits-container">
+                    <div class="drum-kit-card">
+                        <img src="assets/img/bateria-big-800w.webp" 
+                             alt="Kit Yamaha Maple Custom Absolute en configuración grande" 
+                             class="drum-kit-image" loading="lazy" width="1100" height="733"
+                             srcset="assets/img/bateria-big-400w.webp 400w,
+                                     assets/img/bateria-big-800w.webp 800w,
+                                     assets/img/bateria-big-1100w.webp 1100w"
+                             sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 550px">
+                        <h3>La Configuración "Gigante"</h3>
+                        <p>Nuestro caballo de batalla para un sonido masivo y explosivo. Configuramos nuestra Yamaha Maple Custom Absolute con un bombo atronador de 22" y un set completo de toms (de 10" a 16") para ofrecer un tono gordo y profundo con un punch imponente. La elección definitiva para una base potente en Rock, Pop, Funk, Latin y Metal.</p>
+                    </div>
+                    <div class="drum-kit-card">
+                        <img src="assets/img/bateria-small-800w.webp" 
+                             alt="Kit Yamaha Maple Custom Absolute en configuración pequeña" 
+                             class="drum-kit-image" loading="lazy" width="1100" height="733"
+                             srcset="assets/img/bateria-small-400w.webp 400w,
+                                     assets/img/bateria-small-800w.webp 800w,
+                                     assets/img/bateria-small-1100w.webp 1100w"
+                             sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 550px">
+                        <h3>La Configuración "Refinada"</h3>
+                        <p>Cuando la sutileza es clave, rearmamos nuestra Yamaha Maple Custom Absolute a su configuración "Refinada". Centrada en un bombo melódico y definido de 18" y toms más pequeños con afinación más responsiva, esta configuración produce un sonido nítido y articulado, lleno de calidez y matices. Es la elección perfecta para capturar cada detalle en sesiones de Jazz, Fusión, Folclor, R&B, Urbano y Acústicos.</p>
+                    </div>
+                </div>
+                <div class="drum-palette-container">
+                    <h3>El Toque Final: Tu Huella Sonora</h3>
+                    <p>La configuración del kit sienta las bases, pero los redoblantes y platillos definen su voz. Esta es la calibración final. Ofrecemos una paleta completa de opciones —distintos tamaños y materiales para redoblantes; y una amplia gama de hi-hats, rides, crashes, chinas y stacks— para encontrar esa combinación única que se convertirá en la huella sonora de tu beat.</p>
+                    <div class="drum-palette-images">
+                        <img src="assets/img/snares-collection-800w.webp" 
+                             alt="Colección de varios redoblantes" 
+                             loading="lazy" width="1100" height="733"
+                             srcset="assets/img/snares-collection-400w.webp 400w,
+                                     assets/img/snares-collection-800w.webp 800w,
+                                     assets/img/snares-collection-1100w.webp 1100w"
+                             sizes="(max-width: 768px) 90vw, (max-width: 1200px) 40vw, 500px">
+                        <img src="assets/img/cymbals-selection-800w.webp" 
+                             alt="Selección de varios platillos" 
+                             loading="lazy" width="1100" height="733"
+                             srcset="assets/img/cymbals-selection-400w.webp 400w,
+                                     assets/img/cymbals-selection-800w.webp 800w,
+                                     assets/img/cymbals-selection-1100w.webp 1100w"
+                             sizes="(max-width: 768px) 90vw, (max-width: 1200px) 40vw, 500px">
+                    </div>
+                </div>
                 <h3 class="gear-subsection-title">Más Allá del Ritmo: Cimientos Melódicos y Armónicos</h3>
                 <p class="section-subtitle">La Fábrica de Beats no solo forja ritmos exquisitos; también puede forjar el alma armónica y melódica que elevará tu producción. Tenemos una gama única de teclados percutidos para añadir autenticidad, color y transmitir cada emoción.</p>
-                <div class="mallet-instrument-container"><div class="mallet-card"><div class="mallet-text"><h4>Marimba de Chonta</h4><p>El piano de la selva colombiana. Sus teclas de madera guardan los secretos del bosque húmedo del Pacífico. La usamos para añadir calidez orgánica, texturas hipnóticas y un sabor profundamente ancestral, aportando un carácter único y conmovedor a tu música.</p></div><div class="mallet-image"><img src="assets/img/marimba-de-chonta.webp" alt="Marimba de Chonta" loading="lazy" width="1100" height="733"></div></div><div class="mallet-card"><div class="mallet-text"><h4>Vibráfono</h4><p>Etéreo, metálico y lleno de alma. El vibráfono añade una capa de armonía sofisticada y un sustain de ensueño que es perfecto para paisajes sonoros de jazz, lo-fi y cinemáticos. Su vibrato único crea una atmósfera cautivadora e inolvidable.</p></div><div class="mallet-image"><img src="assets/img/vibraphone.webp" alt="Vibráfono" loading="lazy" width="1100" height="733"></div></div><div class="mallet-card"><div class="mallet-text"><h4>Handpan</h4><p>Hipnótico, resonante y orgánico. El handpan teje melodías conmovedoras con un decaimiento cálido y sonoro que provee una firma sónica única para pistas de ambient, lo-fi o world fusion. Su tono auténtico y terrenal crea una textura cautivadora que hará que tu proyecto destaque al instante.</p></div><div class="mallet-image"><img src="assets/img/handpan.webp" alt="Handpan" loading="lazy" width="1100" height="733"></div></div></div>
+                <div class="mallet-instrument-container">
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>Marimba de Chonta</h4>
+                            <p>El piano de la selva colombiana. Sus teclas de madera guardan los secretos del bosque húmedo del Pacífico. La usamos para añadir calidez orgánica, texturas hipnóticas y un sabor profundamente ancestral, aportando un carácter único y conmovedor a tu música.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/marimba-de-chonta-800w.webp" 
+                                 alt="Marimba de Chonta" 
+                                 loading="lazy" width="1100" height="733"
+                                 srcset="assets/img/marimba-de-chonta-400w.webp 400w,
+                                         assets/img/marimba-de-chonta-800w.webp 800w,
+                                         assets/img/marimba-de-chonta-1100w.webp 1100w"
+                                 sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 550px">
+                        </div>
+                    </div>
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>Vibráfono</h4>
+                            <p>Etéreo, metálico y lleno de alma. El vibráfono añade una capa de armonía sofisticada y un sustain de ensueño que es perfecto para paisajes sonoros de jazz, lo-fi y cinemáticos. Su vibrato único crea una atmósfera cautivadora e inolvidable.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/vibraphone-800w.webp" 
+                                 alt="Vibráfono" 
+                                 loading="lazy" width="1100" height="733"
+                                 srcset="assets/img/vibraphone-400w.webp 400w,
+                                         assets/img/vibraphone-800w.webp 800w,
+                                         assets/img/vibraphone-1100w.webp 1100w"
+                                 sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 550px">
+                        </div>
+                    </div>
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>Handpan</h4>
+                            <p>Hipnótico, resonante y orgánico. El handpan teje melodías conmovedoras con un decaimiento cálido y sonoro que provee una firma sónica única para pistas de ambient, lo-fi o world fusion. Su tono auténtico y terrenal crea una textura cautivadora que hará que tu proyecto destaque al instante.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/handpan-800w.webp" 
+                                 alt="Handpan" 
+                                 loading="lazy" width="1100" height="733"
+                                 srcset="assets/img/handpan-400w.webp 400w,
+                                         assets/img/handpan-800w.webp 800w,
+                                         assets/img/handpan-1100w.webp 1100w"
+                                 sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 550px">
+                        </div>
+                    </div>
+                </div>
                 <h3 class="gear-subsection-title">La Fragua Moderna: Donde los Bytes se Convierten en Beats</h3>
-                <div class="mallet-instrument-container" style="margin-bottom: 60px;"><div class="mallet-card"><div class="mallet-text"><h4>El Lienzo Rítmico Infinito</h4><p>Nuestra alma es análoga, pero nuestro cerebro es digital. Aquí, el mundo físico se deconstruye y reconstruye sin límites. Nuestro set electrónico es una herramienta poderosa capaz de capturar cualquier textura, crear loops hipnóticos y re-imaginar cualquier fuente de audio. Combinado con nuestras vastas librerías, diseñamos beats híbridos y forjamos texturas futuristas. Es el complemento perfecto a nuestro arsenal acústico, ofreciendo creatividad sin fronteras y precisión quirúrgica.</p></div><div class="mallet-image"><img src="assets/img/digital-set.webp" alt="Set de batería electrónica y sampler" loading="lazy" width="1100" height="733"></div></div></div>
+                <div class="mallet-instrument-container" style="margin-bottom: 60px;">
+                    <div class="mallet-card">
+                        <div class="mallet-text">
+                            <h4>El Lienzo Rítmico Infinito</h4>
+                            <p>Nuestra alma es análoga, pero nuestro cerebro es digital. Aquí, el mundo físico se deconstruye y reconstruye sin límites. Nuestro set electrónico es una herramienta poderosa capaz de capturar cualquier textura, crear loops hipnóticos y re-imaginar cualquier fuente de audio. Combinado con nuestras vastas librerías, diseñamos beats híbridos y forjamos texturas futuristas. Es el complemento perfecto a nuestro arsenal acústico, ofreciendo creatividad sin fronteras y precisión quirúrgica.</p>
+                        </div>
+                        <div class="mallet-image">
+                            <img src="assets/img/digital-set-800w.webp" 
+                                 alt="Set de batería electrónica y sampler" 
+                                 loading="lazy" width="1100" height="733"
+                                 srcset="assets/img/digital-set-400w.webp 400w,
+                                         assets/img/digital-set-800w.webp 800w,
+                                         assets/img/digital-set-1100w.webp 1100w"
+                                 sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 550px">
+                        </div>
+                    </div>
+                </div>
                 <h3 class="gear-subsection-title">El Arsenal: Equipo Técnico y de Estudio</h3>
-                <div class="tech-gear-grid"><div class="gear-category"><h3><i class="ri-hard-drive-3-line"></i> Sistema Central y Conversión A/D</h3><ul><li>Antelope Orion Studio Synergy Core</li><li>(Recreaciones a Nivel de Circuito FPGA para FX en tiempo real)</li></ul></div><div class="gear-category"><h3><i class="ri-keyboard-box-line"></i> Controladores y Herramientas</h3><ul><li>Akai Pro MPK Mini Plus</li><li>Yamaha DTX Multi 12</li><li>MIDI Breath Controller Yamaha</li></ul></div><div class="gear-category"><h3><i class="ri-equalizer-2-line"></i> Procesamiento Digital y Plugins</h3><ul><li>Pro Tools Ultimate</li><li>Suite Completa FabFilter, iZotope, Waves y SSL</li><li>Adobe Creative Suite (Audio para Video)</li><li>Librerías de Sonido Extensas</li></ul></div><div class="gear-category"><h3><i class="ri-speaker-2-line"></i> Monitoreo</h3><ul><li>Adam Audio T5V</li><li>Subwoofer Adam Audio T10S</li><li>Audio-Technica ATH-M70x</li><li>Sennheiser HD600</li></ul></div><div class="gear-category"><h3><i class="ri-mic-2-line"></i> Micrófonos</h3><ul><li>Antelope Edge Duo</li><li>Sennheiser MD421-II</li><li>Sennheiser MD421 Kompakt</li><li>Shure SM57</li><li>Shure Beta57a</li><li>Audix i5</li><li>Shure Beta52a</li><li>Earthworks DM6</li><li>Antelope Audio Edge Note (Par)</li></ul></div></div>
+                <div class="tech-gear-grid">
+                    <div class="gear-category"><h4><i class="ri-hard-drive-3-line"></i> Sistema Central y Conversión A/D</h4><ul><li>Antelope Orion Studio Synergy Core</li><li>(Recreaciones a Nivel de Circuito FPGA para FX en tiempo real)</li></ul></div>
+                    <div class="gear-category"><h4><i class="ri-keyboard-box-line"></i> Controladores y Herramientas</h4><ul><li>Akai Pro MPK Mini Plus</li><li>Yamaha DTX Multi 12</li><li>MIDI Breath Controller Yamaha</li></ul></div>
+                    <div class="gear-category"><h4><i class="ri-equalizer-2-line"></i> Procesamiento Digital y Plugins</h4><ul><li>Pro Tools Ultimate</li><li>Suite Completa FabFilter, iZotope, Waves y SSL</li><li>Adobe Creative Suite (Audio para Video)</li><li>Librerías de Sonido Extensas</li></ul></div>
+                    <div class="gear-category"><h4><i class="ri-speaker-2-line"></i> Monitoreo</h4><ul><li>Adam Audio T5V</li><li>Subwoofer Adam Audio T10S</li><li>Audio-Technica ATH-M70x</li><li>Sennheiser HD600</li></ul></div>
+                    <div class="gear-category"><h4><i class="ri-mic-2-line"></i> Micrófonos</h4><ul><li>Antelope Edge Duo</li><li>Sennheiser MD421-II</li><li>Sennheiser MD421 Kompakt</li><li>Shure SM57</li><li>Shure Beta57a</li><li>Audix i5</li><li>Shure Beta52a</li><li>Earthworks DM6</li><li>Antelope Audio Edge Note (Par)</li></ul></div>
+                </div>
             </div>
         </section>
         <section id="about" class="content-section">
             <div class="container">
                 <h2 class="section-title">Sobre la Fábrica de Beats</h2>
-                <div class="about-wrapper"><div class="about-image"><img src="assets/img/enciso-about.webp" alt="Enciso, fundador de TEBF Studio, en la sala de grabación." loading="lazy" width="900" height="900"></div><div class="about-text"><h3>Nuestra Filosofía: Alma Analógica, Precisión Digital</h3><p>Creemos que la música atemporal nace de la fusión perfecta entre emoción humana y excelencia técnica. Nuestra filosofía es simple: capturar el alma cruda y auténtica de una interpretación con la calidez del mundo análogo, para luego pulirla con las posibilidades ilimitadas del universo digital. No solo grabamos sonidos; forjamos identidades sonoras.</p><h3>El Arquitecto de los Beats</h3><p>El plano de TEBF Studio se dibujó en tarimas por todo el mundo. Girando como percusionista internacional, Eduardo "Eddy" Enciso fue descifrando el ADN del sonido, descubriendo que su instinto para el ritmo era la clave para crear esos hooks que se te pegan y sonidos que marcan la diferencia.</p><p>Luego, reunió a su combo de cómplices —músicos e ingenieros obsesionados por el detalle sonoro— para forjar The Beat Factory. Juntos, fusionan la música de raíz con producción de punta, construyendo cada proyecto con precisión, alma y una visión global.</p></div></div>
+                <div class="about-wrapper">
+                    <div class="about-image">
+                        <img src="assets/img/enciso-about-800w.webp" 
+                             alt="Enciso, fundador de TEBF Studio, en la sala de grabación." 
+                             loading="lazy" width="900" height="900"
+                             srcset="assets/img/enciso-about-400w.webp 400w,
+                                     assets/img/enciso-about-800w.webp 800w"
+                             sizes="(max-width: 768px) 90vw, 450px">
+                    </div>
+                    <div class="about-text">
+                        <h3>Nuestra Filosofía: Alma Analógica, Precisión Digital</h3>
+                        <p>Creemos que la música atemporal nace de la fusión perfecta entre emoción humana y excelencia técnica. Nuestra filosofía es simple: capturar el alma cruda y auténtica de una interpretación con la calidez del mundo análogo, para luego pulirla con las posibilidades ilimitadas del universo digital. No solo grabamos sonidos; forjamos identidades sonoras.</p>
+                        <h3>El Arquitecto de los Beats</h3>
+                        <p>El plano de TEBF Studio se dibujó en tarimas por todo el mundo. Girando como percusionista internacional, Eduardo "Eddy" Enciso fue descifrando el ADN del sonido, descubriendo que su instinto para el ritmo era la clave para crear esos hooks que se te pegan y sonidos que marcan la diferencia.</p>
+                        <p>Luego, reunió a su combo de cómplices —músicos e ingenieros obsesionados por el detalle sonoro— para forjar The Beat Factory. Juntos, fusionan la música de raíz con producción de punta, construyendo cada proyecto con precisión, alma y una visión global.</p>
+                    </div>
+                </div>
             </div>
         </section>
         <section id="contact" class="content-section">

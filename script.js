@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // --- DYNAMIC SERVICES LOGIC ---
-    // This section remains unchanged as it controls the services accordion.
     const servicesData = {};
     const servicesDataContainer = document.getElementById('services-data');
     
@@ -35,6 +34,12 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function createAccordionItem(item) {
+        // Detect page language to set the correct accessible label
+        const lang = document.documentElement.lang;
+        const expandLabel = lang === 'es' 
+            ? `Expandir detalles de ${item.title}` 
+            : `Expand details for ${item.title}`;
+
         const detailsHTML = item.details.map(detail => `
             <div class="service-detail-item">
                 <h4>${detail.title}</h4>
@@ -49,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <h3 class="accordion-title">${item.title}</h3>
                         <p class="accordion-description">${item.description}</p>
                     </div>
-                    <button class="accordion-toggle" aria-expanded="false">
+                    <button class="accordion-toggle" aria-expanded="false" aria-label="${expandLabel}">
                         <i class="ri-arrow-down-s-line"></i>
                     </button>
                 </div>
@@ -587,4 +592,3 @@ document.addEventListener('DOMContentLoaded', function () {
         contactAppsModal.addEventListener('click', (e) => { if (e.target === contactAppsModal) closeContactModal(); });
     }
 });
-
