@@ -1158,7 +1158,18 @@ main {
 
 /* --- ESTILOS RESPONSIVE --- */
 .mobile-filter-trigger {
-    display: none;
+    display: none; /* Oculto por defecto en todas las pantallas */
+    align-items: center;
+    gap: 10px;
+    background-color: var(--color-bg-2);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 auto 30px;
 }
 
 .active-filters-container {
@@ -1321,18 +1332,7 @@ main {
         display: none;
     }
     .mobile-filter-trigger {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background-color: var(--color-bg-2);
-        border: 1px solid var(--color-primary);
-        color: var(--color-primary);
-        padding: 10px 20px;
-        border-radius: 4px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        margin: 0 auto 30px;
+    display: flex;
     }
     .mobile-filter-trigger i {
         font-size: 20px;
@@ -1430,5 +1430,17 @@ main {
     .service-selector-btn {
         font-size: 12px;
         padding: 8px 18px;
+    }
+}
+@media (min-width: 769px) {
+    /* Oculta los filtros en PC si el contenedor tiene la clase 'filters-hidden' */
+    .portfolio-filters-container.filters-hidden .portfolio-filters,
+    .portfolio-filters-container.filters-hidden .desktop-clear-filters-container {
+        display: none;
+    }
+
+    /* Muestra el botón 'Filtrar Proyectos' en PC si el contenedor tiene la clase 'filters-hidden' */
+    .portfolio-filters-container.filters-hidden .mobile-filter-trigger {
+        display: flex;
     }
 }

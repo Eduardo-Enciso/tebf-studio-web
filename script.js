@@ -417,7 +417,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return appMatch && styleMatch;
         });
 
-        triggerFullLoadWithPriority();
+        // --- INICIO DE LA MODIFICACIÓN 2 ---
+        // La siguiente línea ha sido eliminada para que la carga no se active con cada filtro.
+        // triggerFullLoadWithPriority();
+        // --- FIN DE LA MODIFICACIÓN 2 ---
 
         const noResultsContainer = document.getElementById('no-results-container');
         const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
@@ -454,7 +457,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const clearFiltersBtn = document.getElementById('clear-filters-btn');
         const desktopClearBtn = document.getElementById('desktop-clear-filters-btn');
 
-        mobileFilterTrigger.addEventListener('click', () => filterPanelOverlay.classList.add('is-open'));
+        const portfolioFiltersContainer = document.getElementById('portfolio-filters-container');
+
+        // --- INICIO DE LA MODIFICACIÓN 1 ---
+        // Se añade la llamada a triggerFullLoadWithPriority() a este event listener.
+        mobileFilterTrigger.addEventListener('click', () => {
+            // Activa la carga de todos los iframes restantes.
+            triggerFullLoadWithPriority();
+        
+            if (window.innerWidth > 768) {
+                // Comportamiento para PC: Quita la clase para mostrar los filtros en línea.
+                portfolioFiltersContainer.classList.remove('filters-hidden');
+            } else {
+                // Comportamiento para Móvil (sin cambios): Abre el panel de filtros.
+                filterPanelOverlay.classList.add('is-open');
+            }
+        });
+        // --- FIN DE LA MODIFICACIÓN 1 ---
+
         closePanelBtn.addEventListener('click', () => filterPanelOverlay.classList.remove('is-open'));
         filterPanelOverlay.addEventListener('click', (e) => { if (e.target === filterPanelOverlay) filterPanelOverlay.classList.remove('is-open'); });
         applyFiltersBtn.addEventListener('click', () => { applyFilters('mobile'); filterPanelOverlay.classList.remove('is-open'); });
