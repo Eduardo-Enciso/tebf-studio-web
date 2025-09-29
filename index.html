@@ -32,12 +32,14 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
     <!-- Preload critical assets -->
+    <link rel="preload" href="assets/img/video-poster.webp" as="image" fetchpriority="high">
     <link rel="preload" href="assets/img/logo.webp" as="image">
     <link rel="preload" href="assets/logo-animado.webm" as="video" type="video/webm">
     <link rel="preload" href="assets/logo-animado.mp4" as="video" type="video/mp4">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+        <!-- Asynchronous Google Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@300;400;600&display=swap"></noscript>
     
     <!-- External CSS Libraries (non-blocking) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" media="print" onload="this.media='all'">
