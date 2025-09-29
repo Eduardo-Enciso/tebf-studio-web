@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // --- DYNAMIC SERVICES LOGIC ---
+    // --- LÓGICA DINÁMICA DE SERVICIOS ---
     const servicesData = {};
     const servicesDataContainer = document.getElementById('services-data');
     
@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function createAccordionItem(item) {
-        // Detect page language to set the correct accessible label
         const lang = document.documentElement.lang;
         const expandLabel = lang === 'es' 
             ? `Expandir detalles de ${item.title}` 
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <p class="accordion-description">${item.description}</p>
                     </div>
                     <button class="accordion-toggle" aria-expanded="false" aria-label="${expandLabel}">
-                        <i class="ri-arrow-down-s-line"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 15.0006L17.5228 9.47778L18.9371 10.892L12 17.8291L5.06291 10.892L6.47712 9.47778L12 15.0006Z"></path></svg>
                     </button>
                 </div>
                 <div class="accordion-content">
@@ -124,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // --- HERO VIDEO & SOUND LOGIC ---
+    // --- LÓGICA DE VIDEO Y SONIDO DEL HERO ---
     const video = document.getElementById('heroVideo');
     const soundButton = document.getElementById('sound-toggle');
     const iconMute = document.getElementById('icon-mute');
@@ -158,25 +157,35 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- MOBILE NAVIGATION ---
+    // --- NAVEGACIÓN MÓVIL (ACTUALIZADO PARA SVGs) ---
     const mobileNavToggle = document.getElementById('mobile-nav-toggle');
     const mobileNav = document.getElementById('mobile-nav');
-    const mobileNavIcon = document.getElementById('mobile-nav-icon');
     
-    if (mobileNavToggle && mobileNav && mobileNavIcon) {
+    // Nuevas referencias a los SVGs
+    const mobileNavIconOpen = document.getElementById('mobile-nav-icon-open');
+    const mobileNavIconClose = document.getElementById('mobile-nav-icon-close');
+    
+    // Condición actualizada
+    if (mobileNavToggle && mobileNav && mobileNavIconOpen && mobileNavIconClose) {
         mobileNavToggle.addEventListener('click', () => {
             const isOpen = mobileNav.classList.toggle('is-open');
-            mobileNavIcon.className = isOpen ? 'ri-close-line' : 'ri-menu-line';
+            
+            // Nuevo manejo de visibilidad de SVGs
+            mobileNavIconOpen.classList.toggle('is-hidden', isOpen);
+            mobileNavIconClose.classList.toggle('is-hidden', !isOpen);
         });
         mobileNav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 mobileNav.classList.remove('is-open');
-                mobileNavIcon.className = 'ri-menu-line';
+
+                // Resetear visibilidad de SVGs
+                mobileNavIconOpen.classList.remove('is-hidden');
+                mobileNavIconClose.classList.add('is-hidden');
             });
         });
     }
 
-    // --- GEAR MAP LOGIC ---
+    // --- LÓGICA DEL MAPA DE INSTRUMENTOS ---
     document.querySelectorAll('.map-dot').forEach(dot => {
         dot.setAttribute('aria-pressed', 'false');
         dot.addEventListener('click', () => {
@@ -218,10 +227,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     
-    // --- PORTFOLIO LAZY LOAD LOGIC (DEFINITIVE VERSION) ---
+    // --- LÓGICA DE CARGA DIFERIDA DEL PORTAFOLIO ---
     const portfolioItemsData = Array.from(document.querySelectorAll('#portfolio-slider-data .portfolio-data-item')).map(el => ({
-        // This is our single source of truth.
-        isLoaded: false, // Our persistent memory flag.
+        isLoaded: false, 
         title: el.dataset.title,
         desc: el.dataset.desc,
         tags: el.dataset.tags,
@@ -254,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const placeholder = slideElement.querySelector('.soundcloud-placeholder');
         if (!placeholder) return;
         
-        dataObject.isLoaded = true; // Update the master data object
+        dataObject.isLoaded = true;
         slideElement.classList.add('is-loaded');
 
         const soundcloudUrl = placeholder.dataset.src;
@@ -283,12 +291,10 @@ document.addEventListener('DOMContentLoaded', function () {
         fullLoadTriggered = true;
         console.log("User interaction detected. Loading all remaining players with priority.");
 
-        // Priority Load: Load the currently active slide first.
         if (swiperInstance && swiperInstance.slides[swiperInstance.activeIndex]) {
             loadIframeForSlide(swiperInstance.slides[swiperInstance.activeIndex]);
         }
         
-        // Load the rest in the background.
         requestAnimationFrame(() => {
             document.querySelectorAll('#portfolio-slider .swiper-slide:not(.is-loaded)').forEach(loadIframeForSlide);
         });
@@ -315,31 +321,42 @@ document.addEventListener('DOMContentLoaded', function () {
             loadIframeForSlide(findSlideByUrl(portfolioItemsData[0].soundcloudUrl));
         }
     }
-
+    
     function scaleClassicPlayers() {
+        const playersToScale = [];
+        
         document.querySelectorAll('.soundcloud-classic-wrapper').forEach(wrapper => {
             const viewport = wrapper.querySelector('.soundcloud-classic-viewport');
             if (viewport) {
                 const scale = wrapper.offsetWidth / 480;
-                viewport.style.transform = `scale(${scale})`;
+                playersToScale.push({ viewport, scale });
             }
+        });
+    
+        requestAnimationFrame(() => {
+            playersToScale.forEach(player => {
+                player.viewport.style.transform = `scale(${player.scale})`;
+            });
         });
     }
     
     function createPortfolioItemHTML(item) {
         const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
-        const iconMap = { 
-            spotify: { class: 'ri-spotify-fill', title: 'Listen on Spotify' }, 
-            instagram: { class: 'ri-instagram-line', title: 'Follow on Instagram' }, 
-            youtube: { class: 'ri-youtube-line', title: 'Watch on YouTube' }, 
-            facebook: { class: 'ri-facebook-box-line', title: 'Find on Facebook' }, 
-            website: { class: 'ri-global-line', title: 'Visit Website' }, 
-            linkedin: { class: 'ri-linkedin-box-line', title: 'View on LinkedIn' }
-        };
+        
         let linksHTML = '';
         if (item.artistLinks) {
+            const socialSVGs = {
+                spotify: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.333 14.933c-.2.333-.533.4-.866.2-2.333-1.4-5.266-1.733-8.8-1.066-.333.067-.6-.133-.667-.466-.067-.333.133-.6.467-.667 3.8-.733 7.066-.333 9.666 1.2.334.2.4.534.2.867zm1.067-2.333c-.267.333-.667.467-1.067.267-2.666-1.6-6.6-2.067-9.733-1.133-.4.133-.8-.133-.933-.533-.133-.4.133-.8.533-.933 3.533-1.067 7.933-.533 10.933 1.267.4.2.533.667.267 1.067zm1-2.467c-.267.4-.8.534-1.2.267-3.067-1.866-8.2-2.266-11.467-1.2-.466.133-.933-.2-.1-.666-.133-.467.2-.934.667-1.067 3.667-1.2 9.267-.733 12.733 1.333.4.267.533.8.267 1.2z"/></svg>',
+                instagram: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.05 1.066.06 1.405.06 4.122s-.01 3.056-.06 4.122c-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.05-1.405.06-4.122.06s-3.056-.01-4.122-.06c-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.01 15.056 2 14.717 2 12s.01-3.056.06-4.122c.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.01 9.283 2 12 2zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6-10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>',
+                youtube: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm6.2 8.7c.2.5.2 1.6 0 2.1-.2.5-1 1-1 1s-2.8.3-5.2.3-5.2-.3-5.2-.3-.8-.4-1-1c-.2-.5-.2-1.6 0-2.1.2-.5 1-1 1-1s2.8-.3 5.2-.3 5.2.3 5.2.3.8.5 1 1zm-8.2 2.6l4-2.1-4-2.1v4.2z"/></svg>',
+                facebook: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm2.5 10.5h-2v5h-3v-5h-2v-3h2v-2c0-1.7 1.1-4 4-4h2v3h-1.5c-.5 0-1 .5-1 1v2h2.5l-.5 3z"/></svg>',
+                website: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-8h10v2H7v-2zm-2-2h14v2H5v-2z"/></svg>',
+                linkedin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM9 17H6v-7h3v7zm-1.5-8.25A1.75 1.75 0 1 1 7.5 7a1.75 1.75 0 0 1 0 1.75zm10.5 8.25h-3v-3.5c0-1-.5-2-1.5-2s-1.5 1-1.5 2v3.5h-3v-7h3v1.25c.5-.75 1.5-1.25 2.5-1.25 2 0 3.5 1.5 3.5 4v4.5z"/></svg>'
+            };
+            const titleMap = { spotify: 'Listen on Spotify', instagram: 'Follow on Instagram', youtube: 'Watch on YouTube', facebook: 'Find on Facebook', website: 'Visit Website', linkedin: 'View on LinkedIn' };
+
             const linksArray = Object.keys(item.artistLinks)
-                .map(key => (iconMap[key] && item.artistLinks[key]) ? `<a href="${item.artistLinks[key]}" target="_blank" rel="noopener noreferrer" title="${iconMap[key].title}" aria-label="${iconMap[key].title}"><i class="${iconMap[key].class}"></i></a>` : '')
+                .map(key => (socialSVGs[key] && item.artistLinks[key]) ? `<a href="${item.artistLinks[key]}" target="_blank" rel="noopener noreferrer" title="${titleMap[key]}" aria-label="${titleMap[key]}">${socialSVGs[key]}</a>` : '')
                 .join('');
             if(linksArray) linksHTML = `<div class="artist-links">${linksArray}</div>`;
         }
@@ -348,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const soundcloudSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23EE8F00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
         
         let mediaHTML;
-        // The check now happens against the master data object.
         if (item.isLoaded) {
             mediaHTML = `<div class="soundcloud-classic-wrapper">
                 <div class="soundcloud-classic-viewport">
@@ -401,7 +417,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return appMatch && styleMatch;
         });
 
-        // Trigger full load BEFORE rebuilding, ensuring all potentially visible items are ready.
         triggerFullLoadWithPriority();
 
         const noResultsContainer = document.getElementById('no-results-container');
@@ -424,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDesktopClearButtonVisibility();
     }
     
-    // --- Setup for Filters and Lazy Load Trigger ---
+    // --- Configuración de filtros y disparador de carga diferida ---
     const desktopFilterContainer = document.querySelector('.portfolio-filters');
     const filterPanelBody = document.querySelector('.filter-panel-body');
     const portfolioSection = document.getElementById('portfolio');
@@ -541,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('touchcancel', handleTouchEnd);
     });
 
-    // --- INSTRUMENT MODAL LOGIC ---
+    // --- LÓGICA DEL MODAL DE INSTRUMENTOS ---
     const instrumentModal = document.getElementById('instrument-modal');
     const modalImg = document.getElementById('instrument-modal-img');
     const modalName = document.getElementById('instrument-modal-name');
@@ -581,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function () {
         instrumentModal.addEventListener('click', (e) => { if (e.target === instrumentModal) closeInstrumentModal(); });
     }
 
-    // --- MOBILE CONTACT MODAL LOGIC ---
+    // --- LÓGICA DEL MODAL DE CONTACTO MÓVIL ---
     const contactPhoneLink = document.getElementById('contact-phone-link');
     const contactAppsModal = document.getElementById('contact-apps-modal');
     if(contactPhoneLink && contactAppsModal) {

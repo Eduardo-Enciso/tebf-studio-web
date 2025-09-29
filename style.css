@@ -1051,9 +1051,10 @@ main {
     pointer-events: none;
     transition: opacity 0.3s ease;
 }
-.modal-overlay.is-visible {
+#instrument-modal.is-visible, #contact-apps-modal.is-visible {
     opacity: 1;
     pointer-events: all;
+    display: flex;
 }
 
 .modal-content {
@@ -1241,9 +1242,10 @@ main {
     transition: transform 0.4s ease-in-out;
 }
 
-.filter-panel-overlay.is-open {
+#filter-panel-overlay.is-open {
     opacity: 1;
     pointer-events: all;
+    display: block;
 }
 .filter-panel-overlay.is-open .filter-panel {
     transform: translateY(0);
