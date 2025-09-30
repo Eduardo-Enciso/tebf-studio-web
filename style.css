@@ -329,21 +329,28 @@ main {
     flex-direction: column;
 }
 
+/* START: SoundCloud Player Optimization */
 .soundcloud-classic-wrapper {
     width: 100%;
-    aspect-ratio: 480 / 166;
+    /* aspect-ratio is now handled dynamically by height */
     overflow: hidden;
     position: relative;
     background-color: #051a19;
+    /* Nueva altura dinámica basada en la escala calculada por JS */
+    height: calc(166px * var(--soundcloud-scale, 1)); 
 }
 .soundcloud-classic-viewport {
     position: absolute;
-    width: 480px;
+    width: 480px; /* Mantenemos el ancho fijo que SoundCloud necesita para la vista clásica */
     height: 166px;
     top: 0;
     left: 0;
     transform-origin: 0 0;
+    /* Aplicamos la escala usando la variable CSS */
+    transform: scale(var(--soundcloud-scale, 1)); 
 }
+/* END: SoundCloud Player Optimization */
+
 .soundcloud-classic-viewport iframe {
     width: 100%;
     height: 100%;

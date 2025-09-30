@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
         viewport.appendChild(iframe);
         placeholder.parentNode.replaceChild(viewport, placeholder);
         
-        scaleClassicPlayers();
+        updateSoundCloudScale();
     }
     
     function triggerFullLoadWithPriority() {
@@ -322,23 +322,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    function scaleClassicPlayers() {
-        const playersToScale = [];
+    // START MODIFICATION: Replaced scaleClassicPlayers with updateSoundCloudScale
+    // Efficient function to scale SoundCloud players using a CSS variable
+    function updateSoundCloudScale() {
+        // Measure the active slide's wrapper for accuracy.
+        const activeWrapper = document.querySelector('.swiper-slide-active .soundcloud-classic-wrapper');
         
-        document.querySelectorAll('.soundcloud-classic-wrapper').forEach(wrapper => {
-            const viewport = wrapper.querySelector('.soundcloud-classic-viewport');
-            if (viewport) {
-                const scale = wrapper.offsetWidth / 480;
-                playersToScale.push({ viewport, scale });
-            }
-        });
-    
-        requestAnimationFrame(() => {
-            playersToScale.forEach(player => {
-                player.viewport.style.transform = `scale(${player.scale})`;
-            });
-        });
+        // Exit if the slider container is hidden (e.g., no search results) or no active wrapper exists.
+        if (!activeWrapper || document.querySelector('.portfolio-slider-wrapper').classList.contains('is-hidden')) {
+             return;
+        }
+
+        // Read width ONCE to avoid forced reflows
+        const containerWidth = activeWrapper.offsetWidth;
+        const scale = containerWidth / 480;
+
+        // Write the CSS variable to the root element ONCE
+        document.documentElement.style.setProperty('--soundcloud-scale', scale);
     }
+    // END MODIFICATION
     
     function createPortfolioItemHTML(item) {
         const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
@@ -399,10 +401,12 @@ document.addEventListener('DOMContentLoaded', function () {
         swiperInstance.on('navigationNext', triggerFullLoadWithPriority);
         swiperInstance.on('navigationPrev', triggerFullLoadWithPriority);
         swiperInstance.el.addEventListener('pointerdown', triggerFullLoadWithPriority, { once: true });
-        swiperInstance.on('transitionEnd', scaleClassicPlayers);
-        swiperInstance.on('resize', scaleClassicPlayers);
+        // START MODIFICATION: Updated to call the new function
+        swiperInstance.on('transitionEnd', updateSoundCloudScale);
+        swiperInstance.on('resize', updateSoundCloudScale);
         
-        scaleClassicPlayers();
+        updateSoundCloudScale();
+        // END MODIFICATION
     }
     
     function applyFilters(source = 'desktop') {
@@ -416,11 +420,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const styleMatch = activeStyleFilters.length === 0 || activeStyleFilters.some(filter => tags.includes(filter));
             return appMatch && styleMatch;
         });
-
-        // --- INICIO DE LA MODIFICACIÓN 2 ---
-        // La siguiente línea ha sido eliminada para que la carga no se active con cada filtro.
-        // triggerFullLoadWithPriority();
-        // --- FIN DE LA MODIFICACIÓN 2 ---
 
         const noResultsContainer = document.getElementById('no-results-container');
         const portfolioSliderWrapper = document.querySelector('.portfolio-slider-wrapper');
@@ -459,21 +458,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const portfolioFiltersContainer = document.getElementById('portfolio-filters-container');
 
-        // --- INICIO DE LA MODIFICACIÓN 1 ---
-        // Se añade la llamada a triggerFullLoadWithPriority() a este event listener.
         mobileFilterTrigger.addEventListener('click', () => {
-            // Activa la carga de todos los iframes restantes.
             triggerFullLoadWithPriority();
         
             if (window.innerWidth > 768) {
-                // Comportamiento para PC: Quita la clase para mostrar los filtros en línea.
                 portfolioFiltersContainer.classList.remove('filters-hidden');
             } else {
-                // Comportamiento para Móvil (sin cambios): Abre el panel de filtros.
                 filterPanelOverlay.classList.add('is-open');
             }
         });
-        // --- FIN DE LA MODIFICACIÓN 1 ---
 
         closePanelBtn.addEventListener('click', () => filterPanelOverlay.classList.remove('is-open'));
         filterPanelOverlay.addEventListener('click', (e) => { if (e.target === filterPanelOverlay) filterPanelOverlay.classList.remove('is-open'); });
@@ -566,7 +559,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    window.addEventListener('resize', scaleClassicPlayers);
+    // START MODIFICATION: The global resize listener has been removed.
+    // The swiper 'resize' event now handles this efficiently.
+    // END MODIFICATION
 
     document.querySelectorAll('.slider-btn').forEach(button => {
         const handleTouchStart = () => button.classList.add('btn-active-touch');
