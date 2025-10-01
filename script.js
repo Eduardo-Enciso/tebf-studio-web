@@ -227,6 +227,47 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     
+    // --- LÓGICA DE CARGA DINÁMICA DE SWIPER.JS ---
+    const portfolioSectionObserver = new IntersectionObserver((entries, observer) => {
+        // Check if the portfolio section is intersecting with the viewport
+        if (entries[0].isIntersecting) {
+            console.log('Portfolio section is visible, loading Swiper.js...');
+            
+            // Dynamically import only the necessary Swiper modules
+            import('https://cdn.jsdelivr.net/npm/swiper@11/swiper.mjs')
+                .then(({
+                    default: Swiper
+                }) => {
+                    import('https://cdn.jsdelivr.net/npm/swiper@11/modules/navigation.mjs')
+                        .then(({
+                            default: Navigation
+                        }) => {
+                            // Now that the modules are loaded, initialize Swiper
+                            // We pass the imported modules to the Swiper instance
+                            window.Swiper = Swiper; // Make Swiper globally available if needed
+                            window.SwiperNavigation = Navigation;
+                            
+                            // Initialize Swiper with your existing configuration
+                            initializeSwiper(portfolioItemsData); 
+
+                            console.log('Swiper.js loaded and initialized successfully.');
+                        });
+                }).catch(error => console.error("Failed to load Swiper modules:", error));
+
+            // Stop observing the portfolio section since we've loaded the script
+            observer.unobserve(entries[0].target);
+        }
+    }, {
+        // Start loading when the section is 200px away from being visible
+        rootMargin: '200px' 
+    });
+
+    // Start observing the portfolio section
+    const portfolioEl = document.getElementById('portfolio');
+    if (portfolioEl) {
+        portfolioSectionObserver.observe(portfolioEl);
+    }
+
     // --- LÓGICA DE CARGA DIFERIDA DEL PORTAFOLIO ---
     const portfolioItemsData = Array.from(document.querySelectorAll('#portfolio-slider-data .portfolio-data-item')).map(el => ({
         isLoaded: false, 
@@ -322,25 +363,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    // START MODIFICATION: Replaced scaleClassicPlayers with updateSoundCloudScale
-    // Efficient function to scale SoundCloud players using a CSS variable
     function updateSoundCloudScale() {
-        // Measure the active slide's wrapper for accuracy.
         const activeWrapper = document.querySelector('.swiper-slide-active .soundcloud-classic-wrapper');
         
-        // Exit if the slider container is hidden (e.g., no search results) or no active wrapper exists.
         if (!activeWrapper || document.querySelector('.portfolio-slider-wrapper').classList.contains('is-hidden')) {
              return;
         }
 
-        // Read width ONCE to avoid forced reflows
         const containerWidth = activeWrapper.offsetWidth;
         const scale = containerWidth / 480;
 
-        // Write the CSS variable to the root element ONCE
         document.documentElement.style.setProperty('--soundcloud-scale', scale);
     }
-    // END MODIFICATION
     
     function createPortfolioItemHTML(item) {
         const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
@@ -382,6 +416,19 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function initializeSwiper(dataToRender) {
         if (swiperInstance) swiperInstance.destroy(true, true);
+
+        // Check if Swiper and Navigation module are loaded
+        if (typeof window.Swiper === 'undefined' || typeof window.SwiperNavigation === 'undefined') {
+            console.log("Swiper not loaded yet, skipping initialization.");
+            
+            // Render static HTML so the layout doesn't break
+            const slidesHTML = dataToRender.map(createPortfolioItemHTML).join('');
+            portfolioSliderEl.innerHTML = slidesHTML;
+
+            // Trigger smart load for the static items
+            triggerInitialSmartLoad();
+            return;
+        }
         
         const slidesHTML = dataToRender.map(createPortfolioItemHTML).join('');
         portfolioSliderEl.innerHTML = slidesHTML;
@@ -389,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!portfolioSliderEl || !portfolioSliderEl.children.length) return;
 
         swiperInstance = new Swiper('.portfolio-swiper', {
+            modules: [window.SwiperNavigation],
             loop: dataToRender.length > 2,
             slidesPerView: 'auto',
             centeredSlides: true,
@@ -401,12 +449,11 @@ document.addEventListener('DOMContentLoaded', function () {
         swiperInstance.on('navigationNext', triggerFullLoadWithPriority);
         swiperInstance.on('navigationPrev', triggerFullLoadWithPriority);
         swiperInstance.el.addEventListener('pointerdown', triggerFullLoadWithPriority, { once: true });
-        // START MODIFICATION: Updated to call the new function
         swiperInstance.on('transitionEnd', updateSoundCloudScale);
         swiperInstance.on('resize', updateSoundCloudScale);
         
         updateSoundCloudScale();
-        // END MODIFICATION
+        triggerInitialSmartLoad();
     }
     
     function applyFilters(source = 'desktop') {
@@ -475,12 +522,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('clear-all-pills-btn').addEventListener('click', () => clearAllFilters('mobile'));
         desktopClearBtn.addEventListener('click', () => clearAllFilters('desktop'));
         
-        initializeSwiper(portfolioItemsData);
+        // Removed the initial swiper initialization from here. It will be called by the IntersectionObserver.
         
         setupFilterButtons(desktopFilterContainer, 'desktop');
         setupFilterButtons(filterPanelBody, 'mobile');
         
-        const portfolioObserver = new IntersectionObserver((entries, observer) => {
+        const portfolioLazyLoadObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     triggerInitialSmartLoad();
@@ -489,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }, { rootMargin: '0px 0px 100px 0px' });
 
-        portfolioObserver.observe(portfolioSection);
+        portfolioLazyLoadObserver.observe(portfolioSection);
 
         updateDesktopClearButtonVisibility();
     }
@@ -558,10 +605,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
-    // START MODIFICATION: The global resize listener has been removed.
-    // The swiper 'resize' event now handles this efficiently.
-    // END MODIFICATION
 
     document.querySelectorAll('.slider-btn').forEach(button => {
         const handleTouchStart = () => button.classList.add('btn-active-touch');
