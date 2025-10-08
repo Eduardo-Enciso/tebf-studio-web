@@ -326,8 +326,6 @@ document.addEventListener('DOMContentLoaded', function () {
         
         viewport.appendChild(iframe);
         placeholder.parentNode.replaceChild(viewport, placeholder);
-        
-        updateSoundCloudScale();
     }
     
     function triggerFullLoadWithPriority() {
@@ -365,20 +363,6 @@ document.addEventListener('DOMContentLoaded', function () {
             loadIframeForSlide(findSlideByUrl(portfolioItemsData[0].soundcloudUrl));
         }
     }
-    
-    function updateSoundCloudScale() {
-        const activeWrapper = document.querySelector('.swiper-slide-active .soundcloud-classic-wrapper');
-        
-        if (!activeWrapper || document.querySelector('.portfolio-slider-wrapper').classList.contains('is-hidden')) {
-             return;
-        }
-
-        const containerWidth = activeWrapper.offsetWidth;
-        const scale = containerWidth / 480;
-
-        document.documentElement.style.setProperty('--soundcloud-scale', scale);
-    }
-    
     function createPortfolioItemHTML(item) {
         const tagsHTML = item.tags.split(' ').map(tag => `<span class="tag">${tag.replace(/-/g, ' ')}</span>`).join('');
         
@@ -454,10 +438,7 @@ document.addEventListener('DOMContentLoaded', function () {
         swiperInstance.on('navigationNext', triggerFullLoadWithPriority);
         swiperInstance.on('navigationPrev', triggerFullLoadWithPriority);
         swiperInstance.el.addEventListener('pointerdown', triggerFullLoadWithPriority, { once: true });
-        swiperInstance.on('transitionEnd', updateSoundCloudScale);
-        swiperInstance.on('resize', updateSoundCloudScale);
-        
-        updateSoundCloudScale();
+
         triggerInitialSmartLoad();
     }
     
