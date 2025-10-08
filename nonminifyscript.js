@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <p class="accordion-description">${item.description}</p>
                     </div>
                     <button class="accordion-toggle" aria-expanded="false" aria-label="${expandLabel}">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 15.0006L17.5228 9.47778L18.9371 10.892L12 17.8291L5.06291 10.892L6.47712 9.47778L12 15.0006Z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="accordion-icon"><path d="M12 15.0006L17.5228 9.47778L18.9371 10.892L12 17.8291L5.06291 10.892L6.47712 9.47778L12 15.0006Z"></path></svg>
                     </button>
                 </div>
                 <div class="accordion-content">
@@ -281,7 +281,10 @@ document.addEventListener('DOMContentLoaded', function () {
             youtube: el.dataset.youtube,
             facebook: el.dataset.facebook,
             website: el.dataset.website,
-            linkedin: el.dataset.linkedin
+            linkedin: el.dataset.linkedin,
+            appleMusic: el.dataset.appleMusic,
+            soundcloud: el.dataset.soundcloud,
+            deezer: el.dataset.deezer
         }
     }));
     
@@ -382,15 +385,17 @@ document.addEventListener('DOMContentLoaded', function () {
         let linksHTML = '';
         if (item.artistLinks) {
             const socialSVGs = {
-                spotify: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.333 14.933c-.2.333-.533.4-.866.2-2.333-1.4-5.266-1.733-8.8-1.066-.333.067-.6-.133-.667-.466-.067-.333.133-.6.467-.667 3.8-.733 7.066-.333 9.666 1.2.334.2.4.534.2.867zm1.067-2.333c-.267.333-.667.467-1.067.267-2.666-1.6-6.6-2.067-9.733-1.133-.4.133-.8-.133-.933-.533-.133-.4.133-.8.533-.933 3.533-1.067 7.933-.533 10.933 1.267.4.2.533.667.267 1.067zm1-2.467c-.267.4-.8.534-1.2.267-3.067-1.866-8.2-2.266-11.467-1.2-.466.133-.933-.2-.1-.666-.133-.467.2-.934.667-1.067 3.667-1.2 9.267-.733 12.733 1.333.4.267.533.8.267 1.2z"/></svg>',
-                instagram: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.05 1.066.06 1.405.06 4.122s-.01 3.056-.06 4.122c-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.05-1.405.06-4.122.06s-3.056-.01-4.122-.06c-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.01 15.056 2 14.717 2 12s.01-3.056.06-4.122c.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.01 9.283 2 12 2zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6-10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>',
-                youtube: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm6.2 8.7c.2.5.2 1.6 0 2.1-.2.5-1 1-1 1s-2.8.3-5.2.3-5.2-.3-5.2-.3-.8-.4-1-1c-.2-.5-.2-1.6 0-2.1.2-.5 1-1 1-1s2.8-.3 5.2-.3 5.2.3 5.2.3.8.5 1 1zm-8.2 2.6l4-2.1-4-2.1v4.2z"/></svg>',
-                facebook: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm2.5 10.5h-2v5h-3v-5h-2v-3h2v-2c0-1.7 1.1-4 4-4h2v3h-1.5c-.5 0-1 .5-1 1v2h2.5l-.5 3z"/></svg>',
-                website: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-8h10v2H7v-2zm-2-2h14v2H5v-2z"/></svg>',
-                linkedin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM9 17H6v-7h3v7zm-1.5-8.25A1.75 1.75 0 1 1 7.5 7a1.75 1.75 0 0 1 0 1.75zm10.5 8.25h-3v-3.5c0-1-.5-2-1.5-2s-1.5 1-1.5 2v3.5h-3v-7h3v1.25c.5-.75 1.5-1.25 2.5-1.25 2 0 3.5 1.5 3.5 4v4.5z"/></svg>'
-            };
-            const titleMap = { spotify: 'Listen on Spotify', instagram: 'Follow on Instagram', youtube: 'Watch on YouTube', facebook: 'Find on Facebook', website: 'Visit Website', linkedin: 'View on LinkedIn' };
-
+                spotify: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.333 14.933c-.2.333-.533.4-.866.2-2.333-1.4-5.266-1.733-8.8-1.066-.333.067-.6-.133-.667-.466-.067-.333.133-.6.467-.667 3.8-.733 7.066-.333 9.666 1.2.334.2.4.534.2.867zm1.067-2.333c-.267.333-.667.467-1.067.267-2.666-1.6-6.6-2.067-9.733-1.133-.4.133-.8-.133-.933-.533-.133-.4.133-.8.533-.933 3.533-1.067 7.933-.533 10.933 1.267.4.2.533.667.267 1.067zm1-2.467c-.267.4-.8.534-1.2.267-3.067-1.866-8.2-2.266-11.467-1.2-.466.133-.933-.2-.1-.666-.133-.467.2-.934.667-1.067 3.667-1.2 9.267-.733 12.733 1.333.4.267.533.8.267 1.2z"/></svg>',
+                instagram: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.012-3.584.07-4.85c.148-3.225 1.664-4.771 4.919-4.919C8.428 2.175 8.796 2.163 12 2.163zm0 1.444c-3.117 0-3.486.012-4.71.068-2.92.132-4.343 1.543-4.475 4.475-.056 1.225-.068 1.594-.068 4.71s.012 3.486.068 4.71c.132 2.932 1.555 4.343 4.475 4.475 1.225.056 1.594.068 4.71.068s3.486-.012 4.71-.068c2.92-.132 4.343-1.543 4.475-4.475.056-1.225.068-1.594.068-4.71s-.012-3.486-.068-4.71c-.132-2.932-1.555-4.343-4.475-4.475C15.486 3.619 15.117 3.607 12 3.607zm0 3.082a5.31 5.31 0 1 0 0 10.62 5.31 5.31 0 0 0 0-10.62zm0 8.778a3.468 3.468 0 1 1 0-6.936 3.468 3.468 0 0 1 0 6.936zm4.868-8.62a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>',
+                youtube: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M20 4.47A2.47 2.47 0 0 0 17.53 2H6.47A2.47 2.47 0 0 0 4 4.47v15.06A2.47 2.47 0 0 0 6.47 22h11.06A2.47 2.47 0 0 0 20 19.53V4.47zM10 16.5v-9l6 4.5-6 4.5z"></path></svg>',
+                facebook: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm2.5 10.5h-2v5h-3v-5h-2v-3h2v-2c0-1.7 1.1-4 4-4h2v3h-1.5c-.5 0-1 .5-1 1v2h2.5l-.5 3z"/></svg>',
+                website: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M10 6V8H5V19H19V14H21V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V8C3 6.89543 3.89543 6 5 6H10ZM14 4V6H18.5858L11.2929 13.2929L12.7071 14.7071L20 7.41421V12H22V4H14Z"></path></svg>',
+                linkedin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM9 17H6v-7h3v7zm-1.5-8.25A1.75 1.75 0 1 1 7.5 7a1.75 1.75 0 0 1 0 1.75zm10.5 8.25h-3v-3.5c0-1-.5-2-1.5-2s-1.5 1-1.5 2v3.5h-3v-7h3v1.25c.5-.75 1.5-1.25 2.5-1.25 2 0 3.5 1.5 3.5 4v4.5z"/></svg>',
+                appleMusic: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>',
+                soundcloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
+                deezer: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="artist-link-icon"><path d="M2 17h2v-5H2v5zm4 0h2V7H6v10zm4 0h2v-8h-2v8zm4 0h2V4h-2v13zm4 0h2v-6h-2v6z"/></svg>'
+};
+            const titleMap = { spotify: 'Listen on Spotify', instagram: 'Follow on Instagram', youtube: 'Watch on YouTube', facebook: 'Find on Facebook', website: 'Visit Website', linkedin: 'View on LinkedIn', appleMusic: 'Listen on Apple Music',soundcloud: 'Listen on SoundCloud', deezer: 'Listen on Deezer' };
             const linksArray = Object.keys(item.artistLinks)
                 .map(key => (socialSVGs[key] && item.artistLinks[key]) ? `<a href="${item.artistLinks[key]}" target="_blank" rel="noopener noreferrer" title="${titleMap[key]}" aria-label="${titleMap[key]}">${socialSVGs[key]}</a>` : '')
                 .join('');

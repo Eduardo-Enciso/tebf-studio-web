@@ -21,6 +21,52 @@
   }
 }
 
+/* --- ESTILOS DE ICONOGRAFÍA (SVG) --- *//* Define el tamaño y comportamiento de los iconos SVG en toda la página *//* Iconos de Navegación (Header) */.nav-icon {
+    width: 30px;
+    height: 30px;
+}/* Iconos del Hero (Scroll y Sound Button) */.hero-icon {
+    width: 24px;
+    height: 24px;
+}/* Icono del Acordeón (Services) */.accordion-icon {
+    width: 32px;
+    height: 32px;
+}/* Iconos del Portafolio */.filter-icon {
+    width: 20px;
+    height: 20px;
+}.slider-nav-icon {
+    width: 24px;
+    height: 24px;
+}.artist-link-icon {
+    width: 24px;
+    height: 24px;
+}/* Iconos de la Sección Gear */.panel-close-icon {
+    width: 24px;
+    height: 24px;
+}.gear-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0; /* Evita que el icono se aplaste en contenedores flexibles */
+}/* Iconos de Contacto (Ajuste específico para alineación y robustez) */.contact-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 5px; /* Ajuste fino para alinear con la primera línea de texto */
+}/* Iconos de Modales */.modal-close-icon {
+    width: 30px;
+    height: 30px;
+}.instrument-sound-icon {
+    width: 28px;
+    height: 28px;
+}.contact-app-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0; /* Evita que el icono se aplaste */
+}/* Iconos Sociales del Footer */.footer-social-icon {
+    width: 22px;
+    height: 22px;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -287,7 +333,7 @@ main {
 
 .portfolio-slider-wrapper {
     position: relative;
-    min-height: 300px;
+    min-height: 480px;
 }
 .swiper-container {
     width: 100%;
@@ -1417,6 +1463,7 @@ main {
     .footer-container {
         flex-direction: column-reverse;
         gap: 20px;
+        text-align: center;
     }
     .instrument-modal-body {
         grid-template-columns: 1fr;
